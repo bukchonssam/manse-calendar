@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Four Pillars Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .input-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: nowrap;
+        }
+        
+        .date-input {
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .date-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .search-btn {
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .result-section {
+            display: none;
+            margin-top: 30px;
+        }
+        
+        .saju-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .saju-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .saju-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 2px;
+            margin-bottom: 15px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .grid-cell {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 6px;
+            padding: 8px 4px;
+            text-align: center;
+            font-weight: bold;
+            min-height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .label-cell {
+            font-size: 0.8em;
+            opacity: 0.9;
+        }
+        
+        .stem-cell {
+            font-size: 0.85em;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .branch-cell {
+            font-size: 0.85em;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .wood { background-color: #228B22 !important; }
+        .fire { background-color: #DC143C !important; }
+        .earth { background-color: #DAA520 !important; }
+        .metal { background-color: #C0C0C0 !important; color: #333 !important; }
+        .water { background-color: #191970 !important; }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .info-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #667eea;
+        }
+        
+        .info-title {
+            color: #2c3e50;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .info-content {
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .fortune-period {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 8px;
+            border: 2px solid transparent;
+        }
+        
+        .fortune-past {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            opacity: 0.7;
+        }
+        
+        .fortune-current {
+            background-color: #e3f2fd;
+            border-color: #2196f3;
+            color: #0d47a1;
+            font-weight: bold;
+        }
+        
+        .fortune-future {
+            background-color: #f3e5f5;
+            color: #7b1fa2;
+        }
+        
+        .fortune-title {
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .fortune-elements {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+            justify-content: center;
+        }
+        
+        .fortune-element {
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            color: white;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+        }
+        
+        .loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .error {
+            background-color: #ffe6e6;
+            color: #d8000c;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .input-section {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .date-input {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗓️ Four Pillars Calculator</h1>
+
+        <div class="input-section">
+            <select class="date-input" id="dayInput">
+            </select>
+            <select class="date-input" id="monthInput">
+            </select>
+            <select class="date-input" id="yearInput">
+            </select>
+            <select class="date-input" id="genderInput">
+                <option value="">Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+            <input type="time" class="date-input" id="timeInput" placeholder="Optional">
+            <button class="search-btn" onclick="calculateSaju()">Calculate</button>
+        </div>
+        
+        <div class="result-section" id="resultSection">
+            <div class="saju-box">
+                <div class="saju-title">Four Pillars</div>
+                <div class="saju-grid">
+                    <div class="grid-cell label-cell">Hour</div>
+                    <div class="grid-cell label-cell">Day</div>
+                    <div class="grid-cell label-cell">Month</div>
+                    <div class="grid-cell label-cell">Year</div>
+                    
+                    <div class="grid-cell stem-cell" id="hourStem">-</div>
+                    <div class="grid-cell stem-cell" id="dayStem">-</div>
+                    <div class="grid-cell stem-cell" id="monthStem">-</div>
+                    <div class="grid-cell stem-cell" id="yearStem">-</div>
+                    
+                    <div class="grid-cell branch-cell" id="hourBranch">-</div>
+                    <div class="grid-cell branch-cell" id="dayBranch">-</div>
+                    <div class="grid-cell branch-cell" id="monthBranch">-</div>
+                    <div class="grid-cell branch-cell" id="yearBranch">-</div>
+                </div>
+                <div id="selectedDate" style="font-size: 1.1em; opacity: 0.9;"></div>
+            </div>
+            
+            <div class="info-grid">
+                <div class="info-card" id="fortuneCard" style="display: none;">
+                    <div class="info-title">🔮 Great Fortune</div>
+                    <div class="info-content" id="fortuneInfo"></div>
+                </div>
+                
+                <div class="info-card" id="yearlyCard">
+                    <div class="info-title">📊 Yearly Fortune</div>
+                    <div class="info-content" id="yearlyInfo"></div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-title">📅 Date Information</div>
+                    <div class="info-content" id="dateInfo"></div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-title">⭐ Five Elements</div>
+                    <div class="info-content" id="wuxingInfo"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tianGanEn = ['Yang Wood', 'Yin Wood', 'Yang Fire', 'Yin Fire', 'Yang Earth', 'Yin Earth', 'Yang Metal', 'Yin Metal', 'Yang Water', 'Yin Water'];
+        const diZhiEn = ['Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake', 'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'];
+        
+        const elementClass = { 'Wood': 'wood', 'Fire': 'fire', 'Earth': 'earth', 'Metal': 'metal', 'Water': 'water' };
+        
+        const wuxing = {
+            'Yang Wood': 'Wood', 'Yin Wood': 'Wood', 'Yang Fire': 'Fire', 'Yin Fire': 'Fire', 'Yang Earth': 'Earth',
+            'Yin Earth': 'Earth', 'Yang Metal': 'Metal', 'Yin Metal': 'Metal', 'Yang Water': 'Water', 'Yin Water': 'Water',
+            'Rat': 'Water', 'Ox': 'Earth', 'Tiger': 'Wood', 'Rabbit': 'Wood', 'Dragon': 'Earth',
+            'Snake': 'Fire', 'Horse': 'Fire', 'Goat': 'Earth', 'Monkey': 'Metal', 'Rooster': 'Metal', 'Dog': 'Earth', 'Pig': 'Water'
+        };
+        
+        // 절입시간 데이터를 저장할 변수
+        let solarTermsData = null;
+        
+        // 절입시간 JSON 파일 로드
+        async function loadSolarTermsData() {
+            try {
+                const response = await fetch('solar_terms.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                solarTermsData = await response.json();
+                console.log('절입시간 데이터 로드 완료');
+                return true;
+            } catch (error) {
+                console.error('절입시간 데이터 로드 실패:', error);
+                // 기본 데이터로 폴백
+                solarTermsData = getFallbackSolarTermsData();
+                return false;
+            }
+        }
+        
+        // 기본 절입시간 데이터 (JSON 파일 로드 실패시 사용)
+        function getFallbackSolarTermsData() {
+            return {
+                2024: [
+                    { month: 1, day: 6, hour: 5, minute: 49 },
+                    { month: 2, day: 4, hour: 17, minute: 27 },
+                    { month: 3, day: 5, hour: 11, minute: 22 },
+                    { month: 4, day: 4, hour: 16, minute: 2 },
+                    { month: 5, day: 5, hour: 9, minute: 10 },
+                    { month: 6, day: 5, hour: 13, minute: 10 },
+                    { month: 7, day: 6, hour: 23, minute: 20 },
+                    { month: 8, day: 7, hour: 9, minute: 9 },
+                    { month: 9, day: 7, hour: 12, minute: 11 },
+                    { month: 10, day: 8, hour: 4, minute: 0 },
+                    { month: 11, day: 7, hour: 7, minute: 20 },
+                    { month: 12, day: 7, hour: 0, minute: 17 }
+                ],
+                2025: [
+                    { month: 1, day: 5, hour: 11, minute: 32 },
+                    { month: 2, day: 3, hour: 23, minute: 10 },
+                    { month: 3, day: 5, hour: 17, minute: 7 },
+                    { month: 4, day: 4, hour: 21, minute: 48 },
+                    { month: 5, day: 5, hour: 14, minute: 57 },
+                    { month: 6, day: 5, hour: 18, minute: 56 },
+                    { month: 7, day: 7, hour: 5, minute: 5 },
+                    { month: 8, day: 7, hour: 14, minute: 51 },
+                    { month: 9, day: 7, hour: 17, minute: 52 },
+                    { month: 10, day: 8, hour: 9, minute: 41 },
+                    { month: 11, day: 7, hour: 13, minute: 4 },
+                    { month: 12, day: 7, hour: 6, minute: 4 }
+                ]
+            };
+        }
+
+        function normalizeIndex(index, mod) {
+            return ((index % mod) + mod) % mod;
+        }
+        
+        function calculateSaju() {
+            const dayInput = document.getElementById('dayInput').value;
+            const monthInput = document.getElementById('monthInput').value;
+            const yearInput = document.getElementById('yearInput').value;
+            const genderInput = document.getElementById('genderInput').value;
+            const timeInput = document.getElementById('timeInput').value;
+            
+            if (!dayInput || !monthInput || !yearInput) {
+                alert('Please select all date fields.');
+                return;
+            }
+            
+            if (!solarTermsData) {
+                alert('절입시간 데이터가 로드되지 않았습니다. 페이지를 새로고침해 주세요.');
+                return;
+            }
+            
+            const timeValue = timeInput || '12:00';
+            const selectedDate = new Date(`${yearInput}-${monthInput.padStart(2, '0')}-${dayInput.padStart(2, '0')}T${timeValue}`);
+            const year = selectedDate.getFullYear();
+            const month = selectedDate.getMonth() + 1;
+            const day = selectedDate.getDate();
+            const hour = selectedDate.getHours();
+            
+            // Calculate day pillar
+            // If hour is 23 (11 PM), use next day's pillar
+            let adjustedDate = new Date(year, month - 1, day);
+            if (hour === 23) {
+                adjustedDate = new Date(year, month - 1, day + 1);
+            }
+            
+            const baseDate = new Date(2025, 5, 9); // June 9, 2025
+            const daysDiff = Math.floor((adjustedDate - baseDate) / (1000 * 60 * 60 * 24));
+            
+            const baseDayGan = 5; // Yin Earth
+            const baseDayZhi = 9; // Rooster
+            
+            const dayGan = normalizeIndex(baseDayGan + daysDiff, 10);
+            const dayZhi = normalizeIndex(baseDayZhi + daysDiff, 12);
+            
+            // Calculate year pillar
+            const baseYearGan = 1; // Yin Wood (2025)
+            const baseYearZhi = 5; // Snake (2025)
+            
+            // Determine solar year based on solar terms
+            let solarYear = year;
+            const lichunDate = getMonthStartDate(year, 1);
+            if (lichunDate && selectedDate < lichunDate) {
+                solarYear = year - 1;
+            }
+            
+            const yearOffset = solarYear - 2025;
+            const yearGan = normalizeIndex(baseYearGan + yearOffset, 10);
+            const yearZhi = normalizeIndex(baseYearZhi + yearOffset, 12);
+            
+            // Calculate month pillar
+            const monthNumber = getSolarMonth(selectedDate);
+            const solarYearForMonth = monthNumber === 12 ? solarYear - 1 : solarYear;
+            
+            // Base month: June 2025 = Month 5 = 壬午 (Yang Water Horse)
+            const baseMonthGan = 8; // Yang Water
+            const baseMonthZhi = 6; // Horse
+            const monthOffset = (solarYearForMonth - 2025) * 12 + (monthNumber - 5);
+            
+            const monthGan = normalizeIndex(baseMonthGan + monthOffset, 10);
+            const monthZhi = normalizeIndex(baseMonthZhi + monthOffset, 12);
+            
+            // Calculate hour pillar (if time provided)
+            let hourGan = null, hourZhi = null;
+            if (timeInput) {
+                let hourIndex = Math.floor((hour + 1) / 2) % 12;
+                if (hour === 23) hourIndex = 0;
+                
+                const hourGanBase = (dayGan % 5) * 2;
+                hourGan = normalizeIndex(hourGanBase + hourIndex, 10);
+                hourZhi = hourIndex;
+            }
+            
+            // Get text values
+            const yearStemText = tianGanEn[yearGan];
+            const yearBranchText = diZhiEn[yearZhi];
+            const monthStemText = tianGanEn[monthGan];
+            const monthBranchText = diZhiEn[monthZhi];
+            const dayStemText = tianGanEn[dayGan];
+            const dayBranchText = diZhiEn[dayZhi];
+            
+            let hourStemText = '', hourBranchText = '';
+            if (timeInput && hourGan !== null && hourZhi !== null) {
+                hourStemText = tianGanEn[hourGan];
+                hourBranchText = diZhiEn[hourZhi];
+            }
+            
+            // Update display
+            updateCell('yearStem', yearStemText, 'stem-cell');
+            updateCell('monthStem', monthStemText, 'stem-cell');
+            updateCell('dayStem', dayStemText, 'stem-cell');
+            updateCell('hourStem', hourStemText, 'stem-cell');
+            
+            updateCell('yearBranch', yearBranchText, 'branch-cell');
+            updateCell('monthBranch', monthBranchText, 'branch-cell');
+            updateCell('dayBranch', dayBranchText, 'branch-cell');
+            updateCell('hourBranch', hourBranchText, 'branch-cell');
+            
+            document.getElementById('selectedDate').textContent = 
+                `${year}/${month}/${day}` + (timeInput ? ` ${hour}:${timeValue.split(':')[1] || '00'}` : ' (No time entered)') + 
+                (hour === 23 ? ' (Using next day\'s day pillar)' : '');
+            
+            displayAdditionalInfo(selectedDate, yearStemText, yearBranchText, monthStemText, monthBranchText, dayStemText, dayBranchText, hourStemText, hourBranchText, timeInput);
+            
+            // Great Fortune calculation
+            if (genderInput) {
+                calculateAndDisplayFortune(selectedDate, genderInput, yearGan, monthGan, monthZhi);
+                document.getElementById('fortuneCard').style.display = 'block';
+            } else {
+                document.getElementById('fortuneCard').style.display = 'none';
+            }
+            
+            // Yearly Fortune
+            calculateAndDisplayYearlyFortune();
+            
+            document.getElementById('resultSection').style.display = 'block';
+        }
+        
+        function getSolarMonth(date) {
+            const year = date.getFullYear();
+            const transitions = solarTermsData[year] || [];
+            
+            // Before first transition (February), it's Month 12 of previous year
+            if (transitions.length > 0) {
+                const firstTransition = new Date(year, transitions[0].month - 1, transitions[0].day, transitions[0].hour, transitions[0].minute);
+                if (date < firstTransition) {
+                    return 12;
+                }
+                
+                // Check each transition
+                for (let i = transitions.length - 1; i >= 0; i--) {
+                    const trans = transitions[i];
+                    const transDate = new Date(year, trans.month - 1, trans.day, trans.hour, trans.minute);
+                    if (date >= transDate) {
+                        return i + 1;
+                    }
+                }
+            }
+            
+            // Fallback to approximate calculation
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            
+            if (month === 1 || (month === 2 && day < 4)) return 12;
+            if (month === 2 || (month === 3 && day < 6)) return 1;
+            if (month === 3 || (month === 4 && day < 5)) return 2;
+            if (month === 4 || (month === 5 && day < 5)) return 3;
+            if (month === 5 || (month === 6 && day < 6)) return 4;
+            if (month === 6 || (month === 7 && day < 7)) return 5;
+            if (month === 7 || (month === 8 && day < 7)) return 6;
+            if (month === 8 || (month === 9 && day < 8)) return 7;
+            if (month === 9 || (month === 10 && day < 8)) return 8;
+            if (month === 10 || (month === 11 && day < 7)) return 9;
+            if (month === 11 || (month === 12 && day < 7)) return 10;
+            return 11;
+        }
+        
+        function getMonthStartDate(year, monthNum) {
+            const transitions = solarTermsData[year];
+            if (!transitions || monthNum < 1 || monthNum > 12) return null;
+            
+            if (monthNum === 12) {
+                // Month 12 starts in previous year's December
+                const prevTransitions = solarTermsData[year - 1];
+                if (prevTransitions && prevTransitions.length >= 11) {
+                    const trans = prevTransitions[10];
+                    return new Date(year - 1, trans.month - 1, trans.day, trans.hour, trans.minute);
+                }
+            } else if (monthNum <= transitions.length) {
+                const trans = transitions[monthNum - 1];
+                return new Date(year, trans.month - 1, trans.day, trans.hour, trans.minute);
+            }
+            
+            return null;
+        }
+        
+        function updateCell(elementId, text, cellType) {
+            const element = document.getElementById(elementId);
+            element.textContent = text || '-';
+            
+            if (text && wuxing[text]) {
+                element.className = `grid-cell ${cellType} ${elementClass[wuxing[text]]}`;
+            } else {
+                element.className = `grid-cell ${cellType}`;
+                if (!text) {
+                    element.style.border = '2px dashed rgba(255,255,255,0.5)';
+                    element.style.background = 'transparent';
+                }
+            }
+        }
+        
+        function displayAdditionalInfo(date, yS, yB, mS, mB, dS, dB, hS, hB, hasTime) {
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            
+            const dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            document.getElementById('dateInfo').innerHTML = 
+                `${year}/${month}/${day}<br>${dayOfWeek[date.getDay()]}`;
+            
+            const elements = [wuxing[yS], wuxing[yB], wuxing[mS], wuxing[mB], wuxing[dS], wuxing[dB]];
+            if (hasTime && hS && hB) elements.push(wuxing[hS], wuxing[hB]);
+            
+            const elementCount = {};
+            elements.forEach(el => {
+                if (el) elementCount[el] = (elementCount[el] || 0) + 1;
+            });
+            
+            let wuxingText = '';
+            Object.keys(elementCount).forEach(el => {
+                wuxingText += `${el}: ${elementCount[el]}<br>`;
+            });
+            document.getElementById('wuxingInfo').innerHTML = wuxingText;
+        }
+        
+        function calculateAndDisplayFortune(birthDate, gender, yearGan, monthGan, monthZhi) {
+            const birthYear = birthDate.getFullYear();
+            const currentYear = new Date().getFullYear();
+            
+            // Great Fortune direction (Male Yang year, Female Yin year = Forward)
+            const isYangYear = yearGan % 2 === 0;
+            const isForward = (gender === 'male' && isYangYear) || (gender === 'female' && !isYangYear);
+            
+            // Get solar terms data
+            const yearTransitions = solarTermsData[birthYear];
+            const prevYearTransitions = solarTermsData[birthYear - 1];
+            const nextYearTransitions = solarTermsData[birthYear + 1];
+            
+            if (!yearTransitions) {
+                // Fallback
+                const fortuneStartAge = 3;
+                const fortuneStartYear = birthYear + fortuneStartAge;
+                displayFortuneWithSimpleCalculation(fortuneStartYear, currentYear, monthGan, monthZhi, isForward);
+                return;
+            }
+            
+            // Create array of all solar terms around birth date
+            let allTransitions = [];
+            
+            // Add December from previous year
+            if (prevYearTransitions && prevYearTransitions.length >= 11) {
+                const decTrans = prevYearTransitions[10];
+                allTransitions.push({
+                    date: new Date(birthYear - 1, decTrans.month - 1, decTrans.day, decTrans.hour, decTrans.minute),
+                    monthNum: 12
+                });
+            }
+            
+            // Add all transitions from birth year
+            yearTransitions.forEach((trans, index) => {
+                allTransitions.push({
+                    date: new Date(birthYear, trans.month - 1, trans.day, trans.hour, trans.minute),
+                    monthNum: index + 1
+                });
+            });
+            
+            // Add January from next year
+            if (nextYearTransitions && nextYearTransitions.length > 0) {
+                const janTrans = nextYearTransitions[0];
+                allTransitions.push({
+                    date: new Date(birthYear + 1, janTrans.month - 1, janTrans.day, janTrans.hour, janTrans.minute),
+                    monthNum: 1
+                });
+            }
+            
+            // Find the closest transitions before and after birth
+            let prevTransition = null;
+            let nextTransition = null;
+            
+            for (let i = 0; i < allTransitions.length; i++) {
+                if (allTransitions[i].date <= birthDate) {
+                    prevTransition = allTransitions[i];
+                } else {
+                    nextTransition = allTransitions[i];
+                    break;
+                }
+            }
+            
+            // Calculate days to solar term
+            let daysToSolarTerm = 0;
+            let targetDate = null;
+            
+            if (isForward && nextTransition) {
+                // Forward: days to next solar term
+                targetDate = nextTransition.date;
+                daysToSolarTerm = (targetDate - birthDate) / (1000 * 60 * 60 * 24);
+            } else if (!isForward && prevTransition) {
+                // Backward: days from previous solar term
+                targetDate = prevTransition.date;
+                daysToSolarTerm = (birthDate - targetDate) / (1000 * 60 * 60 * 24);
+            }
+            
+            // Convert days to years (3 days = 1 year)
+            const fortuneStartAge = Math.round(daysToSolarTerm / 3 * 10) / 10; // Round to 0.1
+            const fortuneStartYear = birthYear + Math.floor(fortuneStartAge);
+            
+            // Current fortune index
+            const currentFortuneIndex = Math.floor((currentYear - fortuneStartYear) / 10);
+            
+            // Calculate previous, current, and next fortunes
+            const fortunes = [];
+            for (let i = -1; i <= 1; i++) {
+                const fortuneIndex = currentFortuneIndex + i;
+                const startYear = fortuneStartYear + (fortuneIndex * 10);
+                const endYear = startYear + 9;
+                
+                // Skip if fortune hasn't started yet
+                if (startYear > currentYear + 20) continue;
+                
+                // Calculate fortune stems and branches
+                let fortuneGan, fortuneZhi;
+                if (isForward) {
+                    fortuneGan = normalizeIndex(monthGan + fortuneIndex + 1, 10);
+                    fortuneZhi = normalizeIndex(monthZhi + fortuneIndex + 1, 12);
+                } else {
+                    fortuneGan = normalizeIndex(monthGan - fortuneIndex - 1, 10);
+                    fortuneZhi = normalizeIndex(monthZhi - fortuneIndex - 1, 12);
+                }
+                
+                const fortuneType = i === -1 ? 'past' : (i === 0 ? 'current' : 'future');
+                const fortuneLabel = i === -1 ? 'Previous' : (i === 0 ? 'Current' : 'Next');
+                
+                fortunes.push({
+                    type: fortuneType,
+                    label: fortuneLabel,
+                    startYear,
+                    endYear,
+                    gan: fortuneGan,
+                    zhi: fortuneZhi
+                });
+            }
+            
+            // Display fortune information with calculation details
+            const directionText = isForward ? 'Forward (順行)' : 'Backward (逆行)';
+            const genderYearText = `${gender === 'male' ? 'Male' : 'Female'}, ${isYangYear ? 'Yang' : 'Yin'} year`;
+            
+            let fortuneHtml = `<div style="font-size: 0.9em; margin-bottom: 10px; opacity: 0.8;">
+                ${genderYearText} → ${directionText}<br>
+                Days to solar term: ${daysToSolarTerm.toFixed(1)} days<br>
+                Fortune starts: Year ${fortuneStartYear} (Age ${fortuneStartAge})
+            </div>`;
+            
+            fortunes.forEach(fortune => {
+                const ganText = tianGanEn[fortune.gan];
+                const zhiText = diZhiEn[fortune.zhi];
+                const ganElement = wuxing[ganText];
+                const zhiElement = wuxing[zhiText];
+                
+                fortuneHtml += `
+                    <div class="fortune-period fortune-${fortune.type}">
+                        <div class="fortune-title">${fortune.label} Fortune</div>
+                        <div>${fortune.startYear} - ${fortune.endYear}</div>
+                        <div class="fortune-elements">
+                            <span class="fortune-element ${elementClass[ganElement]}">${ganText}</span>
+                            <span class="fortune-element ${elementClass[zhiElement]}">${zhiText}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('fortuneInfo').innerHTML = fortuneHtml;
+        }
+        
+        function displayFortuneWithSimpleCalculation(fortuneStartYear, currentYear, monthGan, monthZhi, isForward) {
+            // Fallback simple calculation when no solar terms data
+            const currentFortuneIndex = Math.floor((currentYear - fortuneStartYear) / 10);
+            
+            const fortunes = [];
+            for (let i = -1; i <= 1; i++) {
+                const fortuneIndex = currentFortuneIndex + i;
+                const startYear = fortuneStartYear + (fortuneIndex * 10);
+                const endYear = startYear + 9;
+                
+                let fortuneGan, fortuneZhi;
+                if (isForward) {
+                    fortuneGan = normalizeIndex(monthGan + fortuneIndex + 1, 10);
+                    fortuneZhi = normalizeIndex(monthZhi + fortuneIndex + 1, 12);
+                } else {
+                    fortuneGan = normalizeIndex(monthGan - fortuneIndex - 1, 10);
+                    fortuneZhi = normalizeIndex(monthZhi - fortuneIndex - 1, 12);
+                }
+                
+                const fortuneType = i === -1 ? 'past' : (i === 0 ? 'current' : 'future');
+                const fortuneLabel = i === -1 ? 'Previous' : (i === 0 ? 'Current' : 'Next');
+                
+                fortunes.push({
+                    type: fortuneType,
+                    label: fortuneLabel,
+                    startYear,
+                    endYear,
+                    gan: fortuneGan,
+                    zhi: fortuneZhi
+                });
+            }
+            
+            let fortuneHtml = '<div style="font-size: 0.9em; margin-bottom: 10px; opacity: 0.8;">Using simplified calculation (3 years)</div>';
+            
+            fortunes.forEach(fortune => {
+                const ganText = tianGanEn[fortune.gan];
+                const zhiText = diZhiEn[fortune.zhi];
+                const ganElement = wuxing[ganText];
+                const zhiElement = wuxing[zhiText];
+                
+                fortuneHtml += `
+                    <div class="fortune-period fortune-${fortune.type}">
+                        <div class="fortune-title">${fortune.label} Fortune</div>
+                        <div>${fortune.startYear} - ${fortune.endYear}</div>
+                        <div class="fortune-elements">
+                            <span class="fortune-element ${elementClass[ganElement]}">${ganText}</span>
+                            <span class="fortune-element ${elementClass[zhiElement]}">${zhiText}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('fortuneInfo').innerHTML = fortuneHtml;
+        }
+        
+        function calculateAndDisplayYearlyFortune() {
+            // Current year based on solar terms
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            let solarCurrentYear = currentYear;
+            
+            // Check if we're before lichun
+            const lichunDate = getMonthStartDate(currentYear, 1);
+            if (lichunDate && now < lichunDate) {
+                solarCurrentYear = currentYear - 1;
+            }
+            
+            const years = [solarCurrentYear - 1, solarCurrentYear, solarCurrentYear + 1];
+            const yearLabels = ['Last Year', 'This Year', 'Next Year'];
+            const yearTypes = ['past', 'current', 'future'];
+            
+            // 2025 = Yin Wood Snake (乙巳)
+            const base2025Gan = 1; // Yin Wood
+            const base2025Zhi = 5; // Snake
+            
+            let yearlyHtml = '';
+            
+            years.forEach((year, index) => {
+                const yearOffset = year - 2025;
+                const yearGan = normalizeIndex(base2025Gan + yearOffset, 10);
+                const yearZhi = normalizeIndex(base2025Zhi + yearOffset, 12);
+                
+                const ganText = tianGanEn[yearGan];
+                const zhiText = diZhiEn[yearZhi];
+                const ganElement = wuxing[ganText];
+                const zhiElement = wuxing[zhiText];
+                
+                yearlyHtml += `
+                    <div class="fortune-period fortune-${yearTypes[index]}">
+                        <div class="fortune-title">${yearLabels[index]}</div>
+                        <div>${year}</div>
+                        <div class="fortune-elements">
+                            <span class="fortune-element ${elementClass[ganElement]}">${ganText}</span>
+                            <span class="fortune-element ${elementClass[zhiElement]}">${zhiText}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('yearlyInfo').innerHTML = yearlyHtml;
+        }
+        
+        // Initialize on page load
+        window.onload = async function() {
+            // Load solar terms data first
+            const loadSuccess = await loadSolarTermsData();
+            if (!loadSuccess) {
+                console.warn('JSON 파일을 사용할 수 없어 기본 데이터를 사용합니다.');
+            }
+            
+            // Populate day select (1-31)
+            const daySelect = document.getElementById('dayInput');
+            daySelect.innerHTML = '<option value="">Day</option>';
+            for (let i = 1; i <= 31; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                if (i === 10) option.selected = true;
+                daySelect.appendChild(option);
+            }
+            
+            // Populate month select (1-12)
+            const monthSelect = document.getElementById('monthInput');
+            monthSelect.innerHTML = '<option value="">Month</option>';
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            for (let i = 1; i <= 12; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = months[i-1];
+                if (i === 6) option.selected = true;
+                monthSelect.appendChild(option);
+            }
+            
+            // Populate year select (1939-2026)
+            const yearSelect = document.getElementById('yearInput');
+            yearSelect.innerHTML = '<option value="">Year</option>';
+            for (let i = 2026; i >= 1939; i--) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                if (i === 2025) option.selected = true;
+                yearSelect.appendChild(option);
+            }
+        };
+    </script>
+</body>
+</html>

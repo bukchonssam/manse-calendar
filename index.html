@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -335,44 +336,9 @@
                 return true;
             } catch (error) {
                 console.error('절입시간 데이터 로드 실패:', error);
-                // 기본 데이터로 폴백
-                solarTermsData = getFallbackSolarTermsData();
+                solarTermsData = null;
                 return false;
             }
-        }
-        
-        // 기본 절입시간 데이터 (JSON 파일 로드 실패시 사용)
-        function getFallbackSolarTermsData() {
-            return {
-                2024: [
-                    { month: 1, day: 6, hour: 5, minute: 49 },
-                    { month: 2, day: 4, hour: 17, minute: 27 },
-                    { month: 3, day: 5, hour: 11, minute: 22 },
-                    { month: 4, day: 4, hour: 16, minute: 2 },
-                    { month: 5, day: 5, hour: 9, minute: 10 },
-                    { month: 6, day: 5, hour: 13, minute: 10 },
-                    { month: 7, day: 6, hour: 23, minute: 20 },
-                    { month: 8, day: 7, hour: 9, minute: 9 },
-                    { month: 9, day: 7, hour: 12, minute: 11 },
-                    { month: 10, day: 8, hour: 4, minute: 0 },
-                    { month: 11, day: 7, hour: 7, minute: 20 },
-                    { month: 12, day: 7, hour: 0, minute: 17 }
-                ],
-                2025: [
-                    { month: 1, day: 5, hour: 11, minute: 32 },
-                    { month: 2, day: 3, hour: 23, minute: 10 },
-                    { month: 3, day: 5, hour: 17, minute: 7 },
-                    { month: 4, day: 4, hour: 21, minute: 48 },
-                    { month: 5, day: 5, hour: 14, minute: 57 },
-                    { month: 6, day: 5, hour: 18, minute: 56 },
-                    { month: 7, day: 7, hour: 5, minute: 5 },
-                    { month: 8, day: 7, hour: 14, minute: 51 },
-                    { month: 9, day: 7, hour: 17, minute: 52 },
-                    { month: 10, day: 8, hour: 9, minute: 41 },
-                    { month: 11, day: 7, hour: 13, minute: 4 },
-                    { month: 12, day: 7, hour: 6, minute: 4 }
-                ]
-            };
         }
 
         function normalizeIndex(index, mod) {
@@ -392,7 +358,7 @@
             }
             
             if (!solarTermsData) {
-                alert('절입시간 데이터가 로드되지 않았습니다. 페이지를 새로고침해 주세요.');
+                alert('절입시간 데이터(solar_terms.json)를 불러올 수 없습니다. 정확한 사주 계산을 위해서는 절입시간 데이터 파일이 필요합니다.');
                 return;
             }
             
@@ -436,15 +402,31 @@
             
             // Calculate month pillar
             const monthNumber = getSolarMonth(selectedDate);
-            const solarYearForMonth = monthNumber === 12 ? solarYear - 1 : solarYear;
+            if (monthNumber === null) {
+                alert(`${year}년도의 절입시간 데이터가 없습니다. solar_terms.json 파일에 해당 연도 데이터를 추가해주세요.`);
+                return;
+            }
             
-            // Base month: June 2025 = Month 5 = 壬午 (Yang Water Horse)
-            const baseMonthGan = 8; // Yang Water
-            const baseMonthZhi = 6; // Horse
-            const monthOffset = (solarYearForMonth - 2025) * 12 + (monthNumber - 5);
+            // Month pillar calculation using year stem formula
+            // A/F years: Start with Fire Tiger month (stem index 2)
+            // B/G years: Start with Earth Tiger month (stem index 4)
+            // C/H years: Start with Metal Tiger month (stem index 6) 
+            // D/I years: Start with Water Tiger month (stem index 8)
+            // E/J years: Start with Wood Tiger month (stem index 0)
             
-            const monthGan = normalizeIndex(baseMonthGan + monthOffset, 10);
-            const monthZhi = normalizeIndex(baseMonthZhi + monthOffset, 12);
+            const yearGanMod5 = yearGan % 5;
+            let monthGanBase;
+            switch(yearGanMod5) {
+                case 0: case 5: monthGanBase = 2; break; // A/F years -> Fire Tiger
+                case 1: case 6: monthGanBase = 4; break; // B/G years -> Earth Tiger
+                case 2: case 7: monthGanBase = 6; break; // C/H years -> Metal Tiger
+                case 3: case 8: monthGanBase = 8; break; // D/I years -> Water Tiger
+                case 4: case 9: monthGanBase = 0; break; // E/J years -> Wood Tiger
+            }
+            
+            // Month branch starts from Tiger (index 2) and follows sequential order
+            const monthGan = normalizeIndex(monthGanBase + (monthNumber - 1), 10);
+            const monthZhi = normalizeIndex(2 + (monthNumber - 1), 12); // Tiger=2 start
             
             // Calculate hour pillar (if time provided)
             let hourGan = null, hourZhi = null;
@@ -506,39 +488,27 @@
             const year = date.getFullYear();
             const transitions = solarTermsData[year] || [];
             
+            // 해당 년도의 절입시간 데이터가 없으면 null 반환
+            if (transitions.length === 0) {
+                return null;
+            }
+            
             // Before first transition (February), it's Month 12 of previous year
-            if (transitions.length > 0) {
-                const firstTransition = new Date(year, transitions[0].month - 1, transitions[0].day, transitions[0].hour, transitions[0].minute);
-                if (date < firstTransition) {
-                    return 12;
-                }
-                
-                // Check each transition
-                for (let i = transitions.length - 1; i >= 0; i--) {
-                    const trans = transitions[i];
-                    const transDate = new Date(year, trans.month - 1, trans.day, trans.hour, trans.minute);
-                    if (date >= transDate) {
-                        return i + 1;
-                    }
+            const firstTransition = new Date(year, transitions[0].month - 1, transitions[0].day, transitions[0].hour, transitions[0].minute);
+            if (date < firstTransition) {
+                return 12;
+            }
+            
+            // Check each transition
+            for (let i = transitions.length - 1; i >= 0; i--) {
+                const trans = transitions[i];
+                const transDate = new Date(year, trans.month - 1, trans.day, trans.hour, trans.minute);
+                if (date >= transDate) {
+                    return i + 1;
                 }
             }
             
-            // Fallback to approximate calculation
-            const month = date.getMonth() + 1;
-            const day = date.getDate();
-            
-            if (month === 1 || (month === 2 && day < 4)) return 12;
-            if (month === 2 || (month === 3 && day < 6)) return 1;
-            if (month === 3 || (month === 4 && day < 5)) return 2;
-            if (month === 4 || (month === 5 && day < 5)) return 3;
-            if (month === 5 || (month === 6 && day < 6)) return 4;
-            if (month === 6 || (month === 7 && day < 7)) return 5;
-            if (month === 7 || (month === 8 && day < 7)) return 6;
-            if (month === 8 || (month === 9 && day < 8)) return 7;
-            if (month === 9 || (month === 10 && day < 8)) return 8;
-            if (month === 10 || (month === 11 && day < 7)) return 9;
-            if (month === 11 || (month === 12 && day < 7)) return 10;
-            return 11;
+            return null;
         }
         
         function getMonthStartDate(year, monthNum) {
@@ -717,7 +687,7 @@
             }
             
             // Display fortune information with calculation details
-            const directionText = isForward ? 'Forward (順行)' : 'Backward (逆行)';
+            const directionText = isForward ? 'Forward' : 'Backward';
             const genderYearText = `${gender === 'male' ? 'Male' : 'Female'}, ${isYangYear ? 'Yang' : 'Yin'} year`;
             
             let fortuneHtml = `<div style="font-size: 0.9em; margin-bottom: 10px; opacity: 0.8;">
@@ -818,7 +788,7 @@
             const yearLabels = ['Last Year', 'This Year', 'Next Year'];
             const yearTypes = ['past', 'current', 'future'];
             
-            // 2025 = Yin Wood Snake (乙巳)
+            // 2025 = Yin Wood Snake
             const base2025Gan = 1; // Yin Wood
             const base2025Zhi = 5; // Snake
             
@@ -854,7 +824,11 @@
             // Load solar terms data first
             const loadSuccess = await loadSolarTermsData();
             if (!loadSuccess) {
-                console.warn('JSON 파일을 사용할 수 없어 기본 데이터를 사용합니다.');
+                // JSON 파일 로드 실패시 사용자에게 알림
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error';
+                errorDiv.innerHTML = '⚠️ 절입시간 데이터 파일(solar_terms.json)을 찾을 수 없습니다.<br>정확한 사주 계산을 위해서는 이 파일이 필요합니다.';
+                document.querySelector('.container').insertBefore(errorDiv, document.querySelector('.input-section'));
             }
             
             // Populate day select (1-31)

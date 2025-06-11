@@ -504,7 +504,7 @@
                 const trans = transitions[i];
                 const transDate = new Date(year, trans.month - 1, trans.day, trans.hour, trans.minute);
                 if (date >= transDate) {
-                    return i + 1;
+                    return i;
                 }
             }
             

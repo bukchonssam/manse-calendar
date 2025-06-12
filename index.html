@@ -1048,100 +1048,151 @@
             drawGraph(labels, scores);
         }
 
-        // 그래프 그리기
+        // 그래프 그리기 (개선된 버전)
         function drawGraph(labels, scores) {
             const canvas = document.getElementById('fortuneChart');
             const ctx = canvas.getContext('2d');
             
             canvas.style.display = 'block';
-            canvas.width = canvas.offsetWidth;
+            // 고정 크기로 설정
+            canvas.width = 800;
             canvas.height = 400;
             
             // 캔버스 클리어
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            const padding = 60;
+            const padding = 80;
             const graphWidth = canvas.width - padding * 2;
             const graphHeight = canvas.height - padding * 2;
             
             const minScore = Math.min(...scores);
             const maxScore = Math.max(...scores);
-            const scoreRange = maxScore - minScore || 1;
+            const scoreRange = Math.max(maxScore - minScore, 10); // 최소 범위 보장
+            
+            console.log(`그래프 데이터: 최소=${minScore}, 최대=${maxScore}, 범위=${scoreRange}, 데이터개수=${scores.length}`);
+            
+            // 배경 그리기
+            ctx.fillStyle = '#f8f9fa';
+            ctx.fillRect(padding, padding, graphWidth, graphHeight);
+            
+            // 그리드 선 그리기
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            
+            // 세로 그리드 (시간축)
+            for (let i = 0; i <= 10; i++) {
+                const x = padding + (i / 10) * graphWidth;
+                ctx.beginPath();
+                ctx.moveTo(x, padding);
+                ctx.lineTo(x, padding + graphHeight);
+                ctx.stroke();
+            }
+            
+            // 가로 그리드 (점수축)
+            for (let i = 0; i <= 10; i++) {
+                const y = padding + (i / 10) * graphHeight;
+                ctx.beginPath();
+                ctx.moveTo(padding, y);
+                ctx.lineTo(padding + graphWidth, y);
+                ctx.stroke();
+            }
             
             // 축 그리기
             ctx.strokeStyle = '#333';
             ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.moveTo(padding, padding);
-            ctx.lineTo(padding, canvas.height - padding);
-            ctx.lineTo(canvas.width - padding, canvas.height - padding);
+            ctx.lineTo(padding, padding + graphHeight);
+            ctx.lineTo(padding + graphWidth, padding + graphHeight);
             ctx.stroke();
             
-            // 0선 그리기
+            // 0선 그리기 (있을 경우)
             if (minScore <= 0 && maxScore >= 0) {
-                const zeroY = canvas.height - padding - ((0 - minScore) / scoreRange) * graphHeight;
-                ctx.strokeStyle = '#999';
-                ctx.lineWidth = 1;
-                ctx.setLineDash([5, 5]);
+                const zeroY = padding + graphHeight - ((0 - minScore) / scoreRange) * graphHeight;
+                ctx.strokeStyle = '#ff6b6b';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([10, 5]);
                 ctx.beginPath();
                 ctx.moveTo(padding, zeroY);
-                ctx.lineTo(canvas.width - padding, zeroY);
+                ctx.lineTo(padding + graphWidth, zeroY);
                 ctx.stroke();
                 ctx.setLineDash([]);
+                
+                // 0 라벨 추가
+                ctx.fillStyle = '#ff6b6b';
+                ctx.font = 'bold 12px Arial';
+                ctx.textAlign = 'right';
+                ctx.fillText('0', padding - 5, zeroY + 4);
             }
             
-            // 데이터 점 그리기
-            ctx.strokeStyle = '#667eea';
-            ctx.fillStyle = '#667eea';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            
-            scores.forEach((score, index) => {
-                const x = padding + (index / (scores.length - 1)) * graphWidth;
-                const y = canvas.height - padding - ((score - minScore) / scoreRange) * graphHeight;
-                
-                if (index === 0) {
-                    ctx.moveTo(x, y);
-                } else {
-                    ctx.lineTo(x, y);
-                }
-            });
-            ctx.stroke();
-            
-            // 점 표시
-            scores.forEach((score, index) => {
-                const x = padding + (index / (scores.length - 1)) * graphWidth;
-                const y = canvas.height - padding - ((score - minScore) / scoreRange) * graphHeight;
-                
+            // 데이터 라인 그리기
+            if (scores.length > 1) {
+                ctx.strokeStyle = '#667eea';
+                ctx.lineWidth = 3;
                 ctx.beginPath();
-                ctx.arc(x, y, 3, 0, 2 * Math.PI);
-                ctx.fill();
-            });
+                
+                scores.forEach((score, index) => {
+                    const x = padding + (index / (scores.length - 1)) * graphWidth;
+                    const y = padding + graphHeight - ((score - minScore) / scoreRange) * graphHeight;
+                    
+                    if (index === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                });
+                ctx.stroke();
+                
+                // 데이터 점 표시
+                ctx.fillStyle = '#667eea';
+                scores.forEach((score, index) => {
+                    const x = padding + (index / (scores.length - 1)) * graphWidth;
+                    const y = padding + graphHeight - ((score - minScore) / scoreRange) * graphHeight;
+                    
+                    ctx.beginPath();
+                    ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                    ctx.fill();
+                    
+                    // 높은 점수와 낮은 점수에 값 표시
+                    if (score === maxScore || score === minScore) {
+                        ctx.fillStyle = '#2c3e50';
+                        ctx.font = 'bold 11px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(score.toString(), x, y - 10);
+                        ctx.fillStyle = '#667eea';
+                    }
+                });
+            }
             
-            // 라벨 표시 (일부만)
+            // X축 라벨 (년도만 표시)
             ctx.fillStyle = '#333';
             ctx.font = '12px Arial';
             ctx.textAlign = 'center';
             
-            const labelStep = Math.max(1, Math.floor(labels.length / 10));
-            for (let i = 0; i < labels.length; i += labelStep) {
-                const x = padding + (i / (scores.length - 1)) * graphWidth;
-                ctx.fillText(labels[i], x, canvas.height - padding + 20);
-            }
+            const yearLabels = ['2024', '2025', '2026', '2027', '2028'];
+            yearLabels.forEach((year, index) => {
+                const x = padding + (index / 4) * graphWidth;
+                ctx.fillText(year, x, canvas.height - padding + 25);
+            });
             
             // Y축 라벨
             ctx.textAlign = 'right';
             for (let i = 0; i <= 5; i++) {
                 const score = minScore + (scoreRange * i / 5);
-                const y = canvas.height - padding - (i / 5) * graphHeight;
+                const y = padding + graphHeight - (i / 5) * graphHeight;
                 ctx.fillText(score.toFixed(0), padding - 10, y + 4);
             }
             
             // 제목 추가
             ctx.fillStyle = '#2c3e50';
-            ctx.font = 'bold 16px Arial';
+            ctx.font = 'bold 18px Arial';
             ctx.textAlign = 'center';
-            ctx.fillText('Study Fortune (Inseong) Graph', canvas.width / 2, 30);
+            ctx.fillText('Study Fortune (Inseong) Analysis', canvas.width / 2, 30);
+            
+            // 범례 추가
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText(`Range: ${minScore} ~ ${maxScore} (Avg: ${(scores.reduce((a,b) => a+b, 0) / scores.length).toFixed(1)})`, padding, canvas.height - 10);
         }
 
         // 가중치 슬라이더 업데이트

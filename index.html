@@ -924,7 +924,7 @@
             document.getElementById('yearlyInfo').innerHTML = yearlyHtml;
         }
 
-        // 인성의 십이운성 계산 (정인만)
+        // 인성의 십이운성 계산 (정인만) - 변수들을 함수 내부로 이동
         function calculateInseongUnsung(ilgan, ganzhi) {
             // 정인 매핑
             const jeongInMapping = {
@@ -939,6 +939,24 @@
                 'Yang Water': 'Yin Metal',   // 임수의 정인: 신금
                 'Yin Water': 'Yang Metal'    // 계수의 정인: 경금
             };
+
+            // 지지별 장생위치
+            const jangSaengPos = {
+                'Yang Wood': 'Pig', 'Yin Wood': 'Horse', 'Yang Fire': 'Tiger', 'Yin Fire': 'Rooster',
+                'Yang Earth': 'Tiger', 'Yin Earth': 'Rooster', 'Yang Metal': 'Snake', 'Yin Metal': 'Rat',
+                'Yang Water': 'Monkey', 'Yin Water': 'Rabbit'
+            };
+
+            // 십이운성 점수
+            const unsungScores = {
+                '장생': 50, '목욕': -40, '관대': 30, '건록': 60,
+                '제왕': 70, '쇠': -20, '병': -50, '사': -60,
+                '묘': -65, '절': -70, '태': 0, '양': 10
+            };
+
+            // 십이운성 순서
+            const unsungOrder = ['장생', '목욕', '관대', '건록', '제왕', '쇠', '병', '사', '묘', '절', '태', '양'];
+            const jiOrder = ['Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake', 'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'];
             
             const jeongIn = jeongInMapping[ilgan];
             if (!jeongIn) return 0;
@@ -964,7 +982,11 @@
             diff = (12 - diff) % 12; // 역순
             
             const unsung = unsungOrder[diff];
-            return unsungScores[unsung] || 0;
+            const score = unsungScores[unsung] || 0;
+            
+            console.log(`${ilgan}의 정인 ${jeongIn} in ${ganzhi}: ${ji} -> ${unsung} = ${score}`);
+            
+            return score;
         }
 
         // 십이운성 점수 계산

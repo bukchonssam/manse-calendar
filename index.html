@@ -1213,16 +1213,22 @@
                 });
             }
             
-            // X축 라벨 (년도만 표시)
+            // X축 라벨 (동적 년도 표시)
             ctx.fillStyle = '#333';
             ctx.font = '12px Arial';
             ctx.textAlign = 'center';
             
-            const yearLabels = ['2024', '2025', '2026', '2027', '2028'];
-            yearLabels.forEach((year, index) => {
-                const x = padding + (index / 4) * graphWidth;
-                ctx.fillText(year, x, canvas.height - padding + 25);
-            });
+            // 시작년도와 끝년도 계산
+            const startYear = parseInt(document.getElementById('graphStartYear').value);
+            const endYear = parseInt(document.getElementById('graphEndYear').value);
+            const yearRange = endYear - startYear;
+            
+            // 년도 라벨 동적 생성
+            for (let i = 0; i <= yearRange; i++) {
+                const year = startYear + i;
+                const x = padding + (i / yearRange) * graphWidth;
+                ctx.fillText(year.toString(), x, canvas.height - padding + 25);
+            }
             
             // Y축 라벨 (100 기준값 적용된 값으로 표시)
             ctx.textAlign = 'right';

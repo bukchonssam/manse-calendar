@@ -977,9 +977,9 @@
             const jiIndex = jiOrder.indexOf(ji);
             if (jangSaengIndex === -1 || jiIndex === -1) return 0;
             
-            // 정인은 역순으로 계산
+            // 정인은 정순으로 계산 (역순 제거)
             let diff = (jiIndex - jangSaengIndex + 12) % 12;
-            diff = (12 - diff) % 12; // 역순
+            // diff = (12 - diff) % 12; // 역순 제거!
             
             const unsung = unsungOrder[diff];
             const score = unsungScores[unsung] || 0;

@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -229,6 +228,53 @@
             border-radius: 8px;
             margin: 10px 0;
         }
+
+        /* 인성운 그래프 스타일 */
+        .inseong-section {
+            margin-top: 30px;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #667eea;
+        }
+        
+        .period-selector {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .weight-settings {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        
+        .weight-settings label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: #555;
+        }
+        
+        .weight-settings input[type="range"] {
+            width: 200px;
+            margin: 0 10px;
+        }
+        
+        #fortuneChart {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            display: block;
+            width: 100%;
+        }
         
         @media (max-width: 768px) {
             .input-section {
@@ -305,6 +351,24 @@
                     <div class="info-content" id="wuxingInfo"></div>
                 </div>
             </div>
+
+            <!-- 인성운 그래프 섹션 추가 -->
+            <div class="inseong-section" id="inseongSection" style="display: none;">
+                <div class="info-title">📈 Study Fortune (Inseong) Analysis</div>
+                <div class="period-selector">
+                    <label>Analysis Period:</label>
+                    <input type="number" class="date-input" id="graphStartYear" placeholder="Start Year" value="2024" style="width: 120px;">
+                    <input type="number" class="date-input" id="graphEndYear" placeholder="End Year" value="2028" style="width: 120px;">
+                    <button class="search-btn" onclick="showInseongFortune()">Generate Graph</button>
+                </div>
+                
+                <div class="weight-settings">
+                    <label>Year Fortune Weight: <input type="range" id="yearWeight" min="10" max="90" value="60"> <span id="yearValue">60%</span></label>
+                    <label>Month Fortune Weight: <input type="range" id="monthWeight" min="10" max="90" value="40"> <span id="monthValue">40%</span></label>
+                </div>
+                
+                <canvas id="fortuneChart" style="display:none; height: 400px;"></canvas>
+            </div>
         </div>
     </div>
 
@@ -320,6 +384,37 @@
             'Rat': 'Water', 'Ox': 'Earth', 'Tiger': 'Wood', 'Rabbit': 'Wood', 'Dragon': 'Earth',
             'Snake': 'Fire', 'Horse': 'Fire', 'Goat': 'Earth', 'Monkey': 'Metal', 'Rooster': 'Metal', 'Dog': 'Earth', 'Pig': 'Water'
         };
+
+        // 인성운 그래프 관련 데이터
+        const inseongMapping = {
+            'Yang Wood': ['Yang Water', 'Yin Water'], // 갑목 → 임수(편인), 계수(정인)
+            'Yin Wood': ['Yin Water', 'Yang Water'], // 을목 → 계수(편인), 임수(정인)
+            'Yang Fire': ['Yang Wood', 'Yin Wood'], // 병화 → 갑목(편인), 을목(정인)
+            'Yin Fire': ['Yin Wood', 'Yang Wood'], // 정화 → 을목(편인), 갑목(정인)
+            'Yang Earth': ['Yang Fire', 'Yin Fire'], // 무토 → 병화(편인), 정화(정인)
+            'Yin Earth': ['Yin Fire', 'Yang Fire'], // 기토 → 정화(편인), 병화(정인)
+            'Yang Metal': ['Yang Earth', 'Yin Earth'], // 경금 → 무토(편인), 기토(정인)
+            'Yin Metal': ['Yin Earth', 'Yang Earth'], // 신금 → 기토(편인), 무토(정인)
+            'Yang Water': ['Yang Metal', 'Yin Metal'], // 임수 → 경금(편인), 신금(정인)
+            'Yin Water': ['Yin Metal', 'Yang Metal']  // 계수 → 신금(편인), 경금(정인)
+        };
+
+        const unsungScores = {
+            '장생': 50, '목욕': -40, '관대': 30, '건록': 60,
+            '제왕': 70, '쇠': -20, '병': -50, '사': -60,
+            '묘': -65, '절': -70, '태': 0, '양': 10
+        };
+
+        // 지지별 장생위치 (정순)
+        const jangSaengPos = {
+            'Yang Wood': 'Pig', 'Yin Wood': 'Horse', 'Yang Fire': 'Tiger', 'Yin Fire': 'Rooster',
+            'Yang Earth': 'Tiger', 'Yin Earth': 'Rooster', 'Yang Metal': 'Snake', 'Yin Metal': 'Rat',
+            'Yang Water': 'Monkey', 'Yin Water': 'Rabbit'
+        };
+
+        // 십이운성 순서
+        const unsungOrder = ['장생', '목욕', '관대', '건록', '제왕', '쇠', '병', '사', '묘', '절', '태', '양'];
+        const jiOrder = ['Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake', 'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'];
         
         // 절입시간 데이터를 저장할 변수
         let solarTermsData = null;
@@ -482,6 +577,16 @@
             calculateAndDisplayYearlyFortune();
             
             document.getElementById('resultSection').style.display = 'block';
+            
+            // 인성운 그래프 섹션 표시
+            document.getElementById('inseongSection').style.display = 'block';
+            
+            // 전역 변수에 저장 (그래프용)
+            window.currentPillars = {
+                day: dayStemText,
+                year: yearStemText + yearBranchText,
+                month: monthStemText + monthBranchText
+            };
         }
         
         function getSolarMonth(date) {
@@ -818,6 +923,248 @@
             
             document.getElementById('yearlyInfo').innerHTML = yearlyHtml;
         }
+
+        // 인성의 십이운성 계산
+        function calculateInseongUnsung(ilgan, ganzhi) {
+            const inseongList = inseongMapping[ilgan];
+            if (!inseongList) return 0;
+            
+            let totalScore = 0;
+            
+            // 편인과 정인 계산
+            inseongList.forEach((inseong, index) => {
+                const isReverse = index === 1; // 정인은 역순
+                const score = getUnsungScore(inseong, ganzhi, isReverse);
+                totalScore += score;
+            });
+            
+            return totalScore;
+        }
+
+        // 십이운성 점수 계산
+        function getUnsungScore(gan, ganzhi, reverse = false) {
+            const ganElement = wuxing[gan];
+            const zhiElement = wuxing[ganzhi];
+            
+            // 간지에서 지지 부분 추출
+            let ji = '';
+            Object.keys(wuxing).forEach(key => {
+                if (wuxing[key] === zhiElement && diZhiEn.includes(key)) {
+                    ji = key;
+                }
+            });
+            
+            const jangSaeng = jangSaengPos[gan];
+            
+            if (!jangSaeng || !ji) return 0;
+            
+            const jangSaengIndex = jiOrder.indexOf(jangSaeng);
+            const jiIndex = jiOrder.indexOf(ji);
+            
+            if (jangSaengIndex === -1 || jiIndex === -1) return 0;
+            
+            let diff = (jiIndex - jangSaengIndex + 12) % 12;
+            if (reverse) {
+                diff = (12 - diff) % 12;
+            }
+            
+            const unsung = unsungOrder[diff];
+            return unsungScores[unsung] || 0;
+        }
+
+        // 년월간지 생성
+        function generateYearMonthGanzhi(startYear, endYear) {
+            const result = [];
+            
+            for (let year = startYear; year <= endYear; year++) {
+                // 년간지 계산
+                const baseYearGan = 1; // Yin Wood (2025)
+                const baseYearZhi = 5; // Snake (2025)
+                const yearOffset = year - 2025;
+                const yearGan = normalizeIndex(baseYearGan + yearOffset, 10);
+                const yearZhi = normalizeIndex(baseYearZhi + yearOffset, 12);
+                const yearGanzhi = tianGanEn[yearGan] + diZhiEn[yearZhi];
+                
+                for (let month = 1; month <= 12; month++) {
+                    // 월간지 계산
+                    const yearGanMod5 = yearGan % 5;
+                    let monthGanBase;
+                    switch(yearGanMod5) {
+                        case 0: case 5: monthGanBase = 2; break;
+                        case 1: case 6: monthGanBase = 4; break;
+                        case 2: case 7: monthGanBase = 6; break;
+                        case 3: case 8: monthGanBase = 8; break;
+                        case 4: case 9: monthGanBase = 0; break;
+                    }
+                    
+                    const monthGan = normalizeIndex(monthGanBase + (month - 1), 10);
+                    const monthZhi = normalizeIndex(2 + (month - 1), 12);
+                    const monthGanzhi = tianGanEn[monthGan] + diZhiEn[monthZhi];
+                    
+                    result.push({
+                        year: year,
+                        month: month,
+                        yearGanzhi: yearGanzhi,
+                        monthGanzhi: monthGanzhi
+                    });
+                }
+            }
+            
+            return result;
+        }
+
+        // 인성운 그래프 표시
+        function showInseongFortune() {
+            if (!window.currentPillars) {
+                alert('Please calculate Four Pillars first.');
+                return;
+            }
+            
+            const startYear = parseInt(document.getElementById('graphStartYear').value);
+            const endYear = parseInt(document.getElementById('graphEndYear').value);
+            
+            if (!startYear || !endYear || startYear >= endYear) {
+                alert('Please enter a valid period.');
+                return;
+            }
+            
+            const ilgan = window.currentPillars.day;
+            const yearMonthData = generateYearMonthGanzhi(startYear, endYear);
+            const yearWeight = parseInt(document.getElementById('yearWeight').value) / 100;
+            const monthWeight = parseInt(document.getElementById('monthWeight').value) / 100;
+            
+            const scores = [];
+            const labels = [];
+            
+            yearMonthData.forEach(data => {
+                const yearScore = calculateInseongUnsung(ilgan, data.yearGanzhi);
+                const monthScore = calculateInseongUnsung(ilgan, data.monthGanzhi);
+                
+                const totalScore = yearScore * yearWeight + monthScore * monthWeight;
+                scores.push(totalScore);
+                labels.push(`${data.year}.${data.month.toString().padStart(2, '0')}`);
+            });
+            
+            drawGraph(labels, scores);
+        }
+
+        // 그래프 그리기
+        function drawGraph(labels, scores) {
+            const canvas = document.getElementById('fortuneChart');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.style.display = 'block';
+            canvas.width = canvas.offsetWidth;
+            canvas.height = 400;
+            
+            // 캔버스 클리어
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const padding = 60;
+            const graphWidth = canvas.width - padding * 2;
+            const graphHeight = canvas.height - padding * 2;
+            
+            const minScore = Math.min(...scores);
+            const maxScore = Math.max(...scores);
+            const scoreRange = maxScore - minScore || 1;
+            
+            // 축 그리기
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, canvas.height - padding);
+            ctx.lineTo(canvas.width - padding, canvas.height - padding);
+            ctx.stroke();
+            
+            // 0선 그리기
+            if (minScore <= 0 && maxScore >= 0) {
+                const zeroY = canvas.height - padding - ((0 - minScore) / scoreRange) * graphHeight;
+                ctx.strokeStyle = '#999';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.moveTo(padding, zeroY);
+                ctx.lineTo(canvas.width - padding, zeroY);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+            
+            // 데이터 점 그리기
+            ctx.strokeStyle = '#667eea';
+            ctx.fillStyle = '#667eea';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            
+            scores.forEach((score, index) => {
+                const x = padding + (index / (scores.length - 1)) * graphWidth;
+                const y = canvas.height - padding - ((score - minScore) / scoreRange) * graphHeight;
+                
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            ctx.stroke();
+            
+            // 점 표시
+            scores.forEach((score, index) => {
+                const x = padding + (index / (scores.length - 1)) * graphWidth;
+                const y = canvas.height - padding - ((score - minScore) / scoreRange) * graphHeight;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, 3, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+            
+            // 라벨 표시 (일부만)
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            
+            const labelStep = Math.max(1, Math.floor(labels.length / 10));
+            for (let i = 0; i < labels.length; i += labelStep) {
+                const x = padding + (i / (scores.length - 1)) * graphWidth;
+                ctx.fillText(labels[i], x, canvas.height - padding + 20);
+            }
+            
+            // Y축 라벨
+            ctx.textAlign = 'right';
+            for (let i = 0; i <= 5; i++) {
+                const score = minScore + (scoreRange * i / 5);
+                const y = canvas.height - padding - (i / 5) * graphHeight;
+                ctx.fillText(score.toFixed(0), padding - 10, y + 4);
+            }
+            
+            // 제목 추가
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Study Fortune (Inseong) Graph', canvas.width / 2, 30);
+        }
+
+        // 가중치 슬라이더 업데이트
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearSlider = document.getElementById('yearWeight');
+            const monthSlider = document.getElementById('monthWeight');
+            const yearValue = document.getElementById('yearValue');
+            const monthValue = document.getElementById('monthValue');
+            
+            if (yearSlider && monthSlider) {
+                yearSlider.addEventListener('input', function() {
+                    yearValue.textContent = this.value + '%';
+                    monthSlider.value = 100 - this.value;
+                    monthValue.textContent = monthSlider.value + '%';
+                });
+                
+                monthSlider.addEventListener('input', function() {
+                    monthValue.textContent = this.value + '%';
+                    yearSlider.value = 100 - this.value;
+                    yearValue.textContent = yearSlider.value + '%';
+                });
+            }
+        });
         
         // Initialize on page load
         window.onload = async function() {

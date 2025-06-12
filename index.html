@@ -1154,12 +1154,12 @@
                     ctx.arc(x, y, 4, 0, 2 * Math.PI);
                     ctx.fill();
                     
-                    // 높은 점수와 낮은 점수에 값 표시 (원래 값으로 표시)
+                    // 높은 점수와 낮은 점수에 값 표시 (100 기준값 적용된 값으로 표시)
                     if (score === maxScore || score === minScore) {
                         ctx.fillStyle = '#2c3e50';
                         ctx.font = 'bold 11px Arial';
                         ctx.textAlign = 'center';
-                        ctx.fillText((score - 100).toString(), x, y - 10); // 원래 값으로 표시
+                        ctx.fillText(score.toString(), x, y - 10); // 100 더해진 값 그대로 표시
                         ctx.fillStyle = '#667eea';
                     }
                 });
@@ -1176,13 +1176,15 @@
                 ctx.fillText(year, x, canvas.height - padding + 25);
             });
             
-            // Y축 라벨 (원래 값으로 표시)
+            // Y축 라벨 (100 기준값 적용된 값으로 표시)
             ctx.textAlign = 'right';
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Arial';
+            
             for (let i = 0; i <= 5; i++) {
                 const score = minScore + (scoreRange * i / 5);
-                const originalScore = score - 100; // 원래 값으로 변환
                 const y = padding + graphHeight - (i / 5) * graphHeight;
-                ctx.fillText(originalScore.toFixed(0), padding - 10, y + 4);
+                ctx.fillText(score.toFixed(0), padding - 10, y + 4);
             }
             
             // 제목 추가
@@ -1191,13 +1193,11 @@
             ctx.textAlign = 'center';
             ctx.fillText('Study Fortune (Inseong) Analysis', canvas.width / 2, 30);
             
-            // 범례 추가 (원래 값으로 표시)
+            // 범례 추가 (100 기준값 적용된 값으로 표시)
             ctx.font = '12px Arial';
             ctx.textAlign = 'left';
-            const originalMin = minScore - 100;
-            const originalMax = maxScore - 100;
-            const originalAvg = (scores.reduce((a,b) => a+b, 0) / scores.length) - 100;
-            ctx.fillText(`Range: ${originalMin} ~ ${originalMax} (Avg: ${originalAvg.toFixed(1)}, Baseline: 0)`, padding, canvas.height - 10);
+            const avgScore = scores.reduce((a,b) => a+b, 0) / scores.length;
+            ctx.fillText(`Range: ${minScore.toFixed(0)} ~ ${maxScore.toFixed(0)} (Avg: ${avgScore.toFixed(1)}, Baseline: 100)`, padding, canvas.height - 10);
         }
 
         // 가중치 슬라이더 업데이트

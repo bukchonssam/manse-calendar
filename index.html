@@ -924,21 +924,47 @@
             document.getElementById('yearlyInfo').innerHTML = yearlyHtml;
         }
 
-        // 인성의 십이운성 계산
+        // 인성의 십이운성 계산 (정인만)
         function calculateInseongUnsung(ilgan, ganzhi) {
-            const inseongList = inseongMapping[ilgan];
-            if (!inseongList) return 0;
+            // 정인 매핑
+            const jeongInMapping = {
+                'Yang Wood': 'Yang Water',   // 갑목의 정인: 임수
+                'Yin Wood': 'Yin Water',     // 을목의 정인: 계수
+                'Yang Fire': 'Yin Wood',     // 병화의 정인: 을목
+                'Yin Fire': 'Yang Wood',     // 정화의 정인: 갑목
+                'Yang Earth': 'Yin Fire',    // 무토의 정인: 정화
+                'Yin Earth': 'Yang Fire',    // 기토의 정인: 병화
+                'Yang Metal': 'Yin Earth',   // 경금의 정인: 기토
+                'Yin Metal': 'Yang Earth',   // 신금의 정인: 무토
+                'Yang Water': 'Yin Metal',   // 임수의 정인: 신금
+                'Yin Water': 'Yang Metal'    // 계수의 정인: 경금
+            };
             
-            let totalScore = 0;
+            const jeongIn = jeongInMapping[ilgan];
+            if (!jeongIn) return 0;
             
-            // 편인과 정인 계산
-            inseongList.forEach((inseong, index) => {
-                const isReverse = index === 1; // 정인은 역순
-                const score = getUnsungScore(inseong, ganzhi, isReverse);
-                totalScore += score;
-            });
+            // 간지에서 지지 부분 추출
+            let ji = '';
+            for (let animal of diZhiEn) {
+                if (ganzhi.includes(animal)) {
+                    ji = animal;
+                    break;
+                }
+            }
             
-            return totalScore;
+            const jangSaeng = jangSaengPos[jeongIn];
+            if (!jangSaeng || !ji) return 0;
+            
+            const jangSaengIndex = jiOrder.indexOf(jangSaeng);
+            const jiIndex = jiOrder.indexOf(ji);
+            if (jangSaengIndex === -1 || jiIndex === -1) return 0;
+            
+            // 정인은 역순으로 계산
+            let diff = (jiIndex - jangSaengIndex + 12) % 12;
+            diff = (12 - diff) % 12; // 역순
+            
+            const unsung = unsungOrder[diff];
+            return unsungScores[unsung] || 0;
         }
 
         // 십이운성 점수 계산

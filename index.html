@@ -1041,14 +1041,15 @@
                 const monthScore = calculateInseongUnsung(ilgan, data.monthGanzhi);
                 
                 const totalScore = yearScore * yearWeight + monthScore * monthWeight;
-                scores.push(totalScore);
+                // 기본값 100을 더해서 모든 값을 양수로 만들기
+                scores.push(totalScore + 100);
                 labels.push(`${data.year}.${data.month.toString().padStart(2, '0')}`);
             });
             
             drawGraph(labels, scores);
         }
 
-        // 그래프 그리기 (개선된 버전)
+        // 그래프 그리기 (개선된 버전 - 기본값 100 적용)
         function drawGraph(labels, scores) {
             const canvas = document.getElementById('fortuneChart');
             const ctx = canvas.getContext('2d');
@@ -1106,23 +1107,23 @@
             ctx.lineTo(padding + graphWidth, padding + graphHeight);
             ctx.stroke();
             
-            // 0선 그리기 (있을 경우)
-            if (minScore <= 0 && maxScore >= 0) {
-                const zeroY = padding + graphHeight - ((0 - minScore) / scoreRange) * graphHeight;
+            // 100선 그리기 (기준선)
+            const baselineY = padding + graphHeight - ((100 - minScore) / scoreRange) * graphHeight;
+            if (baselineY >= padding && baselineY <= padding + graphHeight) {
                 ctx.strokeStyle = '#ff6b6b';
                 ctx.lineWidth = 2;
                 ctx.setLineDash([10, 5]);
                 ctx.beginPath();
-                ctx.moveTo(padding, zeroY);
-                ctx.lineTo(padding + graphWidth, zeroY);
+                ctx.moveTo(padding, baselineY);
+                ctx.lineTo(padding + graphWidth, baselineY);
                 ctx.stroke();
                 ctx.setLineDash([]);
                 
-                // 0 라벨 추가
+                // 100 라벨 추가
                 ctx.fillStyle = '#ff6b6b';
                 ctx.font = 'bold 12px Arial';
                 ctx.textAlign = 'right';
-                ctx.fillText('0', padding - 5, zeroY + 4);
+                ctx.fillText('100', padding - 5, baselineY + 4);
             }
             
             // 데이터 라인 그리기
@@ -1153,12 +1154,12 @@
                     ctx.arc(x, y, 4, 0, 2 * Math.PI);
                     ctx.fill();
                     
-                    // 높은 점수와 낮은 점수에 값 표시
+                    // 높은 점수와 낮은 점수에 값 표시 (원래 값으로 표시)
                     if (score === maxScore || score === minScore) {
                         ctx.fillStyle = '#2c3e50';
                         ctx.font = 'bold 11px Arial';
                         ctx.textAlign = 'center';
-                        ctx.fillText(score.toString(), x, y - 10);
+                        ctx.fillText((score - 100).toString(), x, y - 10); // 원래 값으로 표시
                         ctx.fillStyle = '#667eea';
                     }
                 });
@@ -1175,12 +1176,13 @@
                 ctx.fillText(year, x, canvas.height - padding + 25);
             });
             
-            // Y축 라벨
+            // Y축 라벨 (원래 값으로 표시)
             ctx.textAlign = 'right';
             for (let i = 0; i <= 5; i++) {
                 const score = minScore + (scoreRange * i / 5);
+                const originalScore = score - 100; // 원래 값으로 변환
                 const y = padding + graphHeight - (i / 5) * graphHeight;
-                ctx.fillText(score.toFixed(0), padding - 10, y + 4);
+                ctx.fillText(originalScore.toFixed(0), padding - 10, y + 4);
             }
             
             // 제목 추가
@@ -1189,10 +1191,13 @@
             ctx.textAlign = 'center';
             ctx.fillText('Study Fortune (Inseong) Analysis', canvas.width / 2, 30);
             
-            // 범례 추가
+            // 범례 추가 (원래 값으로 표시)
             ctx.font = '12px Arial';
             ctx.textAlign = 'left';
-            ctx.fillText(`Range: ${minScore} ~ ${maxScore} (Avg: ${(scores.reduce((a,b) => a+b, 0) / scores.length).toFixed(1)})`, padding, canvas.height - 10);
+            const originalMin = minScore - 100;
+            const originalMax = maxScore - 100;
+            const originalAvg = (scores.reduce((a,b) => a+b, 0) / scores.length) - 100;
+            ctx.fillText(`Range: ${originalMin} ~ ${originalMax} (Avg: ${originalAvg.toFixed(1)}, Baseline: 0)`, padding, canvas.height - 10);
         }
 
         // 가중치 슬라이더 업데이트

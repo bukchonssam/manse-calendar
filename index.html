@@ -352,9 +352,9 @@
                 </div>
             </div>
 
-            <!-- 인성운 그래프 섹션 추가 -->
+            <!-- 인성운 그래프 섹션 수정 -->
             <div class="inseong-section" id="inseongSection" style="display: none;">
-                <div class="info-title">📈 Study Fortune (Inseong) Analysis</div>
+                <div class="info-title">📈 Study Exam Fortune Analysis</div>
                 <div class="period-selector">
                     <label>Analysis Period:</label>
                     <input type="number" class="date-input" id="graphStartYear" placeholder="Start Year" value="2024" style="width: 120px;">
@@ -926,10 +926,10 @@
 
         // 인성의 십이운성 계산 (정인만) - 변수들을 함수 내부로 이동
         function calculateInseongUnsung(ilgan, ganzhi) {
-            // 정인 매핑
+            // 정인 매핑 (수정된 버전)
             const jeongInMapping = {
-                'Yang Wood': 'Yang Water',   // 갑목의 정인: 임수
-                'Yin Wood': 'Yin Water',     // 을목의 정인: 계수
+                'Yang Wood': 'Yin Water',    // 갑목의 정인: 계수
+                'Yin Wood': 'Yang Water',    // 을목의 정인: 임수
                 'Yang Fire': 'Yin Wood',     // 병화의 정인: 을목
                 'Yin Fire': 'Yang Wood',     // 정화의 정인: 갑목
                 'Yang Earth': 'Yin Fire',    // 무토의 정인: 정화
@@ -947,11 +947,11 @@
                 'Yang Water': 'Monkey', 'Yin Water': 'Rabbit'
             };
 
-            // 십이운성 점수
+            // 십이운성 점수 (새로운 설정)
             const unsungScores = {
-                '장생': 50, '목욕': -40, '관대': 30, '건록': 60,
-                '제왕': 70, '쇠': -20, '병': -50, '사': -60,
-                '묘': -65, '절': -70, '태': 0, '양': 10
+                '장생': 40, '목욕': 10, '관대': 30, '건록': 60,
+                '제왕': 70, '쇠': 50, '병': 30, '사': 10,
+                '묘': -20, '절': -40, '태': -20, '양': 0
             };
 
             // 십이운성 순서
@@ -1089,8 +1089,8 @@
                 const monthScore = calculateInseongUnsung(ilgan, data.monthGanzhi);
                 
                 const totalScore = yearScore * yearWeight + monthScore * monthWeight;
-                // 기본값 100을 더해서 모든 값을 양수로 만들기
-                scores.push(totalScore + 100);
+                // 기본값 100을 더해서 모든 값을 양수로 만들고 반올림
+                scores.push(Math.round((totalScore + 100) * 10) / 10); // 소수점 1자리까지
                 labels.push(`${data.year}.${data.month.toString().padStart(2, '0')}`);
             });
             
@@ -1174,32 +1174,54 @@
                 ctx.fillText('100', padding - 5, baselineY + 4);
             }
             
-            // 데이터 라인 그리기
+            // 데이터 라인 그리기 (부드러운 베지어 곡선)
             if (scores.length > 1) {
                 ctx.strokeStyle = '#667eea';
                 ctx.lineWidth = 3;
                 ctx.beginPath();
                 
-                scores.forEach((score, index) => {
-                    const x = padding + (index / (scores.length - 1)) * graphWidth;
-                    const y = padding + graphHeight - ((score - minScore) / scoreRange) * graphHeight;
+                // 첫 번째 점
+                let x = padding + (0 / (scores.length - 1)) * graphWidth;
+                let y = padding + graphHeight - ((scores[0] - minScore) / scoreRange) * graphHeight;
+                ctx.moveTo(x, y);
+                
+                // 베지어 곡선으로 부드럽게 연결
+                for (let i = 1; i < scores.length; i++) {
+                    const currentX = padding + (i / (scores.length - 1)) * graphWidth;
+                    const currentY = padding + graphHeight - ((scores[i] - minScore) / scoreRange) * graphHeight;
                     
-                    if (index === 0) {
-                        ctx.moveTo(x, y);
+                    if (i === 1) {
+                        // 첫 번째 곡선
+                        const cp1x = x + (currentX - x) * 0.5;
+                        const cp1y = y;
+                        const cp2x = currentX - (currentX - x) * 0.5;
+                        const cp2y = currentY;
+                        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, currentX, currentY);
                     } else {
-                        ctx.lineTo(x, y);
+                        // 이전 점과 현재 점 사이의 제어점 계산
+                        const prevX = padding + ((i-1) / (scores.length - 1)) * graphWidth;
+                        const prevY = padding + graphHeight - ((scores[i-1] - minScore) / scoreRange) * graphHeight;
+                        
+                        const cp1x = prevX + (currentX - prevX) * 0.3;
+                        const cp1y = prevY;
+                        const cp2x = currentX - (currentX - prevX) * 0.3;
+                        const cp2y = currentY;
+                        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, currentX, currentY);
                     }
-                });
+                    
+                    x = currentX;
+                    y = currentY;
+                }
                 ctx.stroke();
                 
                 // 데이터 점 표시
                 ctx.fillStyle = '#667eea';
                 scores.forEach((score, index) => {
-                    const x = padding + (index / (scores.length - 1)) * graphWidth;
-                    const y = padding + graphHeight - ((score - minScore) / scoreRange) * graphHeight;
+                    const pointX = padding + (index / (scores.length - 1)) * graphWidth;
+                    const pointY = padding + graphHeight - ((score - minScore) / scoreRange) * graphHeight;
                     
                     ctx.beginPath();
-                    ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                    ctx.arc(pointX, pointY, 4, 0, 2 * Math.PI);
                     ctx.fill();
                     
                     // 높은 점수와 낮은 점수에 값 표시 (100 기준값 적용된 값으로 표시)
@@ -1207,7 +1229,7 @@
                         ctx.fillStyle = '#2c3e50';
                         ctx.font = 'bold 11px Arial';
                         ctx.textAlign = 'center';
-                        ctx.fillText(score.toString(), x, y - 10); // 100 더해진 값 그대로 표시
+                        ctx.fillText(score.toString(), pointX, pointY - 10); // 100 더해진 값 그대로 표시
                         ctx.fillStyle = '#667eea';
                     }
                 });
@@ -1245,7 +1267,7 @@
             ctx.fillStyle = '#2c3e50';
             ctx.font = 'bold 18px Arial';
             ctx.textAlign = 'center';
-            ctx.fillText('Study Fortune (Inseong) Analysis', canvas.width / 2, 30);
+            ctx.fillText('Study Exam Fortune Analysis', canvas.width / 2, 30);
             
             // 범례 추가 (100 기준값 적용된 값으로 표시)
             ctx.font = '12px Arial';

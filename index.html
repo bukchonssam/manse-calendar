@@ -1061,7 +1061,15 @@
             return result;
         }
 
-        // 인성운 그래프 표시
+        // 가중치 업데이트 함수 (탭 함수들 다음에 배치)
+        function updateWeights() {
+            const yearWeight = document.getElementById('yearWeight').value;
+            const monthWeight = 100 - yearWeight;
+            
+            document.getElementById('monthWeight').value = monthWeight;
+            document.getElementById('yearWeightValue').textContent = yearWeight;
+            document.getElementById('monthWeightValue').textContent = monthWeight;
+        }
         function showInseongFortune() {
             if (!window.currentPillars) {
                 alert('Please calculate Four Pillars first.');

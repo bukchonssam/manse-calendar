@@ -1,4 +1,191 @@
-<!DOCTYPE html>
+// 그래프 그리기 (개선된 버전 - 기본값 100 적용)
+        function drawGraph(labels, scores, canvasId = 'fortuneChart', title = 'Fortune Analysis') {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            
+            canvas.style.display = 'block';
+            // 고정 크기로 설정
+            canvas.width = 800;
+            canvas.height = 400;
+            
+            // 캔버스 클리어
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const padding = 80;
+            const graphWidth = canvas.width - padding * 2;
+            const graphHeight = canvas.height - padding * 2;
+            
+            const minScore = Math.min(...scores);
+            const maxScore = Math.max(...scores);
+            const scoreRange = Math.max(maxScore - minScore, 10); // 최소 범위 보장
+            
+            console.log(`그래프 데이터: 최소=${minScore}, 최대=${maxScore}, 범위=${scoreRange}, 데이터개수=${scores.length}`);
+            
+            // 배경 그리기
+            ctx.fillStyle = '#f8f9fa';
+            ctx.fillRect(padding, padding, graphWidth, graphHeight);
+            
+            // 그리드 선 그리기
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            
+            // 세로 그리드 (시간축)
+            for (let i = 0; i <= 10; i++) {
+                const x = padding + (i / 10) * graphWidth;
+                ctx.beginPath();
+                ctx.moveTo(x, padding);
+                ctx.lineTo(x, padding + graphHeight);
+                ctx.stroke();
+            }
+            
+            // 가로 그리드 (점수축)
+            for (let i = 0; i <= 10; i++) {
+                const y = padding + (i / 10) * graphHeight;
+                ctx.beginPath();
+                ctx.moveTo(padding, y);
+                ctx.lineTo(padding + graphWidth, y);
+                ctx.stroke();
+            }
+            
+            // 축 그리기
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, padding + graphHeight);
+            ctx.lineTo(padding + graphWidth, padding + graphHeight);
+            ctx.stroke();
+            
+            // 100선 그리기 (기준선)
+            const baselineY = padding + graphHeight - ((100 - minScore) / scoreRange) * graphHeight;
+            if (baselineY >= padding && baselineY <= padding + graphHeight) {
+                ctx.strokeStyle = '#ff6b6b';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([10, 5]);
+                ctx.beginPath();
+                ctx.moveTo(padding, baselineY);
+                ctx.lineTo(padding + graphWidth, baselineY);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                
+                // 100 라벨 추가
+                ctx.fillStyle = '#ff6b6b';
+                ctx.font = 'bold 12px Arial';
+                ctx.textAlign = 'right';
+                ctx.fillText('100', padding - 5, baselineY + 4);
+            }
+            
+            // 데이터 라인 그리기 (부드러운 베지어 곡선)
+            if (scores.length > 1) {
+                ctx.strokeStyle = '#667eea';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                
+                // 첫 번째 점
+                let x = padding + (0 / (scores.length - 1)) * graphWidth;
+                let y = padding + graphHeight - ((scores[0] - minScore) / scoreRange) * graphHeight;
+                ctx.moveTo(x, y);
+                
+                // 베지어 곡선으로 부드럽게 연결
+                for (let i = 1; i < scores.length; i++) {
+                    const currentX = padding + (i / (scores.length - 1)) * graphWidth;
+                    const currentY = padding + graphHeight - ((scores[i] - minScore) / scoreRange) * graphHeight;
+                    
+                    if (i === 1) {
+                        // 첫 번째 곡선
+                        const cp1x = x + (currentX - x) * 0.5;
+                        const cp1y = y;
+                        const cp2x = currentX - (currentX - x) * 0.5;
+                        const cp2y = currentY;
+                        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, currentX, currentY);
+                    } else {
+                        // 이전 점과 현재 점 사이의 제어점 계산
+                        const prevX = padding + ((i-1) / (scores.length - 1)) * graphWidth;
+                        const prevY = padding + graphHeight - ((scores[i-1] - minScore) / scoreRange) * graphHeight;
+                        
+                        const cp1x = prevX + (currentX - prevX) * 0.3;
+                        const cp1y = prevY;
+                        const cp2x = currentX - (currentX - prevX) * 0.3;
+                        const cp2y = currentY;
+                        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, currentX, currentY);
+                    }
+                    
+                    x = currentX;
+                    y = currentY;
+                }
+                ctx.stroke();
+                
+                // 데이터 점 표시
+                ctx.fillStyle = '#667eea';
+                scores.forEach((score, index) => {
+                    const pointX = padding + (index / (scores.length - 1)) * graphWidth;
+                    const pointY = padding + graphHeight - ((score - minScore) / scoreRange) * graphHeight;
+                    
+                    ctx.beginPath();
+                    ctx.arc(pointX, pointY, 4, 0, 2 * Math.PI);
+                    ctx.fill();
+                    
+                    // 높은 점수와 낮은 점수에 값 표시 (100 기준값 적용된 값으로 표시)
+                    if (score === maxScore || score === minScore) {
+                        ctx.fillStyle = '#2c3e50';
+                        ctx.font = 'bold 11px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(score.toString(), pointX, pointY - 10); // 100 더해진 값 그대로 표시
+                        ctx.fillStyle = '#667eea';
+                    }
+                });
+            }
+            
+            // X축 라벨 (동적 년도 표시)
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            
+            // 시작년도와 끝년도 계산
+            const startYear = parseInt(document.getElementById('graphStartYear').value);
+            const endYear = parseInt(document.getElementById('graphEndYear').value);
+            const yearRange = endYear - startYear;
+            
+            // 년도 라벨 동적 생성
+            for (let i = 0; i <= yearRange; i++) {
+                const year = startYear + i;
+                const x = padding + (i / yearRange) * graphWidth;
+                ctx.fillText(year.toString(), x, canvas.height - padding + 25);
+            }
+            
+            // Y축 라벨 (100 기준값 적용된 값으로 표시)
+            ctx.textAlign = 'right';
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Arial';
+            
+            for (let i = 0; i <= 5; i++) {
+                const score = minScore + (scoreRange * i / 5);
+                const y = padding + graphHeight - (i / 5) * graphHeight;
+                ctx.fillText(score.toFixed(0), padding - 10, y + 4);
+            }
+            
+            // 제목 추가
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = 'bold 18px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(title, canvas.width / 2, 30);
+            
+            // 범례 추가 (100 기준값 적용된 값으로 표시)
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'left';
+            const avgScore = scores.reduce((a,b) => a+b, 0) / scores.length;
+            ctx.fillText(`Range: ${minScore.toFixed(0)} ~ ${maxScore.toFixed(0)} (Avg: ${avgScore.toFixed(1)}, Baseline: 100)`, padding, canvas.height - 10);
+        }
+
+        // 다른 탭 가중치 슬라이더 설정 (삭제됨)
+        function setupOtherTabSliders() {
+            // 가중치 슬라이더는 더 이상 사용하지 않음
+        }
+
+        // 가중치 슬라이더 업데이트 (삭제됨)
+        document.addEventListener('DOMContentLoaded', function() {
+            // 가중치 슬라이더는 더 이상 사용하지 않음
+        });<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -288,11 +475,11 @@
         
         .tab-btn {
             flex: 1;
-            padding: 15px 20px;
+            padding: 12px 15px;
             border: none;
             background: transparent;
             color: #666;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -334,6 +521,10 @@
             .date-input {
                 width: 100%;
                 max-width: 200px;
+            }
+            .tab-btn {
+                font-size: 12px;
+                padding: 10px 8px;
             }
         }
     </style>
@@ -390,16 +581,6 @@
                     <div class="info-title">📊 Yearly Fortune</div>
                     <div class="info-content" id="yearlyInfo"></div>
                 </div>
-                
-                <div class="info-card">
-                    <div class="info-title">📅 Date Information</div>
-                    <div class="info-content" id="dateInfo"></div>
-                </div>
-                
-                <div class="info-card">
-                    <div class="info-title">⭐ Five Elements</div>
-                    <div class="info-content" id="wuxingInfo"></div>
-                </div>
             </div>
 
             <!-- 인성운 그래프 섹션 수정 -->
@@ -413,49 +594,33 @@
                 
                 <!-- 탭 버튼들 -->
                 <div class="tab-container">
-                    <button class="tab-btn active" onclick="switchTab('study')">📚 Study Exam</button>
+                    <button class="tab-btn active" onclick="switchTab('study')">📚 Study</button>
                     <button class="tab-btn" onclick="switchTab('wealth')">💰 Wealth</button>
                     <button class="tab-btn" onclick="switchTab('career')">🏢 Career</button>
                     <button class="tab-btn" onclick="switchTab('love')">💕 Love</button>
                 </div>
                 
-                <!-- Study Exam 탭 -->
+                <!-- Study 탭 -->
                 <div class="tab-content active" id="studyTab">
-                    <div class="weight-settings">
-                        <label>Year Fortune Weight: <input type="range" id="yearWeight" min="10" max="90" value="60"> <span id="yearValue">60%</span></label>
-                        <label>Month Fortune Weight: <input type="range" id="monthWeight" min="10" max="90" value="40"> <span id="monthValue">40%</span></label>
-                    </div>
-                    <button class="search-btn" onclick="showInseongFortune()">Generate Graph</button>
+                    <button class="search-btn" onclick="showInseongFortune()">Generate Study Fortune Graph</button>
                     <canvas id="fortuneChart" style="display:none; height: 400px;"></canvas>
                 </div>
                 
                 <!-- Wealth 탭 -->
                 <div class="tab-content" id="wealthTab">
-                    <div class="weight-settings">
-                        <label>Year Fortune Weight: <input type="range" id="wealthYearWeight" min="10" max="90" value="70"> <span id="wealthYearValue">70%</span></label>
-                        <label>Month Fortune Weight: <input type="range" id="wealthMonthWeight" min="10" max="90" value="30"> <span id="wealthMonthValue">30%</span></label>
-                    </div>
-                    <button class="search-btn" onclick="showWealthFortune()">Generate Wealth Graph</button>
+                    <button class="search-btn" onclick="showWealthFortune()">Generate Wealth Fortune Graph</button>
                     <canvas id="wealthChart" style="display:none; height: 400px;"></canvas>
                 </div>
                 
                 <!-- Career 탭 -->
                 <div class="tab-content" id="careerTab">
-                    <div class="weight-settings">
-                        <label>Year Fortune Weight: <input type="range" id="careerYearWeight" min="10" max="90" value="80"> <span id="careerYearValue">80%</span></label>
-                        <label>Month Fortune Weight: <input type="range" id="careerMonthWeight" min="10" max="90" value="20"> <span id="careerMonthValue">20%</span></label>
-                    </div>
-                    <button class="search-btn" onclick="showCareerFortune()">Generate Career Graph</button>
+                    <button class="search-btn" onclick="showCareerFortune()">Generate Career Fortune Graph</button>
                     <canvas id="careerChart" style="display:none; height: 400px;"></canvas>
                 </div>
                 
                 <!-- Love 탭 -->
                 <div class="tab-content" id="loveTab">
-                    <div class="weight-settings">
-                        <label>Year Fortune Weight: <input type="range" id="loveYearWeight" min="10" max="90" value="60"> <span id="loveYearValue">60%</span></label>
-                        <label>Month Fortune Weight: <input type="range" id="loveMonthWeight" min="10" max="90" value="40"> <span id="loveMonthValue">40%</span></label>
-                    </div>
-                    <button class="search-btn" onclick="showLoveFortune()">Generate Love Graph</button>
+                    <button class="search-btn" onclick="showLoveFortune()">Generate Love Fortune Graph</button>
                     <canvas id="loveChart" style="display:none; height: 400px;"></canvas>
                 </div>
             </div>
@@ -741,27 +906,7 @@
         }
         
         function displayAdditionalInfo(date, yS, yB, mS, mB, dS, dB, hS, hB, hasTime) {
-            const year = date.getFullYear();
-            const month = date.getMonth() + 1;
-            const day = date.getDate();
-            
-            const dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            document.getElementById('dateInfo').innerHTML = 
-                `${year}/${month}/${day}<br>${dayOfWeek[date.getDay()]}`;
-            
-            const elements = [wuxing[yS], wuxing[yB], wuxing[mS], wuxing[mB], wuxing[dS], wuxing[dB]];
-            if (hasTime && hS && hB) elements.push(wuxing[hS], wuxing[hB]);
-            
-            const elementCount = {};
-            elements.forEach(el => {
-                if (el) elementCount[el] = (elementCount[el] || 0) + 1;
-            });
-            
-            let wuxingText = '';
-            Object.keys(elementCount).forEach(el => {
-                wuxingText += `${el}: ${elementCount[el]}<br>`;
-            });
-            document.getElementById('wuxingInfo').innerHTML = wuxingText;
+            // 추가 정보 표시 함수는 더 이상 사용하지 않음 (Date Info, Five Elements 섹션 삭제됨)
         }
         
         function calculateAndDisplayFortune(birthDate, gender, yearGan, monthGan, monthZhi) {
@@ -1014,42 +1159,33 @@
             document.getElementById('yearlyInfo').innerHTML = yearlyHtml;
         }
 
-        // 인성의 십이운성 계산 (정인만) - 변수들을 함수 내부로 이동
-        function calculateInseongUnsung(ilgan, ganzhi) {
-            // 정인 매핑 (수정된 버전)
-            const jeongInMapping = {
-                'Yang Wood': 'Yin Water',    // 갑목의 정인: 계수
-                'Yin Wood': 'Yang Water',    // 을목의 정인: 임수
-                'Yang Fire': 'Yin Wood',     // 병화의 정인: 을목
-                'Yin Fire': 'Yang Wood',     // 정화의 정인: 갑목
-                'Yang Earth': 'Yin Fire',    // 무토의 정인: 정화
-                'Yin Earth': 'Yang Fire',    // 기토의 정인: 병화
-                'Yang Metal': 'Yin Earth',   // 경금의 정인: 기토
-                'Yin Metal': 'Yang Earth',   // 신금의 정인: 무토
-                'Yang Water': 'Yin Metal',   // 임수의 정인: 신금
-                'Yin Water': 'Yang Metal'    // 계수의 정인: 경금
-            };
+        // 십신 매핑 정의
+        const sipsinMapping = {
+            // 정인: 나를 생하는 다른 음양
+            'Yang Wood': { jeongin: 'Yin Water', pyeongin: 'Yang Water', jeongjae: 'Yin Earth', pyeonjae: 'Yang Earth', jeonggwan: 'Yin Metal' },
+            'Yin Wood': { jeongin: 'Yang Water', pyeongin: 'Yin Water', jeongjae: 'Yang Earth', pyeonjae: 'Yin Earth', jeonggwan: 'Yang Metal' },
+            'Yang Fire': { jeongin: 'Yin Wood', pyeongin: 'Yang Wood', jeongjae: 'Yin Metal', pyeonjae: 'Yang Metal', jeonggwan: 'Yin Water' },
+            'Yin Fire': { jeongin: 'Yang Wood', pyeongin: 'Yin Wood', jeongjae: 'Yang Metal', pyeonjae: 'Yin Metal', jeonggwan: 'Yang Water' },
+            'Yang Earth': { jeongin: 'Yin Fire', pyeongin: 'Yang Fire', jeongjae: 'Yin Water', pyeonjae: 'Yang Water', jeonggwan: 'Yin Wood' },
+            'Yin Earth': { jeongin: 'Yang Fire', pyeongin: 'Yin Fire', jeongjae: 'Yang Water', pyeonjae: 'Yin Water', jeonggwan: 'Yang Wood' },
+            'Yang Metal': { jeongin: 'Yin Earth', pyeongin: 'Yang Earth', jeongjae: 'Yin Wood', pyeonjae: 'Yang Wood', jeonggwan: 'Yin Fire' },
+            'Yin Metal': { jeongin: 'Yang Earth', pyeongin: 'Yin Earth', jeongjae: 'Yang Wood', pyeonjae: 'Yin Wood', jeonggwan: 'Yang Fire' },
+            'Yang Water': { jeongin: 'Yin Metal', pyeongin: 'Yang Metal', jeongjae: 'Yin Fire', pyeonjae: 'Yang Fire', jeonggwan: 'Yin Earth' },
+            'Yin Water': { jeongin: 'Yang Metal', pyeongin: 'Yin Metal', jeongjae: 'Yang Fire', pyeonjae: 'Yin Fire', jeonggwan: 'Yang Earth' }
+        };
 
-            // 지지별 장생위치
-            const jangSaengPos = {
-                'Yang Wood': 'Pig', 'Yin Wood': 'Horse', 'Yang Fire': 'Tiger', 'Yin Fire': 'Rooster',
-                'Yang Earth': 'Tiger', 'Yin Earth': 'Rooster', 'Yang Metal': 'Snake', 'Yin Metal': 'Rat',
-                'Yang Water': 'Monkey', 'Yin Water': 'Rabbit'
-            };
+        // 음간 역행 체크 (을정기신계)
+        function isReverse(gan) {
+            const reverseGans = ['Yin Wood', 'Yin Fire', 'Yin Earth', 'Yin Metal', 'Yin Water'];
+            return reverseGans.includes(gan);
+        }
 
-            // 십이운성 점수 (새로운 설정)
-            const unsungScores = {
-                '장생': 40, '목욕': 10, '관대': 30, '건록': 60,
-                '제왕': 70, '쇠': 50, '병': 30, '사': 10,
-                '묘': -20, '절': -40, '태': -20, '양': 0
-            };
-
-            // 십이운성 순서
-            const unsungOrder = ['장생', '목욕', '관대', '건록', '제왕', '쇠', '병', '사', '묘', '절', '태', '양'];
-            const jiOrder = ['Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake', 'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'];
+        // 십신별 십이운성 계산
+        function calculateSipsinUnsung(ilgan, ganzhi, sipsinType) {
+            const sipsin = sipsinMapping[ilgan];
+            if (!sipsin || !sipsin[sipsinType]) return 0;
             
-            const jeongIn = jeongInMapping[ilgan];
-            if (!jeongIn) return 0;
+            const targetGan = sipsin[sipsinType];
             
             // 간지에서 지지 부분 추출
             let ji = '';
@@ -1060,23 +1196,30 @@
                 }
             }
             
-            const jangSaeng = jangSaengPos[jeongIn];
+            const jangSaeng = jangSaengPos[targetGan];
             if (!jangSaeng || !ji) return 0;
             
             const jangSaengIndex = jiOrder.indexOf(jangSaeng);
             const jiIndex = jiOrder.indexOf(ji);
             if (jangSaengIndex === -1 || jiIndex === -1) return 0;
             
-            // 정인은 정순으로 계산 (역순 제거)
+            // 음간은 역행
             let diff = (jiIndex - jangSaengIndex + 12) % 12;
-            // diff = (12 - diff) % 12; // 역순 제거!
+            if (isReverse(targetGan)) {
+                diff = (12 - diff) % 12;
+            }
             
             const unsung = unsungOrder[diff];
             const score = unsungScores[unsung] || 0;
             
-            console.log(`${ilgan}의 정인 ${jeongIn} in ${ganzhi}: ${ji} -> ${unsung} = ${score}`);
+            console.log(`${ilgan}의 ${sipsinType} ${targetGan} in ${ganzhi}: ${ji} -> ${unsung} = ${score}`);
             
             return score;
+        }
+
+        // 인성의 십이운성 계산 (기존 함수 수정)
+        function calculateInseongUnsung(ilgan, ganzhi) {
+            return calculateSipsinUnsung(ilgan, ganzhi, 'jeongin');
         }
 
         // 십이운성 점수 계산
@@ -1170,7 +1313,39 @@
                 alert('Please calculate Four Pillars first.');
                 return;
             }
-            alert('Wealth Fortune analysis will be implemented soon!');
+            
+            const startYear = parseInt(document.getElementById('graphStartYear').value);
+            const endYear = parseInt(document.getElementById('graphEndYear').value);
+            
+            if (!startYear || !endYear || startYear >= endYear) {
+                alert('Please enter a valid period.');
+                return;
+            }
+            
+            const ilgan = window.currentPillars.day;
+            const yearMonthData = generateYearMonthGanzhi(startYear, endYear);
+            const yearWeight = 0.7; // 70%
+            const monthWeight = 0.3; // 30%
+            
+            const scores = [];
+            const labels = [];
+            
+            yearMonthData.forEach(data => {
+                // 정재 + 편재 합산
+                const jeongjaeYearScore = calculateSipsinUnsung(ilgan, data.yearGanzhi, 'jeongjae');
+                const pyeonjaeYearScore = calculateSipsinUnsung(ilgan, data.yearGanzhi, 'pyeonjae');
+                const jeongjaeMonthScore = calculateSipsinUnsung(ilgan, data.monthGanzhi, 'jeongjae');
+                const pyeonjaeMonthScore = calculateSipsinUnsung(ilgan, data.monthGanzhi, 'pyeonjae');
+                
+                const yearScore = jeongjaeYearScore + pyeonjaeYearScore;
+                const monthScore = jeongjaeMonthScore + pyeonjaeMonthScore;
+                
+                const totalScore = yearScore * yearWeight + monthScore * monthWeight;
+                scores.push(Math.round((totalScore + 100) * 10) / 10);
+                labels.push(`${data.year}.${data.month.toString().padStart(2, '0')}`);
+            });
+            
+            drawGraph(labels, scores, 'wealthChart', 'Wealth Fortune Analysis');
         }
         
         function showCareerFortune() {
@@ -1178,7 +1353,34 @@
                 alert('Please calculate Four Pillars first.');
                 return;
             }
-            alert('Career Fortune analysis will be implemented soon!');
+            
+            const startYear = parseInt(document.getElementById('graphStartYear').value);
+            const endYear = parseInt(document.getElementById('graphEndYear').value);
+            
+            if (!startYear || !endYear || startYear >= endYear) {
+                alert('Please enter a valid period.');
+                return;
+            }
+            
+            const ilgan = window.currentPillars.day;
+            const yearMonthData = generateYearMonthGanzhi(startYear, endYear);
+            const yearWeight = 0.7; // 70%
+            const monthWeight = 0.3; // 30%
+            
+            const scores = [];
+            const labels = [];
+            
+            yearMonthData.forEach(data => {
+                // 정관운만
+                const yearScore = calculateSipsinUnsung(ilgan, data.yearGanzhi, 'jeonggwan');
+                const monthScore = calculateSipsinUnsung(ilgan, data.monthGanzhi, 'jeonggwan');
+                
+                const totalScore = yearScore * yearWeight + monthScore * monthWeight;
+                scores.push(Math.round((totalScore + 100) * 10) / 10);
+                labels.push(`${data.year}.${data.month.toString().padStart(2, '0')}`);
+            });
+            
+            drawGraph(labels, scores, 'careerChart', 'Career Fortune Analysis');
         }
         
         function showLoveFortune() {
@@ -1186,7 +1388,42 @@
                 alert('Please calculate Four Pillars first.');
                 return;
             }
-            alert('Love Fortune analysis will be implemented soon!');
+            
+            const genderInput = document.getElementById('genderInput').value;
+            if (!genderInput) {
+                alert('Please select gender for love fortune analysis.');
+                return;
+            }
+            
+            const startYear = parseInt(document.getElementById('graphStartYear').value);
+            const endYear = parseInt(document.getElementById('graphEndYear').value);
+            
+            if (!startYear || !endYear || startYear >= endYear) {
+                alert('Please enter a valid period.');
+                return;
+            }
+            
+            const ilgan = window.currentPillars.day;
+            const yearMonthData = generateYearMonthGanzhi(startYear, endYear);
+            const yearWeight = 0.7; // 70%
+            const monthWeight = 0.3; // 30%
+            
+            const scores = [];
+            const labels = [];
+            
+            // 남자: 정재, 여자: 정관
+            const targetSipsin = genderInput === 'male' ? 'jeongjae' : 'jeonggwan';
+            
+            yearMonthData.forEach(data => {
+                const yearScore = calculateSipsinUnsung(ilgan, data.yearGanzhi, targetSipsin);
+                const monthScore = calculateSipsinUnsung(ilgan, data.monthGanzhi, targetSipsin);
+                
+                const totalScore = yearScore * yearWeight + monthScore * monthWeight;
+                scores.push(Math.round((totalScore + 100) * 10) / 10);
+                labels.push(`${data.year}.${data.month.toString().padStart(2, '0')}`);
+            });
+            
+            drawGraph(labels, scores, 'loveChart', 'Love Fortune Analysis');
         }
 
         function showInseongFortune() {
@@ -1205,8 +1442,8 @@
             
             const ilgan = window.currentPillars.day;
             const yearMonthData = generateYearMonthGanzhi(startYear, endYear);
-            const yearWeight = parseInt(document.getElementById('yearWeight').value) / 100;
-            const monthWeight = parseInt(document.getElementById('monthWeight').value) / 100;
+            const yearWeight = 0.7; // 70%
+            const monthWeight = 0.3; // 30%
             
             const scores = [];
             const labels = [];
@@ -1216,12 +1453,11 @@
                 const monthScore = calculateInseongUnsung(ilgan, data.monthGanzhi);
                 
                 const totalScore = yearScore * yearWeight + monthScore * monthWeight;
-                // 기본값 100을 더해서 모든 값을 양수로 만들고 반올림
-                scores.push(Math.round((totalScore + 100) * 10) / 10); // 소수점 1자리까지
+                scores.push(Math.round((totalScore + 100) * 10) / 10);
                 labels.push(`${data.year}.${data.month.toString().padStart(2, '0')}`);
             });
             
-            drawGraph(labels, scores);
+            drawGraph(labels, scores, 'fortuneChart', 'Study Fortune Analysis');
         }
 
         // 그래프 그리기 (개선된 버전 - 기본값 100 적용)

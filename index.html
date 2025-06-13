@@ -6,8 +6,8 @@
     <title>Four Pillars Calculator</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
-        .container { max-width: 900px; margin: 0 auto; background: rgba(255, 255, 255, 0.95); border-radius: 20px; padding: 30px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); }
+        body { font-family: 'Arial', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 10px; }
+        .container { max-width: 95%; margin: 0 auto; background: rgba(255, 255, 255, 0.95); border-radius: 20px; padding: 20px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); }
         h1 { text-align: center; color: #2c3e50; margin-bottom: 30px; font-size: 2.2em; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); }
         .input-section { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 30px; flex-wrap: nowrap; }
         .date-input { padding: 12px 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; transition: border-color 0.3s; }
@@ -38,17 +38,14 @@
         .fortune-elements { display: flex; gap: 5px; margin-top: 5px; justify-content: center; }
         .fortune-element { padding: 2px 6px; border-radius: 4px; font-size: 0.8em; color: white; text-shadow: 1px 1px 1px rgba(0,0,0,0.5); }
         .error { background-color: #ffe6e6; color: #d8000c; padding: 10px; border-radius: 8px; margin: 10px 0; }
-        .inseong-section { margin-top: 30px; padding: 25px; background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); border-left: 4px solid #667eea; }
-        .period-selector { margin-bottom: 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-        #fortuneChart, #wealthChart, #careerChart, #loveChart { margin-top: 20px; border: 1px solid #ddd; border-radius: 8px; background: white; display: block; width: 100%; }
-        .tab-container { display: flex; margin: 20px 0; border-bottom: 2px solid #eee; background: #f8f9fa; border-radius: 8px 8px 0 0; overflow: hidden; }
-        .tab-btn { flex: 1; padding: 15px 20px; border: none; background: transparent; color: #666; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; border-bottom: 3px solid transparent; }
-        .tab-btn:hover { background: rgba(102, 126, 234, 0.1); color: #667eea; }
-        .tab-btn.active { background: white; color: #667eea; border-bottom-color: #667eea; font-weight: bold; }
-        .tab-content { display: none; padding: 20px 0; animation: fadeIn 0.3s ease-in-out; }
-        .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @media (max-width: 768px) { .input-section { flex-direction: column; gap: 10px; } .date-input { width: 100%; max-width: 200px; } .tab-btn { font-size: 12px; padding: 12px 15px; } }
+        @media (max-width: 768px) { 
+            .input-section { flex-direction: column; gap: 10px; } 
+            .date-input { width: 100%; max-width: 200px; } 
+            .container { padding: 15px; }
+            body { padding: 5px; }
+            .info-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -97,43 +94,6 @@
                     <div class="info-content" id="yearlyInfo"></div>
                 </div>
             </div>
-
-            <div class="inseong-section" id="inseongSection" style="display: none;">
-                <div class="info-title">📈 Fortune Analysis</div>
-                <div class="period-selector">
-                    <label>Analysis Period:</label>
-                    <select class="date-input" id="analysisRange" style="width: 200px;">
-                        <option value="3">3 Years (Current ± 1)</option>
-                        <option value="5" selected>5 Years (Current ± 2)</option>
-                        <option value="7">7 Years (Current ± 3)</option>
-                        <option value="10">10 Years (Current ± 4)</option>
-                    </select>
-                </div>
-                
-                <div class="tab-container">
-                    <button class="tab-btn active" onclick="switchTab('study')">📚 Study</button>
-                    <button class="tab-btn" onclick="switchTab('wealth')">💰 Wealth</button>
-                    <button class="tab-btn" onclick="switchTab('career')">🏢 Career</button>
-                    <button class="tab-btn" onclick="switchTab('love')">💕 Love</button>
-                </div>
-                
-                <div class="tab-content active" id="studyTab">
-                    <button class="search-btn" onclick="showStudyFortune()">Generate Graph</button>
-                    <canvas id="fortuneChart" style="display:none; height: 400px;"></canvas>
-                </div>
-                <div class="tab-content" id="wealthTab">
-                    <button class="search-btn" onclick="showWealthFortune()">Generate Wealth Graph</button>
-                    <canvas id="wealthChart" style="display:none; height: 400px;"></canvas>
-                </div>
-                <div class="tab-content" id="careerTab">
-                    <button class="search-btn" onclick="showCareerFortune()">Generate Career Graph</button>
-                    <canvas id="careerChart" style="display:none; height: 400px;"></canvas>
-                </div>
-                <div class="tab-content" id="loveTab">
-                    <button class="search-btn" onclick="showLoveFortune()">Generate Love Graph</button>
-                    <canvas id="loveChart" style="display:none; height: 400px;"></canvas>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -142,11 +102,6 @@
         const diZhiEn = ['Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake', 'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'];
         const elementClass = { 'Wood': 'wood', 'Fire': 'fire', 'Earth': 'earth', 'Metal': 'metal', 'Water': 'water' };
         const wuxing = { 'Yang Wood': 'Wood', 'Yin Wood': 'Wood', 'Yang Fire': 'Fire', 'Yin Fire': 'Fire', 'Yang Earth': 'Earth', 'Yin Earth': 'Earth', 'Yang Metal': 'Metal', 'Yin Metal': 'Metal', 'Yang Water': 'Water', 'Yin Water': 'Water', 'Rat': 'Water', 'Ox': 'Earth', 'Tiger': 'Wood', 'Rabbit': 'Wood', 'Dragon': 'Earth', 'Snake': 'Fire', 'Horse': 'Fire', 'Goat': 'Earth', 'Monkey': 'Metal', 'Rooster': 'Metal', 'Dog': 'Earth', 'Pig': 'Water' };
-        const sipsinMapping = { jeongIn: {'Yang Wood': 'Yin Water', 'Yin Wood': 'Yang Water', 'Yang Fire': 'Yin Wood', 'Yin Fire': 'Yang Wood', 'Yang Earth': 'Yin Fire', 'Yin Earth': 'Yang Fire', 'Yang Metal': 'Yin Earth', 'Yin Metal': 'Yang Earth', 'Yang Water': 'Yin Metal', 'Yin Water': 'Yang Metal'}, pyeonIn: {'Yang Wood': 'Yang Water', 'Yin Wood': 'Yin Water', 'Yang Fire': 'Yang Wood', 'Yin Fire': 'Yin Wood', 'Yang Earth': 'Yang Fire', 'Yin Earth': 'Yin Fire', 'Yang Metal': 'Yang Earth', 'Yin Metal': 'Yin Earth', 'Yang Water': 'Yang Metal', 'Yin Water': 'Yin Metal'}, jeongJae: {'Yang Wood': 'Yin Earth', 'Yin Wood': 'Yang Earth', 'Yang Fire': 'Yin Metal', 'Yin Fire': 'Yang Metal', 'Yang Earth': 'Yin Water', 'Yin Earth': 'Yang Water', 'Yang Metal': 'Yin Wood', 'Yin Metal': 'Yang Wood', 'Yang Water': 'Yin Fire', 'Yin Water': 'Yang Fire'}, pyeonJae: {'Yang Wood': 'Yang Earth', 'Yin Wood': 'Yin Earth', 'Yang Fire': 'Yang Metal', 'Yin Fire': 'Yin Metal', 'Yang Earth': 'Yang Water', 'Yin Earth': 'Yin Water', 'Yang Metal': 'Yang Wood', 'Yin Metal': 'Yin Wood', 'Yang Water': 'Yang Fire', 'Yin Water': 'Yin Fire'}, jeongGwan: {'Yang Wood': 'Yin Metal', 'Yin Wood': 'Yang Metal', 'Yang Fire': 'Yin Water', 'Yin Fire': 'Yang Water', 'Yang Earth': 'Yin Wood', 'Yin Earth': 'Yang Wood', 'Yang Metal': 'Yin Fire', 'Yin Metal': 'Yang Fire', 'Yang Water': 'Yin Earth', 'Yin Water': 'Yang Earth'}, pyeonGwan: {'Yang Wood': 'Yang Metal', 'Yin Wood': 'Yin Metal', 'Yang Fire': 'Yang Water', 'Yin Fire': 'Yin Water', 'Yang Earth': 'Yang Wood', 'Yin Earth': 'Yin Wood', 'Yang Metal': 'Yang Fire', 'Yin Metal': 'Yin Fire', 'Yang Water': 'Yang Earth', 'Yin Water': 'Yin Earth'} };
-        const unsungScores = { '장생': 50, '목욕': -40, '관대': 30, '건록': 60, '제왕': 70, '쇠': -20, '병': -50, '사': -60, '묘': -65, '절': -70, '태': 0, '양': 10 };
-        const jangSaengPos = { 'Yang Wood': 'Pig', 'Yin Wood': 'Horse', 'Yang Fire': 'Tiger', 'Yin Fire': 'Rooster', 'Yang Earth': 'Tiger', 'Yin Earth': 'Rooster', 'Yang Metal': 'Snake', 'Yin Metal': 'Rat', 'Yang Water': 'Monkey', 'Yin Water': 'Rabbit' };
-        const unsungOrder = ['장생', '목욕', '관대', '건록', '제왕', '쇠', '병', '사', '묘', '절', '태', '양'];
-        const jiOrder = ['Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake', 'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'];
         let solarTermsData = null;
 
         async function loadSolarTermsData() {
@@ -267,10 +222,6 @@
             
             calculateAndDisplayYearlyFortune();
             document.getElementById('resultSection').style.display = 'block';
-            document.getElementById('inseongSection').style.display = 'block';
-            
-            window.currentPillars = { day: dayStemText, year: yearStemText + yearBranchText, month: monthStemText + monthBranchText };
-            window.currentGender = genderInput;
         }
 
         function getSolarMonth(date) {
@@ -318,45 +269,46 @@
         }
 
         function calculateAndDisplayFortune(birthDate, gender, yearGan, monthGan, monthZhi) {
-            // 대운 계산 로직 (간단화)
             const birthYear = birthDate.getFullYear();
             const currentYear = new Date().getFullYear();
             const isYangYear = yearGan % 2 === 0;
             const isForward = (gender === 'male' && isYangYear) || (gender === 'female' && !isYangYear);
+            
+            // 절입시간 계산
             const yearTransitions = solarTermsData[birthYear];
-let daysToSolarTerm = 3 * 365; // 기본값
-
-if (yearTransitions) {
-    // 생일 기준으로 이전/다음 절입시간 찾기
-    let prevTransition = null;
-    let nextTransition = null;
-    
-    // 현재 해의 모든 절입시간 확인
-for (let i = 0; i < yearTransitions.length; i++) {
-    const transDate = new Date(birthYear, yearTransitions[i].month - 1, yearTransitions[i].day, yearTransitions[i].hour, yearTransitions[i].minute);
-    if (transDate <= birthDate) {
-        prevTransition = transDate;
-    } else {
-        nextTransition = transDate;
-        break;
-    }
-}
-
-// 12월생이고 nextTransition이 없으면 다음해 1월 절입시간 찾기
-if (!nextTransition && solarTermsData[birthYear + 1] && solarTermsData[birthYear + 1].length > 0) {
-    const nextYearFirstTrans = solarTermsData[birthYear + 1][0];
-    nextTransition = new Date(birthYear + 1, nextYearFirstTrans.month - 1, nextYearFirstTrans.day, nextYearFirstTrans.hour, nextYearFirstTrans.minute);
-}
-    
-    if (isForward && nextTransition) {
-        daysToSolarTerm = (nextTransition - birthDate) / (1000 * 60 * 60 * 24);
-    } else if (!isForward && prevTransition) {
-        daysToSolarTerm = (birthDate - prevTransition) / (1000 * 60 * 60 * 24);
-    }
-}
-
-const fortuneStartAge = daysToSolarTerm / 3;
-const fortuneStartYear = birthYear + Math.round(fortuneStartAge);
+            let daysToSolarTerm = 3 * 365; // 기본값
+            
+            if (yearTransitions) {
+                // 생일 기준으로 이전/다음 절입시간 찾기
+                let prevTransition = null;
+                let nextTransition = null;
+                
+                // 현재 해의 모든 절입시간 확인
+                for (let i = 0; i < yearTransitions.length; i++) {
+                    const transDate = new Date(birthYear, yearTransitions[i].month - 1, yearTransitions[i].day, yearTransitions[i].hour, yearTransitions[i].minute);
+                    if (transDate <= birthDate) {
+                        prevTransition = transDate;
+                    } else {
+                        nextTransition = transDate;
+                        break;
+                    }
+                }
+                
+                // 12월생이고 nextTransition이 없으면 다음해 1월 절입시간 찾기
+                if (!nextTransition && solarTermsData[birthYear + 1] && solarTermsData[birthYear + 1].length > 0) {
+                    const nextYearFirstTrans = solarTermsData[birthYear + 1][0];
+                    nextTransition = new Date(birthYear + 1, nextYearFirstTrans.month - 1, nextYearFirstTrans.day, nextYearFirstTrans.hour, nextYearFirstTrans.minute);
+                }
+                
+                if (isForward && nextTransition) {
+                    daysToSolarTerm = (nextTransition - birthDate) / (1000 * 60 * 60 * 24);
+                } else if (!isForward && prevTransition) {
+                    daysToSolarTerm = (birthDate - prevTransition) / (1000 * 60 * 60 * 24);
+                }
+            }
+            
+            const fortuneStartAge = daysToSolarTerm / 3;
+            const fortuneStartYear = birthYear + Math.round(fortuneStartAge);
             const currentFortuneIndex = Math.floor((currentYear - fortuneStartYear) / 10);
             
             const fortunes = [];
@@ -407,242 +359,6 @@ const fortuneStartYear = birthYear + Math.round(fortuneStartAge);
                 yearlyHtml += `<div class="fortune-period fortune-${yearTypes[index]}"><div class="fortune-title">${yearLabels[index]}</div><div>${year}</div><div class="fortune-elements"><span class="fortune-element ${elementClass[ganElement]}">${ganText}</span><span class="fortune-element ${elementClass[zhiElement]}">${zhiText}</span></div></div>`;
             });
             document.getElementById('yearlyInfo').innerHTML = yearlyHtml;
-        }
-
-        function calculateInseongUnsung(ilgan, ganzhi) {
-            const jeongIn = sipsinMapping.jeongIn[ilgan];
-            if (!jeongIn) return 0;
-            let ji = '';
-            for (let animal of diZhiEn) {
-                if (ganzhi.includes(animal)) { ji = animal; break; }
-            }
-            const jangSaeng = jangSaengPos[jeongIn];
-            if (!jangSaeng || !ji) return 0;
-            const jangSaengIndex = jiOrder.indexOf(jangSaeng);
-            const jiIndex = jiOrder.indexOf(ji);
-            if (jangSaengIndex === -1 || jiIndex === -1) return 0;
-            const isYinGan = tianGanEn.indexOf(jeongIn) % 2 === 1;
-            let diff = (jiIndex - jangSaengIndex + 12) % 12;
-            if (isYinGan) diff = (12 - diff) % 12;
-            const unsung = unsungOrder[diff];
-            return unsungScores[unsung] || 0;
-        }
-
-        function calculateSipsinUnsung(sipsin, ganzhi) {
-            let ji = '';
-            for (let animal of diZhiEn) {
-                if (ganzhi.includes(animal)) { ji = animal; break; }
-            }
-            const jangSaeng = jangSaengPos[sipsin];
-            if (!jangSaeng || !ji) return 0;
-            const jangSaengIndex = jiOrder.indexOf(jangSaeng);
-            const jiIndex = jiOrder.indexOf(ji);
-            if (jangSaengIndex === -1 || jiIndex === -1) return 0;
-            const isYinGan = tianGanEn.indexOf(sipsin) % 2 === 1;
-            let diff = (jiIndex - jangSaengIndex + 12) % 12;
-            if (isYinGan) diff = (12 - diff) % 12;
-            const unsung = unsungOrder[diff];
-            return unsungScores[unsung] || 0;
-        }
-
-        function calculateWealthUnsung(ilgan, ganzhi) {
-            const jeongJae = sipsinMapping.jeongJae[ilgan];
-            const pyeonJae = sipsinMapping.pyeonJae[ilgan];
-            let totalScore = 0;
-            if (jeongJae) totalScore += calculateSipsinUnsung(jeongJae, ganzhi);
-            if (pyeonJae) totalScore += calculateSipsinUnsung(pyeonJae, ganzhi);
-            return totalScore / 2;
-        }
-
-        function calculateCareerUnsung(ilgan, ganzhi) {
-            const jeongGwan = sipsinMapping.jeongGwan[ilgan];
-            const pyeonGwan = sipsinMapping.pyeonGwan[ilgan];
-            let totalScore = 0;
-            if (jeongGwan) totalScore += calculateSipsinUnsung(jeongGwan, ganzhi);
-            if (pyeonGwan) totalScore += calculateSipsinUnsung(pyeonGwan, ganzhi);
-            return totalScore / 2;
-        }
-
-        function calculateLoveUnsung(ilgan, ganzhi, gender) {
-            if (gender === 'male') {
-                const jeongJae = sipsinMapping.jeongJae[ilgan];
-                return jeongJae ? calculateSipsinUnsung(jeongJae, ganzhi) : 0;
-            } else {
-                const jeongGwan = sipsinMapping.jeongGwan[ilgan];
-                return jeongGwan ? calculateSipsinUnsung(jeongGwan, ganzhi) : 0;
-            }
-        }
-
-        function generateYearMonthGanzhi(startYear, endYear) {
-            const result = [];
-            for (let year = startYear; year <= endYear; year++) {
-                const baseYearGan = 1, baseYearZhi = 5;
-                const yearOffset = year - 2025;
-                const yearGan = normalizeIndex(baseYearGan + yearOffset, 10);
-                const yearZhi = normalizeIndex(baseYearZhi + yearOffset, 12);
-                const yearGanzhi = tianGanEn[yearGan] + diZhiEn[yearZhi];
-                for (let month = 1; month <= 12; month++) {
-                    const yearGanMod5 = yearGan % 5;
-                    let monthGanBase;
-                    switch(yearGanMod5) {
-                        case 0: case 5: monthGanBase = 2; break;
-                        case 1: case 6: monthGanBase = 4; break;
-                        case 2: case 7: monthGanBase = 6; break;
-                        case 3: case 8: monthGanBase = 8; break;
-                        case 4: case 9: monthGanBase = 0; break;
-                    }
-                    const monthGan = normalizeIndex(monthGanBase + (month - 1), 10);
-                    const monthZhi = normalizeIndex(2 + (month - 1), 12);
-                    const monthGanzhi = tianGanEn[monthGan] + diZhiEn[monthZhi];
-                    result.push({ year: year, month: month, yearGanzhi: yearGanzhi, monthGanzhi: monthGanzhi });
-                }
-            }
-            return result;
-        }
-
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            event.target.classList.add('active');
-            document.getElementById(tabName + 'Tab').classList.add('active');
-        }
-
-        function showStudyFortune() {
-            if (!window.currentPillars) { alert('Please calculate Four Pillars first.'); return; }
-            const currentYear = new Date().getFullYear();
-            const rangeYears = parseInt(document.getElementById('analysisRange').value);
-            const startYear = currentYear - Math.floor(rangeYears / 2);
-            const endYear = currentYear + Math.floor(rangeYears / 2);
-            const ilgan = window.currentPillars.day;
-            const yearMonthData = generateYearMonthGanzhi(startYear, endYear);
-            const scores = [], labels = [];
-            yearMonthData.forEach(data => {
-                const yearScore = calculateInseongUnsung(ilgan, data.yearGanzhi);
-                const monthScore = calculateInseongUnsung(ilgan, data.monthGanzhi);
-                const totalScore = yearScore * 0.7 + monthScore * 0.3;
-                scores.push(Math.round((totalScore + 100) * 10) / 10);
-                labels.push(`${data.year}.${data.month.toString().padStart(2, '0')}`);
-            });
-            drawGraph(labels, scores, 'Study Fortune Analysis', 'fortuneChart');
-        }
-
-        function showWealthFortune() {
-            if (!window.currentPillars) { alert('Please calculate Four Pillars first.'); return; }
-            const currentYear = new Date().getFullYear();
-            const rangeYears = parseInt(document.getElementById('analysisRange').value);
-            const startYear = currentYear - Math.floor(rangeYears / 2);
-            const endYear = currentYear + Math.floor(rangeYears / 2);
-            const ilgan = window.currentPillars.day;
-            const yearMonthData = generateYearMonthGanzhi(startYear, endYear);
-            const scores = [], labels = [];
-            yearMonthData.forEach(data => {
-                const yearScore = calculateWealthUnsung(ilgan, data.yearGanzhi);
-                const monthScore = calculateWealthUnsung(ilgan, data.monthGanzhi);
-                const totalScore = yearScore * 0.7 + monthScore * 0.3;
-                scores.push(Math.round((totalScore + 100) * 10) / 10);
-                labels.push(`${data.year}.${data.month.toString().padStart(2, '0')}`);
-            });
-            drawGraph(labels, scores, 'Wealth Fortune Analysis', 'wealthChart');
-        }
-
-        function showCareerFortune() {
-            if (!window.currentPillars) { alert('Please calculate Four Pillars first.'); return; }
-            const currentYear = new Date().getFullYear();
-            const rangeYears = parseInt(document.getElementById('analysisRange').value);
-            const startYear = currentYear - Math.floor(rangeYears / 2);
-            const endYear = currentYear + Math.floor(rangeYears / 2);
-            const ilgan = window.currentPillars.day;
-            const yearMonthData = generateYearMonthGanzhi(startYear, endYear);
-            const scores = [], labels = [];
-            yearMonthData.forEach(data => {
-                const yearScore = calculateCareerUnsung(ilgan, data.yearGanzhi);
-                const monthScore = calculateCareerUnsung(ilgan, data.monthGanzhi);
-                const totalScore = yearScore * 0.7 + monthScore * 0.3;
-                scores.push(Math.round((totalScore + 100) * 10) / 10);
-                labels.push(`${data.year}.${data.month.toString().padStart(2, '0')}`);
-            });
-            drawGraph(labels, scores, 'Career Fortune Analysis', 'careerChart');
-        }
-
-        function showLoveFortune() {
-            if (!window.currentPillars || !window.currentGender) { alert('Please calculate Four Pillars and select gender first.'); return; }
-            const currentYear = new Date().getFullYear();
-            const rangeYears = parseInt(document.getElementById('analysisRange').value);
-            const startYear = currentYear - Math.floor(rangeYears / 2);
-            const endYear = currentYear + Math.floor(rangeYears / 2);
-            const ilgan = window.currentPillars.day;
-            const gender = window.currentGender;
-            const yearMonthData = generateYearMonthGanzhi(startYear, endYear);
-            const scores = [], labels = [];
-            yearMonthData.forEach(data => {
-                const yearScore = calculateLoveUnsung(ilgan, data.yearGanzhi, gender);
-                const monthScore = calculateLoveUnsung(ilgan, data.monthGanzhi, gender);
-                const totalScore = yearScore * 0.7 + monthScore * 0.3;
-                scores.push(Math.round((totalScore + 100) * 10) / 10);
-                labels.push(`${data.year}.${data.month.toString().padStart(2, '0')}`);
-            });
-            drawGraph(labels, scores, 'Love Fortune Analysis', 'loveChart');
-        }
-
-        function drawGraph(labels, scores, title, chartId) {
-            const canvas = document.getElementById(chartId);
-            const ctx = canvas.getContext('2d');
-            canvas.style.display = 'block';
-            canvas.width = 800; canvas.height = 400;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const padding = 80, graphWidth = canvas.width - padding * 2, graphHeight = canvas.height - padding * 2;
-            const minScore = Math.min(...scores), maxScore = Math.max(...scores), scoreRange = Math.max(maxScore - minScore, 10);
-            ctx.fillStyle = '#f8f9fa'; ctx.fillRect(padding, padding, graphWidth, graphHeight);
-            ctx.strokeStyle = '#e0e0e0'; ctx.lineWidth = 1;
-            for (let i = 0; i <= 10; i++) {
-                const x = padding + (i / 10) * graphWidth, y = padding + (i / 10) * graphHeight;
-                ctx.beginPath(); ctx.moveTo(x, padding); ctx.lineTo(x, padding + graphHeight); ctx.stroke();
-                ctx.beginPath(); ctx.moveTo(padding, y); ctx.lineTo(padding + graphWidth, y); ctx.stroke();
-            }
-            ctx.strokeStyle = '#333'; ctx.lineWidth = 2; ctx.beginPath();
-            ctx.moveTo(padding, padding); ctx.lineTo(padding, padding + graphHeight); ctx.lineTo(padding + graphWidth, padding + graphHeight); ctx.stroke();
-            const baselineY = padding + graphHeight - ((100 - minScore) / scoreRange) * graphHeight;
-            if (baselineY >= padding && baselineY <= padding + graphHeight) {
-                ctx.strokeStyle = '#ff6b6b'; ctx.lineWidth = 2; ctx.setLineDash([10, 5]);
-                ctx.beginPath(); ctx.moveTo(padding, baselineY); ctx.lineTo(padding + graphWidth, baselineY); ctx.stroke(); ctx.setLineDash([]);
-                ctx.fillStyle = '#ff6b6b'; ctx.font = 'bold 12px Arial'; ctx.textAlign = 'right'; ctx.fillText('100', padding - 5, baselineY + 4);
-            }
-            if (scores.length > 1) {
-                ctx.strokeStyle = '#667eea'; ctx.lineWidth = 3; ctx.beginPath();
-                for (let i = 0; i < scores.length; i++) {
-                    const x = padding + (i / (scores.length - 1)) * graphWidth;
-                    const y = padding + graphHeight - ((scores[i] - minScore) / scoreRange) * graphHeight;
-                    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-                }
-                ctx.stroke();
-                ctx.fillStyle = '#667eea';
-                scores.forEach((score, index) => {
-                    const pointX = padding + (index / (scores.length - 1)) * graphWidth;
-                    const pointY = padding + graphHeight - ((score - minScore) / scoreRange) * graphHeight;
-                    ctx.beginPath(); ctx.arc(pointX, pointY, 4, 0, 2 * Math.PI); ctx.fill();
-                });
-            }
-            ctx.fillStyle = '#333'; ctx.font = '12px Arial'; ctx.textAlign = 'center';
-            const currentYear = new Date().getFullYear();
-            const rangeYears = parseInt(document.getElementById('analysisRange').value);
-            const startYear = currentYear - Math.floor(rangeYears / 2);
-            const endYear = currentYear + Math.floor(rangeYears / 2);
-            const yearRange = endYear - startYear;
-            for (let i = 0; i <= yearRange; i++) {
-                const year = startYear + i;
-                const x = padding + (i / yearRange) * graphWidth;
-                ctx.fillText(year.toString(), x, canvas.height - padding + 25);
-            }
-            ctx.textAlign = 'right';
-            for (let i = 0; i <= 5; i++) {
-                const score = minScore + (scoreRange * i / 5);
-                const y = padding + graphHeight - (i / 5) * graphHeight;
-                ctx.fillText(score.toFixed(0), padding - 10, y + 4);
-            }
-            ctx.fillStyle = '#2c3e50'; ctx.font = 'bold 18px Arial'; ctx.textAlign = 'center'; ctx.fillText(title, canvas.width / 2, 30);
-            ctx.font = '12px Arial'; ctx.textAlign = 'left';
-            const avgScore = scores.reduce((a,b) => a+b, 0) / scores.length;
-            ctx.fillText(`Range: ${minScore.toFixed(0)} ~ ${maxScore.toFixed(0)} (Avg: ${avgScore.toFixed(1)}, Baseline: 100)`, padding, canvas.height - 10);
         }
 
         window.onload = async function() {

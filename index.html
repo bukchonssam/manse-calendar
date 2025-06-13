@@ -323,7 +323,33 @@
             const currentYear = new Date().getFullYear();
             const isYangYear = yearGan % 2 === 0;
             const isForward = (gender === 'male' && isYangYear) || (gender === 'female' && !isYangYear);
-            const fortuneStartYear = birthYear + 3; // 간단화
+            const yearTransitions = solarTermsData[birthYear];
+let daysToSolarTerm = 3 * 365; // 기본값
+
+if (yearTransitions) {
+    // 생일 기준으로 이전/다음 절입시간 찾기
+    let prevTransition = null;
+    let nextTransition = null;
+    
+    for (let i = 0; i < yearTransitions.length; i++) {
+        const transDate = new Date(birthYear, yearTransitions[i].month - 1, yearTransitions[i].day, yearTransitions[i].hour, yearTransitions[i].minute);
+        if (transDate <= birthDate) {
+            prevTransition = transDate;
+        } else {
+            nextTransition = transDate;
+            break;
+        }
+    }
+    
+    if (isForward && nextTransition) {
+        daysToSolarTerm = (nextTransition - birthDate) / (1000 * 60 * 60 * 24);
+    } else if (!isForward && prevTransition) {
+        daysToSolarTerm = (birthDate - prevTransition) / (1000 * 60 * 60 * 24);
+    }
+}
+
+const fortuneStartAge = daysToSolarTerm / 3;
+const fortuneStartYear = birthYear + Math.round(fortuneStartAge);
             const currentFortuneIndex = Math.floor((currentYear - fortuneStartYear) / 10);
             
             const fortunes = [];

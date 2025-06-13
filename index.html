@@ -13,18 +13,18 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f5f5f5;
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
         }
         
         .container {
             max-width: 900px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
         h1 {
@@ -230,11 +230,11 @@
         }
 
         .inseong-section {
-            margin-top: 30px;
-            padding: 25px;
+            margin-top: 20px;
+            padding: 15px;
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             border-left: 4px solid #667eea;
         }
         
@@ -434,16 +434,16 @@
         let solarTermsData = null;
         
         const sipsinMapping = {
-            'Yang Wood': { jeongin: 'Yin Water', pyeongin: 'Yang Water', jeongjae: 'Yin Earth', pyeonjae: 'Yang Earth', jeonggwan: 'Yin Metal' },
-            'Yin Wood': { jeongin: 'Yang Water', pyeongin: 'Yin Water', jeongjae: 'Yang Earth', pyeonjae: 'Yin Earth', jeonggwan: 'Yang Metal' },
-            'Yang Fire': { jeongin: 'Yin Wood', pyeongin: 'Yang Wood', jeongjae: 'Yin Metal', pyeonjae: 'Yang Metal', jeonggwan: 'Yin Water' },
-            'Yin Fire': { jeongin: 'Yang Wood', pyeongin: 'Yin Wood', jeongjae: 'Yang Metal', pyeonjae: 'Yin Metal', jeonggwan: 'Yang Water' },
-            'Yang Earth': { jeongin: 'Yin Fire', pyeongin: 'Yang Fire', jeongjae: 'Yin Water', pyeonjae: 'Yang Water', jeonggwan: 'Yin Wood' },
-            'Yin Earth': { jeongin: 'Yang Fire', pyeongin: 'Yin Fire', jeongjae: 'Yang Water', pyeonjae: 'Yin Water', jeonggwan: 'Yang Wood' },
-            'Yang Metal': { jeongin: 'Yin Earth', pyeongin: 'Yang Earth', jeongjae: 'Yin Wood', pyeonjae: 'Yang Wood', jeonggwan: 'Yin Fire' },
-            'Yin Metal': { jeongin: 'Yang Earth', pyeongin: 'Yin Earth', jeongjae: 'Yang Wood', pyeonjae: 'Yin Wood', jeonggwan: 'Yang Fire' },
-            'Yang Water': { jeongin: 'Yin Metal', pyeongin: 'Yang Metal', jeongjae: 'Yin Fire', pyeonjae: 'Yang Fire', jeonggwan: 'Yin Earth' },
-            'Yin Water': { jeongin: 'Yang Metal', pyeongin: 'Yin Metal', jeongjae: 'Yang Fire', pyeonjae: 'Yin Fire', jeonggwan: 'Yang Earth' }
+            'Yang Wood': { jeongin: 'Yin Water', pyeongin: 'Yang Water', jeongjae: 'Yin Earth', pyeonjae: 'Yang Earth', jeonggwan: 'Yin Metal', pyeonggwan: 'Yang Metal' },
+            'Yin Wood': { jeongin: 'Yang Water', pyeongin: 'Yin Water', jeongjae: 'Yang Earth', pyeonjae: 'Yin Earth', jeonggwan: 'Yang Metal', pyeonggwan: 'Yin Metal' },
+            'Yang Fire': { jeongin: 'Yin Wood', pyeongin: 'Yang Wood', jeongjae: 'Yin Metal', pyeonjae: 'Yang Metal', jeonggwan: 'Yin Water', pyeonggwan: 'Yang Water' },
+            'Yin Fire': { jeongin: 'Yang Wood', pyeongin: 'Yin Wood', jeongjae: 'Yang Metal', pyeonjae: 'Yin Metal', jeonggwan: 'Yang Water', pyeonggwan: 'Yin Water' },
+            'Yang Earth': { jeongin: 'Yin Fire', pyeongin: 'Yang Fire', jeongjae: 'Yin Water', pyeonjae: 'Yang Water', jeonggwan: 'Yin Wood', pyeonggwan: 'Yang Wood' },
+            'Yin Earth': { jeongin: 'Yang Fire', pyeongin: 'Yin Fire', jeongjae: 'Yang Water', pyeonjae: 'Yin Water', jeonggwan: 'Yang Wood', pyeonggwan: 'Yin Wood' },
+            'Yang Metal': { jeongin: 'Yin Earth', pyeongin: 'Yang Earth', jeongjae: 'Yin Wood', pyeonjae: 'Yang Wood', jeonggwan: 'Yin Fire', pyeonggwan: 'Yang Fire' },
+            'Yin Metal': { jeongin: 'Yang Earth', pyeongin: 'Yin Earth', jeongjae: 'Yang Wood', pyeonjae: 'Yin Wood', jeonggwan: 'Yang Fire', pyeonggwan: 'Yin Fire' },
+            'Yang Water': { jeongin: 'Yin Metal', pyeongin: 'Yang Metal', jeongjae: 'Yin Fire', pyeonjae: 'Yang Fire', jeonggwan: 'Yin Earth', pyeonggwan: 'Yang Earth' },
+            'Yin Water': { jeongin: 'Yang Metal', pyeongin: 'Yin Metal', jeongjae: 'Yang Fire', pyeonjae: 'Yin Fire', jeonggwan: 'Yang Earth', pyeonggwan: 'Yin Earth' }
         };
 
         async function loadSolarTermsData() {
@@ -609,8 +609,14 @@
             const labels = [];
             
             yearMonthData.forEach(data => {
-                const yearScore = calculateSipsinUnsung(ilgan, data.yearGanzhi, 'jeonggwan');
-                const monthScore = calculateSipsinUnsung(ilgan, data.monthGanzhi, 'jeonggwan');
+                // 정관 + 편관 합산
+                const jeonggwanYearScore = calculateSipsinUnsung(ilgan, data.yearGanzhi, 'jeonggwan');
+                const pyeonggwanYearScore = calculateSipsinUnsung(ilgan, data.yearGanzhi, 'pyeonggwan');
+                const jeonggwanMonthScore = calculateSipsinUnsung(ilgan, data.monthGanzhi, 'jeonggwan');
+                const pyeonggwanMonthScore = calculateSipsinUnsung(ilgan, data.monthGanzhi, 'pyeonggwan');
+                
+                const yearScore = jeonggwanYearScore + pyeonggwanYearScore;
+                const monthScore = jeonggwanMonthScore + pyeonggwanMonthScore;
                 
                 const totalScore = yearScore * yearWeight + monthScore * monthWeight;
                 scores.push(Math.round((totalScore + 100) * 10) / 10);
@@ -667,12 +673,18 @@
             const ctx = canvas.getContext('2d');
             
             canvas.style.display = 'block';
-            canvas.width = 800;
-            canvas.height = 400;
+            
+            // 반응형 크기 설정
+            const container = canvas.parentElement;
+            const containerWidth = container.offsetWidth - 40; // 여백 고려
+            const isMobile = window.innerWidth <= 768;
+            
+            canvas.width = isMobile ? Math.min(containerWidth, 350) : 800;
+            canvas.height = isMobile ? 300 : 400;
             
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            const padding = 80;
+            const padding = isMobile ? 50 : 80;
             const graphWidth = canvas.width - padding * 2;
             const graphHeight = canvas.height - padding * 2;
             
@@ -722,7 +734,7 @@
                 ctx.setLineDash([]);
                 
                 ctx.fillStyle = '#ff6b6b';
-                ctx.font = 'bold 12px Arial';
+                ctx.font = `bold ${isMobile ? '10px' : '12px'} Arial`;
                 ctx.textAlign = 'right';
                 ctx.fillText('100', padding - 5, baselineY + 4);
             }
@@ -749,39 +761,40 @@
                     const pointY = padding + graphHeight - ((score - minScore) / scoreRange) * graphHeight;
                     
                     ctx.beginPath();
-                    ctx.arc(pointX, pointY, 4, 0, 2 * Math.PI);
+                    ctx.arc(pointX, pointY, isMobile ? 3 : 4, 0, 2 * Math.PI);
                     ctx.fill();
                 });
             }
             
             ctx.fillStyle = '#333';
-            ctx.font = '12px Arial';
+            ctx.font = `${isMobile ? '10px' : '12px'} Arial`;
             ctx.textAlign = 'center';
             
             const startYear = parseInt(document.getElementById('graphStartYear').value);
             const endYear = parseInt(document.getElementById('graphEndYear').value);
             const yearRange = endYear - startYear;
             
-            for (let i = 0; i <= yearRange; i++) {
+            const yearStep = isMobile ? Math.max(1, Math.floor(yearRange / 3)) : 1;
+            for (let i = 0; i <= yearRange; i += yearStep) {
                 const year = startYear + i;
                 const x = padding + (i / yearRange) * graphWidth;
-                ctx.fillText(year.toString(), x, canvas.height - padding + 25);
+                ctx.fillText(year.toString(), x, canvas.height - padding + (isMobile ? 20 : 25));
             }
             
             ctx.textAlign = 'right';
             ctx.fillStyle = '#333';
-            ctx.font = '12px Arial';
+            ctx.font = `${isMobile ? '10px' : '12px'} Arial`;
             
             for (let i = 0; i <= 5; i++) {
                 const score = minScore + (scoreRange * i / 5);
                 const y = padding + graphHeight - (i / 5) * graphHeight;
-                ctx.fillText(score.toFixed(0), padding - 10, y + 4);
+                ctx.fillText(score.toFixed(0), padding - 5, y + 4);
             }
             
             ctx.fillStyle = '#2c3e50';
-            ctx.font = 'bold 18px Arial';
+            ctx.font = `bold ${isMobile ? '14px' : '18px'} Arial`;
             ctx.textAlign = 'center';
-            ctx.fillText(title, canvas.width / 2, 30);
+            ctx.fillText(title, canvas.width / 2, isMobile ? 25 : 30);
         }
 
         function generateYearMonthGanzhi(startYear, endYear) {

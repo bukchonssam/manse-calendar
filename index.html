@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,1347 +12,1339 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-        
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 30px;
-            font-size: 2.2em;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        
-        .input-section {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            flex-wrap: nowrap;
-        }
-        
-        .date-input {
-            padding: 12px 15px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        
-        .date-input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        .search-btn {
-            padding: 12px 25px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-        
-        .search-btn:hover {
-            transform: translateY(-2px);
-        }
-        
-        .result-section {
-            display: none;
-            margin-top: 30px;
-        }
-        
-        .saju-box {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .saju-title {
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-        
-        .saju-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            gap: 2px;
-            margin-bottom: 15px;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            padding: 8px;
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .grid-cell {
-            background: rgba(255, 255, 255, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 6px;
-            padding: 8px 4px;
-            text-align: center;
-            font-weight: bold;
-            min-height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .label-cell {
-            font-size: 0.8em;
-            opacity: 0.9;
-        }
-        
-        .stem-cell {
-            font-size: 0.85em;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-        }
-        
-        .branch-cell {
-            font-size: 0.85em;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-        }
-        
-        .wood { background-color: #228B22 !important; }
-        .fire { background-color: #DC143C !important; }
-        .earth { background-color: #DAA520 !important; }
-        .metal { background-color: #C0C0C0 !important; color: #333 !important; }
-        .water { background-color: #191970 !important; }
-        
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        .info-card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            border-left: 4px solid #667eea;
-        }
-        
-        .info-title {
-            color: #2c3e50;
-            font-weight: bold;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-        }
-        
-        .info-content {
-            color: #555;
-            line-height: 1.6;
-        }
-        
-        .fortune-period {
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 8px;
-            border: 2px solid transparent;
-        }
-        
-        .fortune-past {
-            background-color: #f8f9fa;
-            color: #6c757d;
-            opacity: 0.7;
-        }
-        
-        .fortune-current {
-            background-color: #e3f2fd;
-            border-color: #2196f3;
-            color: #0d47a1;
-            font-weight: bold;
-        }
-        
-        .fortune-future {
-            background-color: #f3e5f5;
-            color: #7b1fa2;
-        }
-        
-        .fortune-title {
-            font-weight: bold;
-            font-size: 0.9em;
-        }
-        
-        .fortune-elements {
-            display: flex;
-            gap: 5px;
-            margin-top: 5px;
-            justify-content: center;
-        }
-        
-        .fortune-element {
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.8em;
-            color: white;
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
-        }
-        
-        .loading {
-            text-align: center;
-            color: #666;
-            font-style: italic;
-        }
-        
-        .error {
-            background-color: #ffe6e6;
-            color: #d8000c;
-            padding: 10px;
-            border-radius: 8px;
-            margin: 10px 0;
-        }
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+    }
+    
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 30px;
+        font-size: 2.2em;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .input-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 30px;
+        flex-wrap: nowrap;
+    }
+    
+    .date-input {
+        padding: 12px 15px;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        font-size: 16px;
+        transition: border-color 0.3s;
+    }
+    
+    .date-input:focus {
+        outline: none;
+        border-color: #667eea;
+    }
+    
+    .search-btn {
+        padding: 12px 25px;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: transform 0.3s;
+    }
+    
+    .search-btn:hover {
+        transform: translateY(-2px);
+    }
+    
+    .result-section {
+        display: none;
+        margin-top: 30px;
+    }
+    
+    .saju-box {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    
+    .saju-title {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+        font-weight: bold;
+    }
+    
+    .saju-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 2px;
+        margin-bottom: 15px;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        padding: 8px;
+        background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .grid-cell {
+        background: rgba(255, 255, 255, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 6px;
+        padding: 8px 4px;
+        text-align: center;
+        font-weight: bold;
+        min-height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .label-cell {
+        font-size: 0.8em;
+        opacity: 0.9;
+    }
+    
+    .stem-cell {
+        font-size: 0.85em;
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+    
+    .branch-cell {
+        font-size: 0.85em;
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+    
+    .wood { background-color: #228B22 !important; }
+    .fire { background-color: #DC143C !important; }
+    .earth { background-color: #DAA520 !important; }
+    .metal { background-color: #C0C0C0 !important; color: #333 !important; }
+    .water { background-color: #191970 !important; }
+    
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+    
+    .info-card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid #667eea;
+    }
+    
+    .info-title {
+        color: #2c3e50;
+        font-weight: bold;
+        margin-bottom: 10px;
+        font-size: 1.1em;
+    }
+    
+    .info-content {
+        color: #555;
+        line-height: 1.6;
+    }
+    
+    .fortune-period {
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 8px;
+        border: 2px solid transparent;
+    }
+    
+    .fortune-past {
+        background-color: #f8f9fa;
+        color: #6c757d;
+        opacity: 0.7;
+    }
+    
+    .fortune-current {
+        background-color: #e3f2fd;
+        border-color: #2196f3;
+        color: #0d47a1;
+        font-weight: bold;
+    }
+    
+    .fortune-future {
+        background-color: #f3e5f5;
+        color: #7b1fa2;
+    }
+    
+    .fortune-title {
+        font-weight: bold;
+        font-size: 0.9em;
+    }
+    
+    .fortune-elements {
+        display: flex;
+        gap: 5px;
+        margin-top: 5px;
+        justify-content: center;
+    }
+    
+    .fortune-element {
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.8em;
+        color: white;
+        text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+    }
+    
+    .loading {
+        text-align: center;
+        color: #666;
+        font-style: italic;
+    }
+    
+    .error {
+        background-color: #ffe6e6;
+        color: #d8000c;
+        padding: 10px;
+        border-radius: 8px;
+        margin: 10px 0;
+    }
 
-        /* 인성운 그래프 스타일 */
-        .inseong-section {
-            margin-top: 30px;
-            padding: 25px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            border-left: 4px solid #667eea;
-        }
-        
-        .period-selector {
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
+    /* 인성운 그래프 스타일 */
+    .inseong-section {
+        margin-top: 30px;
+        padding: 25px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid #667eea;
+    }
+    
+    .period-selector {
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    
+    .weight-settings {
+        margin: 15px 0;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+    
+    .weight-settings label {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 0.9em;
+        color: #555;
+    }
+    
+    .weight-settings input[type="range"] {
+        width: 200px;
+        margin: 0 10px;
+    }
+    
+    #fortuneChart {
+        margin-top: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: white;
+        display: block;
+        width: 100%;
+    }
+    
+    @media (max-width: 768px) {
+        .input-section {
+            flex-direction: column;
             gap: 10px;
-            flex-wrap: wrap;
         }
-        
-        .weight-settings {
-            margin: 15px 0;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
-        
-        .weight-settings label {
-            display: block;
-            margin-bottom: 10px;
-            font-size: 0.9em;
-            color: #555;
-        }
-        
-        .weight-settings input[type="range"] {
-            width: 200px;
-            margin: 0 10px;
-        }
-        
-        #fortuneChart {
-            margin-top: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background: white;
-            display: block;
+        .date-input {
             width: 100%;
+            max-width: 200px;
         }
-        
-        @media (max-width: 768px) {
-            .input-section {
-                flex-direction: column;
-                gap: 10px;
-            }
-            .date-input {
-                width: 100%;
-                max-width: 200px;
-            }
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
     <div class="container">
         <h1>🗓️ Four Pillars Calculator</h1>
 
-        <div class="input-section">
-            <select class="date-input" id="dayInput">
-            </select>
-            <select class="date-input" id="monthInput">
-            </select>
-            <select class="date-input" id="yearInput">
-            </select>
-            <select class="date-input" id="genderInput">
-                <option value="">Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-            </select>
-            <input type="time" class="date-input" id="timeInput" placeholder="Optional">
-            <button class="search-btn" onclick="calculateSaju()">Calculate</button>
+    <div class="input-section">
+        <select class="date-input" id="dayInput">
+        </select>
+        <select class="date-input" id="monthInput">
+        </select>
+        <select class="date-input" id="yearInput">
+        </select>
+        <select class="date-input" id="genderInput">
+            <option value="">Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+        <input type="time" class="date-input" id="timeInput" placeholder="Optional">
+        <button class="search-btn" onclick="calculateSaju()">Calculate</button>
+    </div>
+    
+    <div class="result-section" id="resultSection">
+        <div class="saju-box">
+            <div class="saju-title">Four Pillars</div>
+            <div class="saju-grid">
+                <div class="grid-cell label-cell">Hour</div>
+                <div class="grid-cell label-cell">Day</div>
+                <div class="grid-cell label-cell">Month</div>
+                <div class="grid-cell label-cell">Year</div>
+                
+                <div class="grid-cell stem-cell" id="hourStem">-</div>
+                <div class="grid-cell stem-cell" id="dayStem">-</div>
+                <div class="grid-cell stem-cell" id="monthStem">-</div>
+                <div class="grid-cell stem-cell" id="yearStem">-</div>
+                
+                <div class="grid-cell branch-cell" id="hourBranch">-</div>
+                <div class="grid-cell branch-cell" id="dayBranch">-</div>
+                <div class="grid-cell branch-cell" id="monthBranch">-</div>
+                <div class="grid-cell branch-cell" id="yearBranch">-</div>
+            </div>
+            <div id="selectedDate" style="font-size: 1.1em; opacity: 0.9;"></div>
         </div>
         
-        <div class="result-section" id="resultSection">
-            <div class="saju-box">
-                <div class="saju-title">Four Pillars</div>
-                <div class="saju-grid">
-                    <div class="grid-cell label-cell">Hour</div>
-                    <div class="grid-cell label-cell">Day</div>
-                    <div class="grid-cell label-cell">Month</div>
-                    <div class="grid-cell label-cell">Year</div>
-                    
-                    <div class="grid-cell stem-cell" id="hourStem">-</div>
-                    <div class="grid-cell stem-cell" id="dayStem">-</div>
-                    <div class="grid-cell stem-cell" id="monthStem">-</div>
-                    <div class="grid-cell stem-cell" id="yearStem">-</div>
-                    
-                    <div class="grid-cell branch-cell" id="hourBranch">-</div>
-                    <div class="grid-cell branch-cell" id="dayBranch">-</div>
-                    <div class="grid-cell branch-cell" id="monthBranch">-</div>
-                    <div class="grid-cell branch-cell" id="yearBranch">-</div>
-                </div>
-                <div id="selectedDate" style="font-size: 1.1em; opacity: 0.9;"></div>
+        <div class="info-grid">
+            <div class="info-card" id="fortuneCard" style="display: none;">
+                <div class="info-title">🔮 Great Fortune</div>
+                <div class="info-content" id="fortuneInfo"></div>
             </div>
             
-            <div class="info-grid">
-                <div class="info-card" id="fortuneCard" style="display: none;">
-                    <div class="info-title">🔮 Great Fortune</div>
-                    <div class="info-content" id="fortuneInfo"></div>
-                </div>
-                
-                <div class="info-card" id="yearlyCard">
-                    <div class="info-title">📊 Yearly Fortune</div>
-                    <div class="info-content" id="yearlyInfo"></div>
-                </div>
-                
-                <div class="info-card">
-                    <div class="info-title">📅 Date Information</div>
-                    <div class="info-content" id="dateInfo"></div>
-                </div>
-                
-                <div class="info-card">
-                    <div class="info-title">⭐ Five Elements</div>
-                    <div class="info-content" id="wuxingInfo"></div>
-                </div>
+            <div class="info-card" id="yearlyCard">
+                <div class="info-title">📊 Yearly Fortune</div>
+                <div class="info-content" id="yearlyInfo"></div>
             </div>
-
-            <!-- 인성운 그래프 섹션 수정 -->
-            <div class="inseong-section" id="inseongSection" style="display: none;">
-                <div class="info-title">📈 Study Exam Fortune Analysis</div>
-                <div class="period-selector">
-                    <label>Analysis Period:</label>
-                    <input type="number" class="date-input" id="graphStartYear" placeholder="Start Year" value="2024" style="width: 120px;">
-                    <input type="number" class="date-input" id="graphEndYear" placeholder="End Year" value="2028" style="width: 120px;">
-                    <button class="search-btn" onclick="showInseongFortune()">Generate Graph</button>
-                </div>
-                
-                <div class="weight-settings">
-                    <label>Year Fortune Weight: <input type="range" id="yearWeight" min="10" max="90" value="60"> <span id="yearValue">60%</span></label>
-                    <label>Month Fortune Weight: <input type="range" id="monthWeight" min="10" max="90" value="40"> <span id="monthValue">40%</span></label>
-                </div>
-                
-                <canvas id="fortuneChart" style="display:none; height: 400px;"></canvas>
+            
+            <div class="info-card">
+                <div class="info-title">📅 Date Information</div>
+                <div class="info-content" id="dateInfo"></div>
+            </div>
+            
+            <div class="info-card">
+                <div class="info-title">⭐ Five Elements</div>
+                <div class="info-content" id="wuxingInfo"></div>
             </div>
         </div>
+
+        <!-- 인성운 그래프 섹션 수정 -->
+        <div class="inseong-section" id="inseongSection" style="display: none;">
+            <div class="info-title">📈 Study Exam Fortune Analysis</div>
+            <div class="period-selector">
+                <label>Analysis Period:</label>
+                <input type="number" class="date-input" id="graphStartYear" placeholder="Start Year" value="2024" style="width: 120px;">
+                <input type="number" class="date-input" id="graphEndYear" placeholder="End Year" value="2028" style="width: 120px;">
+                <button class="search-btn" onclick="showInseongFortune()">Generate Graph</button>
+            </div>
+            
+            <div class="weight-settings">
+                <label>Year Fortune Weight: <input type="range" id="yearWeight" min="10" max="90" value="60"> <span id="yearValue">60%</span></label>
+                <label>Month Fortune Weight: <input type="range" id="monthWeight" min="10" max="90" value="40"> <span id="monthValue">40%</span></label>
+            </div>
+            
+            <canvas id="fortuneChart" style="display:none; height: 400px;"></canvas>
+        </div>
     </div>
+</div>
 
-    <script>
-        const tianGanEn = ['Yang Wood', 'Yin Wood', 'Yang Fire', 'Yin Fire', 'Yang Earth', 'Yin Earth', 'Yang Metal', 'Yin Metal', 'Yang Water', 'Yin Water'];
-        const diZhiEn = ['Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake', 'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'];
+<script>
+    const tianGanEn = ['Yang Wood', 'Yin Wood', 'Yang Fire', 'Yin Fire', 'Yang Earth', 'Yin Earth', 'Yang Metal', 'Yin Metal', 'Yang Water', 'Yin Water'];
+    const diZhiEn = ['Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake', 'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'];
+    
+    const elementClass = { 'Wood': 'wood', 'Fire': 'fire', 'Earth': 'earth', 'Metal': 'metal', 'Water': 'water' };
+    
+    const wuxing = {
+        'Yang Wood': 'Wood', 'Yin Wood': 'Wood', 'Yang Fire': 'Fire', 'Yin Fire': 'Fire', 'Yang Earth': 'Earth',
+        'Yin Earth': 'Earth', 'Yang Metal': 'Metal', 'Yin Metal': 'Metal', 'Yang Water': 'Water', 'Yin Water': 'Water',
+        'Rat': 'Water', 'Ox': 'Earth', 'Tiger': 'Wood', 'Rabbit': 'Wood', 'Dragon': 'Earth',
+        'Snake': 'Fire', 'Horse': 'Fire', 'Goat': 'Earth', 'Monkey': 'Metal', 'Rooster': 'Metal', 'Dog': 'Earth', 'Pig': 'Water'
+    };
+
+    // 인성운 그래프 관련 데이터
+    const inseongMapping = {
+        'Yang Wood': ['Yang Water', 'Yin Water'], // 갑목 → 임수(편인), 계수(정인)
+        'Yin Wood': ['Yin Water', 'Yang Water'], // 을목 → 계수(편인), 임수(정인)
+        'Yang Fire': ['Yang Wood', 'Yin Wood'], // 병화 → 갑목(편인), 을목(정인)
+        'Yin Fire': ['Yin Wood', 'Yang Wood'], // 정화 → 을목(편인), 갑목(정인)
+        'Yang Earth': ['Yang Fire', 'Yin Fire'], // 무토 → 병화(편인), 정화(정인)
+        'Yin Earth': ['Yin Fire', 'Yang Fire'], // 기토 → 정화(편인), 병화(정인)
+        'Yang Metal': ['Yang Earth', 'Yin Earth'], // 경금 → 무토(편인), 기토(정인)
+        'Yin Metal': ['Yin Earth', 'Yang Earth'], // 신금 → 기토(편인), 무토(정인)
+        'Yang Water': ['Yang Metal', 'Yin Metal'], // 임수 → 경금(편인), 신금(정인)
+        'Yin Water': ['Yin Metal', 'Yang Metal']  // 계수 → 신금(편인), 경금(정인)
+    };
+
+    const unsungScores = {
+        '장생': 50, '목욕': -40, '관대': 30, '건록': 60,
+        '제왕': 70, '쇠': -20, '병': -50, '사': -60,
+        '묘': -65, '절': -70, '태': 0, '양': 10
+    };
+
+    // 지지별 장생위치 (정순)
+    const jangSaengPos = {
+        'Yang Wood': 'Pig', 'Yin Wood': 'Horse', 'Yang Fire': 'Tiger', 'Yin Fire': 'Rooster',
+        'Yang Earth': 'Tiger', 'Yin Earth': 'Rooster', 'Yang Metal': 'Snake', 'Yin Metal': 'Rat',
+        'Yang Water': 'Monkey', 'Yin Water': 'Rabbit'
+    };
+
+    // 십이운성 순서
+    const unsungOrder = ['장생', '목욕', '관대', '건록', '제왕', '쇠', '병', '사', '묘', '절', '태', '양'];
+    const jiOrder = ['Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake', 'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'];
+    
+    // 절입시간 데이터를 저장할 변수
+    let solarTermsData = null;
+    
+    // 절입시간 JSON 파일 로드
+    async function loadSolarTermsData() {
+        try {
+            const response = await fetch('solar_terms.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            solarTermsData = await response.json();
+            console.log('절입시간 데이터 로드 완료');
+            return true;
+        } catch (error) {
+            console.error('절입시간 데이터 로드 실패:', error);
+            solarTermsData = null;
+            return false;
+        }
+    }
+
+    function normalizeIndex(index, mod) {
+        return ((index % mod) + mod) % mod;
+    }
+    
+    function calculateSaju() {
+        const dayInput = document.getElementById('dayInput').value;
+        const monthInput = document.getElementById('monthInput').value;
+        const yearInput = document.getElementById('yearInput').value;
+        const genderInput = document.getElementById('genderInput').value;
+        const timeInput = document.getElementById('timeInput').value;
         
-        const elementClass = { 'Wood': 'wood', 'Fire': 'fire', 'Earth': 'earth', 'Metal': 'metal', 'Water': 'water' };
+        if (!dayInput || !monthInput || !yearInput) {
+            alert('Please select all date fields.');
+            return;
+        }
         
-        const wuxing = {
-            'Yang Wood': 'Wood', 'Yin Wood': 'Wood', 'Yang Fire': 'Fire', 'Yin Fire': 'Fire', 'Yang Earth': 'Earth',
-            'Yin Earth': 'Earth', 'Yang Metal': 'Metal', 'Yin Metal': 'Metal', 'Yang Water': 'Water', 'Yin Water': 'Water',
-            'Rat': 'Water', 'Ox': 'Earth', 'Tiger': 'Wood', 'Rabbit': 'Wood', 'Dragon': 'Earth',
-            'Snake': 'Fire', 'Horse': 'Fire', 'Goat': 'Earth', 'Monkey': 'Metal', 'Rooster': 'Metal', 'Dog': 'Earth', 'Pig': 'Water'
+        if (!solarTermsData) {
+            alert('절입시간 데이터(solar_terms.json)를 불러올 수 없습니다. 정확한 사주 계산을 위해서는 절입시간 데이터 파일이 필요합니다.');
+            return;
+        }
+        
+        const timeValue = timeInput || '12:00';
+        const selectedDate = new Date(`${yearInput}-${monthInput.padStart(2, '0')}-${dayInput.padStart(2, '0')}T${timeValue}`);
+        const year = selectedDate.getFullYear();
+        const month = selectedDate.getMonth() + 1;
+        const day = selectedDate.getDate();
+        const hour = selectedDate.getHours();
+        
+        // Calculate day pillar
+        // If hour is 23 (11 PM), use next day's pillar
+        let adjustedDate = new Date(year, month - 1, day);
+        if (hour === 23) {
+            adjustedDate = new Date(year, month - 1, day + 1);
+        }
+        
+        const baseDate = new Date(2025, 5, 9); // June 9, 2025
+        const daysDiff = Math.floor((adjustedDate - baseDate) / (1000 * 60 * 60 * 24));
+        
+        const baseDayGan = 5; // Yin Earth
+        const baseDayZhi = 9; // Rooster
+        
+        const dayGan = normalizeIndex(baseDayGan + daysDiff, 10);
+        const dayZhi = normalizeIndex(baseDayZhi + daysDiff, 12);
+        
+        // Calculate year pillar
+        const baseYearGan = 1; // Yin Wood (2025)
+        const baseYearZhi = 5; // Snake (2025)
+        
+        // Determine solar year based on solar terms
+        let solarYear = year;
+        const lichunDate = getMonthStartDate(year, 1);
+        if (lichunDate && selectedDate < lichunDate) {
+            solarYear = year - 1;
+        }
+        
+        const yearOffset = solarYear - 2025;
+        const yearGan = normalizeIndex(baseYearGan + yearOffset, 10);
+        const yearZhi = normalizeIndex(baseYearZhi + yearOffset, 12);
+        
+        // Calculate month pillar
+        const monthNumber = getSolarMonth(selectedDate);
+        if (monthNumber === null) {
+            alert(`${year}년도의 절입시간 데이터가 없습니다. solar_terms.json 파일에 해당 연도 데이터를 추가해주세요.`);
+            return;
+        }
+        
+        // Month pillar calculation using year stem formula
+        // A/F years: Start with Fire Tiger month (stem index 2)
+        // B/G years: Start with Earth Tiger month (stem index 4)
+        // C/H years: Start with Metal Tiger month (stem index 6) 
+        // D/I years: Start with Water Tiger month (stem index 8)
+        // E/J years: Start with Wood Tiger month (stem index 0)
+        
+        const yearGanMod5 = yearGan % 5;
+        let monthGanBase;
+        switch(yearGanMod5) {
+            case 0: case 5: monthGanBase = 2; break; // A/F years -> Fire Tiger
+            case 1: case 6: monthGanBase = 4; break; // B/G years -> Earth Tiger
+            case 2: case 7: monthGanBase = 6; break; // C/H years -> Metal Tiger
+            case 3: case 8: monthGanBase = 8; break; // D/I years -> Water Tiger
+            case 4: case 9: monthGanBase = 0; break; // E/J years -> Wood Tiger
+        }
+        
+        // Month branch starts from Tiger (index 2) and follows sequential order
+        const monthGan = normalizeIndex(monthGanBase + (monthNumber - 1), 10);
+        const monthZhi = normalizeIndex(2 + (monthNumber - 1), 12); // Tiger=2 start
+        
+        // Calculate hour pillar (if time provided)
+        let hourGan = null, hourZhi = null;
+        if (timeInput) {
+            let hourIndex = Math.floor((hour + 1) / 2) % 12;
+            if (hour === 23) hourIndex = 0;
+            
+            const hourGanBase = (dayGan % 5) * 2;
+            hourGan = normalizeIndex(hourGanBase + hourIndex, 10);
+            hourZhi = hourIndex;
+        }
+        
+        // Get text values
+        const yearStemText = tianGanEn[yearGan];
+        const yearBranchText = diZhiEn[yearZhi];
+        const monthStemText = tianGanEn[monthGan];
+        const monthBranchText = diZhiEn[monthZhi];
+        const dayStemText = tianGanEn[dayGan];
+        const dayBranchText = diZhiEn[dayZhi];
+        
+        let hourStemText = '', hourBranchText = '';
+        if (timeInput && hourGan !== null && hourZhi !== null) {
+            hourStemText = tianGanEn[hourGan];
+            hourBranchText = diZhiEn[hourZhi];
+        }
+        
+        // Update display
+        updateCell('yearStem', yearStemText, 'stem-cell');
+        updateCell('monthStem', monthStemText, 'stem-cell');
+        updateCell('dayStem', dayStemText, 'stem-cell');
+        updateCell('hourStem', hourStemText, 'stem-cell');
+        
+        updateCell('yearBranch', yearBranchText, 'branch-cell');
+        updateCell('monthBranch', monthBranchText, 'branch-cell');
+        updateCell('dayBranch', dayBranchText, 'branch-cell');
+        updateCell('hourBranch', hourBranchText, 'branch-cell');
+        
+        document.getElementById('selectedDate').textContent = 
+            `${year}/${month}/${day}` + (timeInput ? ` ${hour}:${timeValue.split(':')[1] || '00'}` : ' (No time entered)') + 
+            (hour === 23 ? ' (Using next day\'s day pillar)' : '');
+        
+        displayAdditionalInfo(selectedDate, yearStemText, yearBranchText, monthStemText, monthBranchText, dayStemText, dayBranchText, hourStemText, hourBranchText, timeInput);
+        
+        // Great Fortune calculation
+        if (genderInput) {
+            calculateAndDisplayFortune(selectedDate, genderInput, yearGan, monthGan, monthZhi);
+            document.getElementById('fortuneCard').style.display = 'block';
+        } else {
+            document.getElementById('fortuneCard').style.display = 'none';
+        }
+        
+        // Yearly Fortune
+        calculateAndDisplayYearlyFortune();
+        
+        document.getElementById('resultSection').style.display = 'block';
+        
+        // 인성운 그래프 섹션 표시
+        document.getElementById('inseongSection').style.display = 'block';
+        
+        // 전역 변수에 저장 (그래프용)
+        window.currentPillars = {
+            day: dayStemText,
+            year: yearStemText + yearBranchText,
+            month: monthStemText + monthBranchText
+        };
+    }
+    
+    function getSolarMonth(date) {
+        const year = date.getFullYear();
+        const transitions = solarTermsData[year] || [];
+        
+        // 해당 년도의 절입시간 데이터가 없으면 null 반환
+        if (transitions.length === 0) {
+            return null;
+        }
+        
+        // Before first transition (February), it's Month 12 of previous year
+        const firstTransition = new Date(year, transitions[0].month - 1, transitions[0].day, transitions[0].hour, transitions[0].minute);
+        if (date < firstTransition) {
+            return 12;
+        }
+        
+        // Check each transition
+        for (let i = transitions.length - 1; i >= 0; i--) {
+            const trans = transitions[i];
+            const transDate = new Date(year, trans.month - 1, trans.day, trans.hour, trans.minute);
+            if (date >= transDate) {
+                return i;
+            }
+        }
+        
+        return null;
+    }
+    
+    function getMonthStartDate(year, monthNum) {
+        const transitions = solarTermsData[year];
+        if (!transitions || monthNum < 1 || monthNum > 12) return null;
+        
+        if (monthNum === 12) {
+            // Month 12 starts in previous year's December
+            const prevTransitions = solarTermsData[year - 1];
+            if (prevTransitions && prevTransitions.length >= 11) {
+                const trans = prevTransitions[10];
+                return new Date(year - 1, trans.month - 1, trans.day, trans.hour, trans.minute);
+            }
+        } else if (monthNum <= transitions.length) {
+            const trans = transitions[monthNum - 1];
+            return new Date(year, trans.month - 1, trans.day, trans.hour, trans.minute);
+        }
+        
+        return null;
+    }
+    
+    function updateCell(elementId, text, cellType) {
+        const element = document.getElementById(elementId);
+        element.textContent = text || '-';
+        
+        if (text && wuxing[text]) {
+            element.className = `grid-cell ${cellType} ${elementClass[wuxing[text]]}`;
+        } else {
+            element.className = `grid-cell ${cellType}`;
+            if (!text) {
+                element.style.border = '2px dashed rgba(255,255,255,0.5)';
+                element.style.background = 'transparent';
+            }
+        }
+    }
+    
+    function displayAdditionalInfo(date, yS, yB, mS, mB, dS, dB, hS, hB, hasTime) {
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        
+        const dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        document.getElementById('dateInfo').innerHTML = 
+            `${year}/${month}/${day}<br>${dayOfWeek[date.getDay()]}`;
+        
+        const elements = [wuxing[yS], wuxing[yB], wuxing[mS], wuxing[mB], wuxing[dS], wuxing[dB]];
+        if (hasTime && hS && hB) elements.push(wuxing[hS], wuxing[hB]);
+        
+        const elementCount = {};
+        elements.forEach(el => {
+            if (el) elementCount[el] = (elementCount[el] || 0) + 1;
+        });
+        
+        let wuxingText = '';
+        Object.keys(elementCount).forEach(el => {
+            wuxingText += `${el}: ${elementCount[el]}<br>`;
+        });
+        document.getElementById('wuxingInfo').innerHTML = wuxingText;
+    }
+    
+    function calculateAndDisplayFortune(birthDate, gender, yearGan, monthGan, monthZhi) {
+        const birthYear = birthDate.getFullYear();
+        const currentYear = new Date().getFullYear();
+        
+        // Great Fortune direction (Male Yang year, Female Yin year = Forward)
+        const isYangYear = yearGan % 2 === 0;
+        const isForward = (gender === 'male' && isYangYear) || (gender === 'female' && !isYangYear);
+        
+        // Get solar terms data
+        const yearTransitions = solarTermsData[birthYear];
+        const prevYearTransitions = solarTermsData[birthYear - 1];
+        const nextYearTransitions = solarTermsData[birthYear + 1];
+        
+        if (!yearTransitions) {
+            // Fallback
+            const fortuneStartAge = 3;
+            const fortuneStartYear = birthYear + fortuneStartAge;
+            displayFortuneWithSimpleCalculation(fortuneStartYear, currentYear, monthGan, monthZhi, isForward);
+            return;
+        }
+        
+        // Create array of all solar terms around birth date
+        let allTransitions = [];
+        
+        // Add December from previous year
+        if (prevYearTransitions && prevYearTransitions.length >= 11) {
+            const decTrans = prevYearTransitions[10];
+            allTransitions.push({
+                date: new Date(birthYear - 1, decTrans.month - 1, decTrans.day, decTrans.hour, decTrans.minute),
+                monthNum: 12
+            });
+        }
+        
+        // Add all transitions from birth year
+        yearTransitions.forEach((trans, index) => {
+            allTransitions.push({
+                date: new Date(birthYear, trans.month - 1, trans.day, trans.hour, trans.minute),
+                monthNum: index + 1
+            });
+        });
+        
+        // Add January from next year
+        if (nextYearTransitions && nextYearTransitions.length > 0) {
+            const janTrans = nextYearTransitions[0];
+            allTransitions.push({
+                date: new Date(birthYear + 1, janTrans.month - 1, janTrans.day, janTrans.hour, janTrans.minute),
+                monthNum: 1
+            });
+        }
+        
+        // Find the closest transitions before and after birth
+        let prevTransition = null;
+        let nextTransition = null;
+        
+        for (let i = 0; i < allTransitions.length; i++) {
+            if (allTransitions[i].date <= birthDate) {
+                prevTransition = allTransitions[i];
+            } else {
+                nextTransition = allTransitions[i];
+                break;
+            }
+        }
+        
+        // Calculate days to solar term
+        let daysToSolarTerm = 0;
+        let targetDate = null;
+        
+        if (isForward && nextTransition) {
+            // Forward: days to next solar term
+            targetDate = nextTransition.date;
+            daysToSolarTerm = (targetDate - birthDate) / (1000 * 60 * 60 * 24);
+        } else if (!isForward && prevTransition) {
+            // Backward: days from previous solar term
+            targetDate = prevTransition.date;
+            daysToSolarTerm = (birthDate - targetDate) / (1000 * 60 * 60 * 24);
+        }
+        
+        // Convert days to years (3 days = 1 year)
+        const fortuneStartAge = Math.round(daysToSolarTerm / 3 * 10) / 10; // Round to 0.1
+        const fortuneStartYear = birthYear + Math.floor(fortuneStartAge);
+        
+        // Current fortune index
+        const currentFortuneIndex = Math.floor((currentYear - fortuneStartYear) / 10);
+        
+        // Calculate previous, current, and next fortunes
+        const fortunes = [];
+        for (let i = -1; i <= 1; i++) {
+            const fortuneIndex = currentFortuneIndex + i;
+            const startYear = fortuneStartYear + (fortuneIndex * 10);
+            const endYear = startYear + 9;
+            
+            // Skip if fortune hasn't started yet
+            if (startYear > currentYear + 20) continue;
+            
+            // Calculate fortune stems and branches
+            let fortuneGan, fortuneZhi;
+            if (isForward) {
+                fortuneGan = normalizeIndex(monthGan + fortuneIndex + 1, 10);
+                fortuneZhi = normalizeIndex(monthZhi + fortuneIndex + 1, 12);
+            } else {
+                fortuneGan = normalizeIndex(monthGan - fortuneIndex - 1, 10);
+                fortuneZhi = normalizeIndex(monthZhi - fortuneIndex - 1, 12);
+            }
+            
+            const fortuneType = i === -1 ? 'past' : (i === 0 ? 'current' : 'future');
+            const fortuneLabel = i === -1 ? 'Previous' : (i === 0 ? 'Current' : 'Next');
+            
+            fortunes.push({
+                type: fortuneType,
+                label: fortuneLabel,
+                startYear,
+                endYear,
+                gan: fortuneGan,
+                zhi: fortuneZhi
+            });
+        }
+        
+        // Display fortune information with calculation details
+        const directionText = isForward ? 'Forward' : 'Backward';
+        const genderYearText = `${gender === 'male' ? 'Male' : 'Female'}, ${isYangYear ? 'Yang' : 'Yin'} year`;
+        
+        let fortuneHtml = `<div style="font-size: 0.9em; margin-bottom: 10px; opacity: 0.8;">
+            ${genderYearText} → ${directionText}<br>
+            Days to solar term: ${daysToSolarTerm.toFixed(1)} days<br>
+            Fortune starts: Year ${fortuneStartYear} (Age ${fortuneStartAge})
+        </div>`;
+        
+        fortunes.forEach(fortune => {
+            const ganText = tianGanEn[fortune.gan];
+            const zhiText = diZhiEn[fortune.zhi];
+            const ganElement = wuxing[ganText];
+            const zhiElement = wuxing[zhiText];
+            
+            fortuneHtml += `
+                <div class="fortune-period fortune-${fortune.type}">
+                    <div class="fortune-title">${fortune.label} Fortune</div>
+                    <div>${fortune.startYear} - ${fortune.endYear}</div>
+                    <div class="fortune-elements">
+                        <span class="fortune-element ${elementClass[ganElement]}">${ganText}</span>
+                        <span class="fortune-element ${elementClass[zhiElement]}">${zhiText}</span>
+                    </div>
+                </div>
+            `;
+        });
+        
+        document.getElementById('fortuneInfo').innerHTML = fortuneHtml;
+    }
+    
+    function displayFortuneWithSimpleCalculation(fortuneStartYear, currentYear, monthGan, monthZhi, isForward) {
+        // Fallback simple calculation when no solar terms data
+        const currentFortuneIndex = Math.floor((currentYear - fortuneStartYear) / 10);
+        
+        const fortunes = [];
+        for (let i = -1; i <= 1; i++) {
+            const fortuneIndex = currentFortuneIndex + i;
+            const startYear = fortuneStartYear + (fortuneIndex * 10);
+            const endYear = startYear + 9;
+            
+            let fortuneGan, fortuneZhi;
+            if (isForward) {
+                fortuneGan = normalizeIndex(monthGan + fortuneIndex + 1, 10);
+                fortuneZhi = normalizeIndex(monthZhi + fortuneIndex + 1, 12);
+            } else {
+                fortuneGan = normalizeIndex(monthGan - fortuneIndex - 1, 10);
+                fortuneZhi = normalizeIndex(monthZhi - fortuneIndex - 1, 12);
+            }
+            
+            const fortuneType = i === -1 ? 'past' : (i === 0 ? 'current' : 'future');
+            const fortuneLabel = i === -1 ? 'Previous' : (i === 0 ? 'Current' : 'Next');
+            
+            fortunes.push({
+                type: fortuneType,
+                label: fortuneLabel,
+                startYear,
+                endYear,
+                gan: fortuneGan,
+                zhi: fortuneZhi
+            });
+        }
+        
+        let fortuneHtml = '<div style="font-size: 0.9em; margin-bottom: 10px; opacity: 0.8;">Using simplified calculation (3 years)</div>';
+        
+        fortunes.forEach(fortune => {
+            const ganText = tianGanEn[fortune.gan];
+            const zhiText = diZhiEn[fortune.zhi];
+            const ganElement = wuxing[ganText];
+            const zhiElement = wuxing[zhiText];
+            
+            fortuneHtml += `
+                <div class="fortune-period fortune-${fortune.type}">
+                    <div class="fortune-title">${fortune.label} Fortune</div>
+                    <div>${fortune.startYear} - ${fortune.endYear}</div>
+                    <div class="fortune-elements">
+                        <span class="fortune-element ${elementClass[ganElement]}">${ganText}</span>
+                        <span class="fortune-element ${elementClass[zhiElement]}">${zhiText}</span>
+                    </div>
+                </div>
+            `;
+        });
+        
+        document.getElementById('fortuneInfo').innerHTML = fortuneHtml;
+    }
+    
+    function calculateAndDisplayYearlyFortune() {
+        // Current year based on solar terms
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        let solarCurrentYear = currentYear;
+        
+        // Check if we're before lichun
+        const lichunDate = getMonthStartDate(currentYear, 1);
+        if (lichunDate && now < lichunDate) {
+            solarCurrentYear = currentYear - 1;
+        }
+        
+        const years = [solarCurrentYear - 1, solarCurrentYear, solarCurrentYear + 1];
+        const yearLabels = ['Last Year', 'This Year', 'Next Year'];
+        const yearTypes = ['past', 'current', 'future'];
+        
+        // 2025 = Yin Wood Snake
+        const base2025Gan = 1; // Yin Wood
+        const base2025Zhi = 5; // Snake
+        
+        let yearlyHtml = '';
+        
+        years.forEach((year, index) => {
+            const yearOffset = year - 2025;
+            const yearGan = normalizeIndex(base2025Gan + yearOffset, 10);
+            const yearZhi = normalizeIndex(base2025Zhi + yearOffset, 12);
+            
+            const ganText = tianGanEn[yearGan];
+            const zhiText = diZhiEn[yearZhi];
+            const ganElement = wuxing[ganText];
+            const zhiElement = wuxing[zhiText];
+            
+            yearlyHtml += `
+                <div class="fortune-period fortune-${yearTypes[index]}">
+                    <div class="fortune-title">${yearLabels[index]}</div>
+                    <div>${year}</div>
+                    <div class="fortune-elements">
+                        <span class="fortune-element ${elementClass[ganElement]}">${ganText}</span>
+                        <span class="fortune-element ${elementClass[zhiElement]}">${zhiText}</span>
+                    </div>
+                </div>
+            `;
+        });
+        
+        document.getElementById('yearlyInfo').innerHTML = yearlyHtml;
+    }
+
+    // 인성의 십이운성 계산 (정인만) - 변수들을 함수 내부로 이동
+    function calculateInseongUnsung(ilgan, ganzhi) {
+        // 정인 매핑 (수정된 버전)
+        const jeongInMapping = {
+            'Yang Wood': 'Yin Water',    // 갑목의 정인: 계수
+            'Yin Wood': 'Yang Water',    // 을목의 정인: 임수
+            'Yang Fire': 'Yin Wood',     // 병화의 정인: 을목
+            'Yin Fire': 'Yang Wood',     // 정화의 정인: 갑목
+            'Yang Earth': 'Yin Fire',    // 무토의 정인: 정화
+            'Yin Earth': 'Yang Fire',    // 기토의 정인: 병화
+            'Yang Metal': 'Yin Earth',   // 경금의 정인: 기토
+            'Yin Metal': 'Yang Earth',   // 신금의 정인: 무토
+            'Yang Water': 'Yin Metal',   // 임수의 정인: 신금
+            'Yin Water': 'Yang Metal'    // 계수의 정인: 경금
         };
 
-        // 인성운 그래프 관련 데이터
-        const inseongMapping = {
-            'Yang Wood': ['Yang Water', 'Yin Water'], // 갑목 → 임수(편인), 계수(정인)
-            'Yin Wood': ['Yin Water', 'Yang Water'], // 을목 → 계수(편인), 임수(정인)
-            'Yang Fire': ['Yang Wood', 'Yin Wood'], // 병화 → 갑목(편인), 을목(정인)
-            'Yin Fire': ['Yin Wood', 'Yang Wood'], // 정화 → 을목(편인), 갑목(정인)
-            'Yang Earth': ['Yang Fire', 'Yin Fire'], // 무토 → 병화(편인), 정화(정인)
-            'Yin Earth': ['Yin Fire', 'Yang Fire'], // 기토 → 정화(편인), 병화(정인)
-            'Yang Metal': ['Yang Earth', 'Yin Earth'], // 경금 → 무토(편인), 기토(정인)
-            'Yin Metal': ['Yin Earth', 'Yang Earth'], // 신금 → 기토(편인), 무토(정인)
-            'Yang Water': ['Yang Metal', 'Yin Metal'], // 임수 → 경금(편인), 신금(정인)
-            'Yin Water': ['Yin Metal', 'Yang Metal']  // 계수 → 신금(편인), 경금(정인)
-        };
-
-        const unsungScores = {
-            '장생': 50, '목욕': -40, '관대': 30, '건록': 60,
-            '제왕': 70, '쇠': -20, '병': -50, '사': -60,
-            '묘': -65, '절': -70, '태': 0, '양': 10
-        };
-
-        // 지지별 장생위치 (정순)
+        // 지지별 장생위치
         const jangSaengPos = {
             'Yang Wood': 'Pig', 'Yin Wood': 'Horse', 'Yang Fire': 'Tiger', 'Yin Fire': 'Rooster',
             'Yang Earth': 'Tiger', 'Yin Earth': 'Rooster', 'Yang Metal': 'Snake', 'Yin Metal': 'Rat',
             'Yang Water': 'Monkey', 'Yin Water': 'Rabbit'
         };
 
+        // 십이운성 점수 (새로운 설정)
+        const unsungScores = {
+            '장생': 40, '목욕': 10, '관대': 30, '건록': 60,
+            '제왕': 70, '쇠': 50, '병': 30, '사': 10,
+            '묘': -20, '절': -40, '태': -20, '양': 0
+        };
+
         // 십이운성 순서
         const unsungOrder = ['장생', '목욕', '관대', '건록', '제왕', '쇠', '병', '사', '묘', '절', '태', '양'];
         const jiOrder = ['Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake', 'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'];
         
-        // 절입시간 데이터를 저장할 변수
-        let solarTermsData = null;
+        const jeongIn = jeongInMapping[ilgan];
+        if (!jeongIn) return 0;
         
-        // 절입시간 JSON 파일 로드
-        async function loadSolarTermsData() {
-            try {
-                const response = await fetch('solar_terms.json');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                solarTermsData = await response.json();
-                console.log('절입시간 데이터 로드 완료');
-                return true;
-            } catch (error) {
-                console.error('절입시간 데이터 로드 실패:', error);
-                solarTermsData = null;
-                return false;
-            }
-        }
-
-        function normalizeIndex(index, mod) {
-            return ((index % mod) + mod) % mod;
-        }
-        
-        function calculateSaju() {
-            const dayInput = document.getElementById('dayInput').value;
-            const monthInput = document.getElementById('monthInput').value;
-            const yearInput = document.getElementById('yearInput').value;
-            const genderInput = document.getElementById('genderInput').value;
-            const timeInput = document.getElementById('timeInput').value;
-            
-            if (!dayInput || !monthInput || !yearInput) {
-                alert('Please select all date fields.');
-                return;
-            }
-            
-            if (!solarTermsData) {
-                alert('절입시간 데이터(solar_terms.json)를 불러올 수 없습니다. 정확한 사주 계산을 위해서는 절입시간 데이터 파일이 필요합니다.');
-                return;
-            }
-            
-            const timeValue = timeInput || '12:00';
-            const selectedDate = new Date(`${yearInput}-${monthInput.padStart(2, '0')}-${dayInput.padStart(2, '0')}T${timeValue}`);
-            const year = selectedDate.getFullYear();
-            const month = selectedDate.getMonth() + 1;
-            const day = selectedDate.getDate();
-            const hour = selectedDate.getHours();
-            
-            // Calculate day pillar
-            // If hour is 23 (11 PM), use next day's pillar
-            let adjustedDate = new Date(year, month - 1, day);
-            if (hour === 23) {
-                adjustedDate = new Date(year, month - 1, day + 1);
-            }
-            
-            const baseDate = new Date(2025, 5, 9); // June 9, 2025
-            const daysDiff = Math.floor((adjustedDate - baseDate) / (1000 * 60 * 60 * 24));
-            
-            const baseDayGan = 5; // Yin Earth
-            const baseDayZhi = 9; // Rooster
-            
-            const dayGan = normalizeIndex(baseDayGan + daysDiff, 10);
-            const dayZhi = normalizeIndex(baseDayZhi + daysDiff, 12);
-            
-            // Calculate year pillar
-            const baseYearGan = 1; // Yin Wood (2025)
-            const baseYearZhi = 5; // Snake (2025)
-            
-            // Determine solar year based on solar terms
-            let solarYear = year;
-            const lichunDate = getMonthStartDate(year, 1);
-            if (lichunDate && selectedDate < lichunDate) {
-                solarYear = year - 1;
-            }
-            
-            const yearOffset = solarYear - 2025;
-            const yearGan = normalizeIndex(baseYearGan + yearOffset, 10);
-            const yearZhi = normalizeIndex(baseYearZhi + yearOffset, 12);
-            
-            // Calculate month pillar
-            const monthNumber = getSolarMonth(selectedDate);
-            if (monthNumber === null) {
-                alert(`${year}년도의 절입시간 데이터가 없습니다. solar_terms.json 파일에 해당 연도 데이터를 추가해주세요.`);
-                return;
-            }
-            
-            // Month pillar calculation using year stem formula
-            // A/F years: Start with Fire Tiger month (stem index 2)
-            // B/G years: Start with Earth Tiger month (stem index 4)
-            // C/H years: Start with Metal Tiger month (stem index 6) 
-            // D/I years: Start with Water Tiger month (stem index 8)
-            // E/J years: Start with Wood Tiger month (stem index 0)
-            
-            const yearGanMod5 = yearGan % 5;
-            let monthGanBase;
-            switch(yearGanMod5) {
-                case 0: case 5: monthGanBase = 2; break; // A/F years -> Fire Tiger
-                case 1: case 6: monthGanBase = 4; break; // B/G years -> Earth Tiger
-                case 2: case 7: monthGanBase = 6; break; // C/H years -> Metal Tiger
-                case 3: case 8: monthGanBase = 8; break; // D/I years -> Water Tiger
-                case 4: case 9: monthGanBase = 0; break; // E/J years -> Wood Tiger
-            }
-            
-            // Month branch starts from Tiger (index 2) and follows sequential order
-            const monthGan = normalizeIndex(monthGanBase + (monthNumber - 1), 10);
-            const monthZhi = normalizeIndex(2 + (monthNumber - 1), 12); // Tiger=2 start
-            
-            // Calculate hour pillar (if time provided)
-            let hourGan = null, hourZhi = null;
-            if (timeInput) {
-                let hourIndex = Math.floor((hour + 1) / 2) % 12;
-                if (hour === 23) hourIndex = 0;
-                
-                const hourGanBase = (dayGan % 5) * 2;
-                hourGan = normalizeIndex(hourGanBase + hourIndex, 10);
-                hourZhi = hourIndex;
-            }
-            
-            // Get text values
-            const yearStemText = tianGanEn[yearGan];
-            const yearBranchText = diZhiEn[yearZhi];
-            const monthStemText = tianGanEn[monthGan];
-            const monthBranchText = diZhiEn[monthZhi];
-            const dayStemText = tianGanEn[dayGan];
-            const dayBranchText = diZhiEn[dayZhi];
-            
-            let hourStemText = '', hourBranchText = '';
-            if (timeInput && hourGan !== null && hourZhi !== null) {
-                hourStemText = tianGanEn[hourGan];
-                hourBranchText = diZhiEn[hourZhi];
-            }
-            
-            // Update display
-            updateCell('yearStem', yearStemText, 'stem-cell');
-            updateCell('monthStem', monthStemText, 'stem-cell');
-            updateCell('dayStem', dayStemText, 'stem-cell');
-            updateCell('hourStem', hourStemText, 'stem-cell');
-            
-            updateCell('yearBranch', yearBranchText, 'branch-cell');
-            updateCell('monthBranch', monthBranchText, 'branch-cell');
-            updateCell('dayBranch', dayBranchText, 'branch-cell');
-            updateCell('hourBranch', hourBranchText, 'branch-cell');
-            
-            document.getElementById('selectedDate').textContent = 
-                `${year}/${month}/${day}` + (timeInput ? ` ${hour}:${timeValue.split(':')[1] || '00'}` : ' (No time entered)') + 
-                (hour === 23 ? ' (Using next day\'s day pillar)' : '');
-            
-            displayAdditionalInfo(selectedDate, yearStemText, yearBranchText, monthStemText, monthBranchText, dayStemText, dayBranchText, hourStemText, hourBranchText, timeInput);
-            
-            // Great Fortune calculation
-            if (genderInput) {
-                calculateAndDisplayFortune(selectedDate, genderInput, yearGan, monthGan, monthZhi);
-                document.getElementById('fortuneCard').style.display = 'block';
-            } else {
-                document.getElementById('fortuneCard').style.display = 'none';
-            }
-            
-            // Yearly Fortune
-            calculateAndDisplayYearlyFortune();
-            
-            document.getElementById('resultSection').style.display = 'block';
-            
-            // 인성운 그래프 섹션 표시
-            document.getElementById('inseongSection').style.display = 'block';
-            
-            // 전역 변수에 저장 (그래프용)
-            window.currentPillars = {
-                day: dayStemText,
-                year: yearStemText + yearBranchText,
-                month: monthStemText + monthBranchText
-            };
-        }
-        
-        function getSolarMonth(date) {
-            const year = date.getFullYear();
-            const transitions = solarTermsData[year] || [];
-            
-            // 해당 년도의 절입시간 데이터가 없으면 null 반환
-            if (transitions.length === 0) {
-                return null;
-            }
-            
-            // Before first transition (February), it's Month 12 of previous year
-            const firstTransition = new Date(year, transitions[0].month - 1, transitions[0].day, transitions[0].hour, transitions[0].minute);
-            if (date < firstTransition) {
-                return 12;
-            }
-            
-            // Check each transition
-            for (let i = transitions.length - 1; i >= 0; i--) {
-                const trans = transitions[i];
-                const transDate = new Date(year, trans.month - 1, trans.day, trans.hour, trans.minute);
-                if (date >= transDate) {
-                    return i;
-                }
-            }
-            
-            return null;
-        }
-        
-        function getMonthStartDate(year, monthNum) {
-            const transitions = solarTermsData[year];
-            if (!transitions || monthNum < 1 || monthNum > 12) return null;
-            
-            if (monthNum === 12) {
-                // Month 12 starts in previous year's December
-                const prevTransitions = solarTermsData[year - 1];
-                if (prevTransitions && prevTransitions.length >= 11) {
-                    const trans = prevTransitions[10];
-                    return new Date(year - 1, trans.month - 1, trans.day, trans.hour, trans.minute);
-                }
-            } else if (monthNum <= transitions.length) {
-                const trans = transitions[monthNum - 1];
-                return new Date(year, trans.month - 1, trans.day, trans.hour, trans.minute);
-            }
-            
-            return null;
-        }
-        
-        function updateCell(elementId, text, cellType) {
-            const element = document.getElementById(elementId);
-            element.textContent = text || '-';
-            
-            if (text && wuxing[text]) {
-                element.className = `grid-cell ${cellType} ${elementClass[wuxing[text]]}`;
-            } else {
-                element.className = `grid-cell ${cellType}`;
-                if (!text) {
-                    element.style.border = '2px dashed rgba(255,255,255,0.5)';
-                    element.style.background = 'transparent';
-                }
+        // 간지에서 지지 부분 추출
+        let ji = '';
+        for (let animal of diZhiEn) {
+            if (ganzhi.includes(animal)) {
+                ji = animal;
+                break;
             }
         }
         
-        function displayAdditionalInfo(date, yS, yB, mS, mB, dS, dB, hS, hB, hasTime) {
-            const year = date.getFullYear();
-            const month = date.getMonth() + 1;
-            const day = date.getDate();
-            
-            const dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            document.getElementById('dateInfo').innerHTML = 
-                `${year}/${month}/${day}<br>${dayOfWeek[date.getDay()]}`;
-            
-            const elements = [wuxing[yS], wuxing[yB], wuxing[mS], wuxing[mB], wuxing[dS], wuxing[dB]];
-            if (hasTime && hS && hB) elements.push(wuxing[hS], wuxing[hB]);
-            
-            const elementCount = {};
-            elements.forEach(el => {
-                if (el) elementCount[el] = (elementCount[el] || 0) + 1;
-            });
-            
-            let wuxingText = '';
-            Object.keys(elementCount).forEach(el => {
-                wuxingText += `${el}: ${elementCount[el]}<br>`;
-            });
-            document.getElementById('wuxingInfo').innerHTML = wuxingText;
-        }
+        const jangSaeng = jangSaengPos[jeongIn];
+        if (!jangSaeng || !ji) return 0;
         
-        function calculateAndDisplayFortune(birthDate, gender, yearGan, monthGan, monthZhi) {
-            const birthYear = birthDate.getFullYear();
-            const currentYear = new Date().getFullYear();
-            
-            // Great Fortune direction (Male Yang year, Female Yin year = Forward)
-            const isYangYear = yearGan % 2 === 0;
-            const isForward = (gender === 'male' && isYangYear) || (gender === 'female' && !isYangYear);
-            
-            // Get solar terms data
-            const yearTransitions = solarTermsData[birthYear];
-            const prevYearTransitions = solarTermsData[birthYear - 1];
-            const nextYearTransitions = solarTermsData[birthYear + 1];
-            
-            if (!yearTransitions) {
-                // Fallback
-                const fortuneStartAge = 3;
-                const fortuneStartYear = birthYear + fortuneStartAge;
-                displayFortuneWithSimpleCalculation(fortuneStartYear, currentYear, monthGan, monthZhi, isForward);
-                return;
-            }
-            
-            // Create array of all solar terms around birth date
-            let allTransitions = [];
-            
-            // Add December from previous year
-            if (prevYearTransitions && prevYearTransitions.length >= 11) {
-                const decTrans = prevYearTransitions[10];
-                allTransitions.push({
-                    date: new Date(birthYear - 1, decTrans.month - 1, decTrans.day, decTrans.hour, decTrans.minute),
-                    monthNum: 12
-                });
-            }
-            
-            // Add all transitions from birth year
-            yearTransitions.forEach((trans, index) => {
-                allTransitions.push({
-                    date: new Date(birthYear, trans.month - 1, trans.day, trans.hour, trans.minute),
-                    monthNum: index + 1
-                });
-            });
-            
-            // Add January from next year
-            if (nextYearTransitions && nextYearTransitions.length > 0) {
-                const janTrans = nextYearTransitions[0];
-                allTransitions.push({
-                    date: new Date(birthYear + 1, janTrans.month - 1, janTrans.day, janTrans.hour, janTrans.minute),
-                    monthNum: 1
-                });
-            }
-            
-            // Find the closest transitions before and after birth
-            let prevTransition = null;
-            let nextTransition = null;
-            
-            for (let i = 0; i < allTransitions.length; i++) {
-                if (allTransitions[i].date <= birthDate) {
-                    prevTransition = allTransitions[i];
-                } else {
-                    nextTransition = allTransitions[i];
-                    break;
-                }
-            }
-            
-            // Calculate days to solar term
-            let daysToSolarTerm = 0;
-            let targetDate = null;
-            
-            if (isForward && nextTransition) {
-                // Forward: days to next solar term
-                targetDate = nextTransition.date;
-                daysToSolarTerm = (targetDate - birthDate) / (1000 * 60 * 60 * 24);
-            } else if (!isForward && prevTransition) {
-                // Backward: days from previous solar term
-                targetDate = prevTransition.date;
-                daysToSolarTerm = (birthDate - targetDate) / (1000 * 60 * 60 * 24);
-            }
-            
-            // Convert days to years (3 days = 1 year)
-            const fortuneStartAge = Math.round(daysToSolarTerm / 3 * 10) / 10; // Round to 0.1
-            const fortuneStartYear = birthYear + Math.floor(fortuneStartAge);
-            
-            // Current fortune index
-            const currentFortuneIndex = Math.floor((currentYear - fortuneStartYear) / 10);
-            
-            // Calculate previous, current, and next fortunes
-            const fortunes = [];
-            for (let i = -1; i <= 1; i++) {
-                const fortuneIndex = currentFortuneIndex + i;
-                const startYear = fortuneStartYear + (fortuneIndex * 10);
-                const endYear = startYear + 9;
-                
-                // Skip if fortune hasn't started yet
-                if (startYear > currentYear + 20) continue;
-                
-                // Calculate fortune stems and branches
-                let fortuneGan, fortuneZhi;
-                if (isForward) {
-                    fortuneGan = normalizeIndex(monthGan + fortuneIndex + 1, 10);
-                    fortuneZhi = normalizeIndex(monthZhi + fortuneIndex + 1, 12);
-                } else {
-                    fortuneGan = normalizeIndex(monthGan - fortuneIndex - 1, 10);
-                    fortuneZhi = normalizeIndex(monthZhi - fortuneIndex - 1, 12);
-                }
-                
-                const fortuneType = i === -1 ? 'past' : (i === 0 ? 'current' : 'future');
-                const fortuneLabel = i === -1 ? 'Previous' : (i === 0 ? 'Current' : 'Next');
-                
-                fortunes.push({
-                    type: fortuneType,
-                    label: fortuneLabel,
-                    startYear,
-                    endYear,
-                    gan: fortuneGan,
-                    zhi: fortuneZhi
-                });
-            }
-            
-            // Display fortune information with calculation details
-            const directionText = isForward ? 'Forward' : 'Backward';
-            const genderYearText = `${gender === 'male' ? 'Male' : 'Female'}, ${isYangYear ? 'Yang' : 'Yin'} year`;
-            
-            let fortuneHtml = `<div style="font-size: 0.9em; margin-bottom: 10px; opacity: 0.8;">
-                ${genderYearText} → ${directionText}<br>
-                Days to solar term: ${daysToSolarTerm.toFixed(1)} days<br>
-                Fortune starts: Year ${fortuneStartYear} (Age ${fortuneStartAge})
-            </div>`;
-            
-            fortunes.forEach(fortune => {
-                const ganText = tianGanEn[fortune.gan];
-                const zhiText = diZhiEn[fortune.zhi];
-                const ganElement = wuxing[ganText];
-                const zhiElement = wuxing[zhiText];
-                
-                fortuneHtml += `
-                    <div class="fortune-period fortune-${fortune.type}">
-                        <div class="fortune-title">${fortune.label} Fortune</div>
-                        <div>${fortune.startYear} - ${fortune.endYear}</div>
-                        <div class="fortune-elements">
-                            <span class="fortune-element ${elementClass[ganElement]}">${ganText}</span>
-                            <span class="fortune-element ${elementClass[zhiElement]}">${zhiText}</span>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            document.getElementById('fortuneInfo').innerHTML = fortuneHtml;
-        }
+        const jangSaengIndex = jiOrder.indexOf(jangSaeng);
+        const jiIndex = jiOrder.indexOf(ji);
+        if (jangSaengIndex === -1 || jiIndex === -1) return 0;
         
-        function displayFortuneWithSimpleCalculation(fortuneStartYear, currentYear, monthGan, monthZhi, isForward) {
-            // Fallback simple calculation when no solar terms data
-            const currentFortuneIndex = Math.floor((currentYear - fortuneStartYear) / 10);
-            
-            const fortunes = [];
-            for (let i = -1; i <= 1; i++) {
-                const fortuneIndex = currentFortuneIndex + i;
-                const startYear = fortuneStartYear + (fortuneIndex * 10);
-                const endYear = startYear + 9;
-                
-                let fortuneGan, fortuneZhi;
-                if (isForward) {
-                    fortuneGan = normalizeIndex(monthGan + fortuneIndex + 1, 10);
-                    fortuneZhi = normalizeIndex(monthZhi + fortuneIndex + 1, 12);
-                } else {
-                    fortuneGan = normalizeIndex(monthGan - fortuneIndex - 1, 10);
-                    fortuneZhi = normalizeIndex(monthZhi - fortuneIndex - 1, 12);
-                }
-                
-                const fortuneType = i === -1 ? 'past' : (i === 0 ? 'current' : 'future');
-                const fortuneLabel = i === -1 ? 'Previous' : (i === 0 ? 'Current' : 'Next');
-                
-                fortunes.push({
-                    type: fortuneType,
-                    label: fortuneLabel,
-                    startYear,
-                    endYear,
-                    gan: fortuneGan,
-                    zhi: fortuneZhi
-                });
-            }
-            
-            let fortuneHtml = '<div style="font-size: 0.9em; margin-bottom: 10px; opacity: 0.8;">Using simplified calculation (3 years)</div>';
-            
-            fortunes.forEach(fortune => {
-                const ganText = tianGanEn[fortune.gan];
-                const zhiText = diZhiEn[fortune.zhi];
-                const ganElement = wuxing[ganText];
-                const zhiElement = wuxing[zhiText];
-                
-                fortuneHtml += `
-                    <div class="fortune-period fortune-${fortune.type}">
-                        <div class="fortune-title">${fortune.label} Fortune</div>
-                        <div>${fortune.startYear} - ${fortune.endYear}</div>
-                        <div class="fortune-elements">
-                            <span class="fortune-element ${elementClass[ganElement]}">${ganText}</span>
-                            <span class="fortune-element ${elementClass[zhiElement]}">${zhiText}</span>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            document.getElementById('fortuneInfo').innerHTML = fortuneHtml;
-        }
+        // 정인은 정순으로 계산 (역순 제거)
+        let diff = (jiIndex - jangSaengIndex + 12) % 12;
+        // diff = (12 - diff) % 12; // 역순 제거!
         
-        function calculateAndDisplayYearlyFortune() {
-            // Current year based on solar terms
-            const now = new Date();
-            const currentYear = now.getFullYear();
-            let solarCurrentYear = currentYear;
-            
-            // Check if we're before lichun
-            const lichunDate = getMonthStartDate(currentYear, 1);
-            if (lichunDate && now < lichunDate) {
-                solarCurrentYear = currentYear - 1;
-            }
-            
-            const years = [solarCurrentYear - 1, solarCurrentYear, solarCurrentYear + 1];
-            const yearLabels = ['Last Year', 'This Year', 'Next Year'];
-            const yearTypes = ['past', 'current', 'future'];
-            
-            // 2025 = Yin Wood Snake
-            const base2025Gan = 1; // Yin Wood
-            const base2025Zhi = 5; // Snake
-            
-            let yearlyHtml = '';
-            
-            years.forEach((year, index) => {
-                const yearOffset = year - 2025;
-                const yearGan = normalizeIndex(base2025Gan + yearOffset, 10);
-                const yearZhi = normalizeIndex(base2025Zhi + yearOffset, 12);
-                
-                const ganText = tianGanEn[yearGan];
-                const zhiText = diZhiEn[yearZhi];
-                const ganElement = wuxing[ganText];
-                const zhiElement = wuxing[zhiText];
-                
-                yearlyHtml += `
-                    <div class="fortune-period fortune-${yearTypes[index]}">
-                        <div class="fortune-title">${yearLabels[index]}</div>
-                        <div>${year}</div>
-                        <div class="fortune-elements">
-                            <span class="fortune-element ${elementClass[ganElement]}">${ganText}</span>
-                            <span class="fortune-element ${elementClass[zhiElement]}">${zhiText}</span>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            document.getElementById('yearlyInfo').innerHTML = yearlyHtml;
-        }
+        const unsung = unsungOrder[diff];
+        const score = unsungScores[unsung] || 0;
+        
+        console.log(`${ilgan}의 정인 ${jeongIn} in ${ganzhi}: ${ji} -> ${unsung} = ${score}`);
+        
+        return score;
+    }
 
-        // 인성의 십이운성 계산 (정인만) - 변수들을 함수 내부로 이동
-        function calculateInseongUnsung(ilgan, ganzhi) {
-            // 정인 매핑 (수정된 버전)
-            const jeongInMapping = {
-                'Yang Wood': 'Yin Water',    // 갑목의 정인: 계수
-                'Yin Wood': 'Yang Water',    // 을목의 정인: 임수
-                'Yang Fire': 'Yin Wood',     // 병화의 정인: 을목
-                'Yin Fire': 'Yang Wood',     // 정화의 정인: 갑목
-                'Yang Earth': 'Yin Fire',    // 무토의 정인: 정화
-                'Yin Earth': 'Yang Fire',    // 기토의 정인: 병화
-                'Yang Metal': 'Yin Earth',   // 경금의 정인: 기토
-                'Yin Metal': 'Yang Earth',   // 신금의 정인: 무토
-                'Yang Water': 'Yin Metal',   // 임수의 정인: 신금
-                'Yin Water': 'Yang Metal'    // 계수의 정인: 경금
-            };
-
-            // 지지별 장생위치
-            const jangSaengPos = {
-                'Yang Wood': 'Pig', 'Yin Wood': 'Horse', 'Yang Fire': 'Tiger', 'Yin Fire': 'Rooster',
-                'Yang Earth': 'Tiger', 'Yin Earth': 'Rooster', 'Yang Metal': 'Snake', 'Yin Metal': 'Rat',
-                'Yang Water': 'Monkey', 'Yin Water': 'Rabbit'
-            };
-
-            // 십이운성 점수 (새로운 설정)
-            const unsungScores = {
-                '장생': 40, '목욕': 10, '관대': 30, '건록': 60,
-                '제왕': 70, '쇠': 50, '병': 30, '사': 10,
-                '묘': -20, '절': -40, '태': -20, '양': 0
-            };
-
-            // 십이운성 순서
-            const unsungOrder = ['장생', '목욕', '관대', '건록', '제왕', '쇠', '병', '사', '묘', '절', '태', '양'];
-            const jiOrder = ['Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake', 'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'];
-            
-            const jeongIn = jeongInMapping[ilgan];
-            if (!jeongIn) return 0;
-            
-            // 간지에서 지지 부분 추출
-            let ji = '';
-            for (let animal of diZhiEn) {
-                if (ganzhi.includes(animal)) {
-                    ji = animal;
-                    break;
-                }
-            }
-            
-            const jangSaeng = jangSaengPos[jeongIn];
-            if (!jangSaeng || !ji) return 0;
-            
-            const jangSaengIndex = jiOrder.indexOf(jangSaeng);
-            const jiIndex = jiOrder.indexOf(ji);
-            if (jangSaengIndex === -1 || jiIndex === -1) return 0;
-            
-            // 정인은 정순으로 계산 (역순 제거)
-            let diff = (jiIndex - jangSaengIndex + 12) % 12;
-            // diff = (12 - diff) % 12; // 역순 제거!
-            
-            const unsung = unsungOrder[diff];
-            const score = unsungScores[unsung] || 0;
-            
-            console.log(`${ilgan}의 정인 ${jeongIn} in ${ganzhi}: ${ji} -> ${unsung} = ${score}`);
-            
-            return score;
-        }
-
-        // 십이운성 점수 계산
-        function getUnsungScore(gan, ganzhi, reverse = false) {
-            const ganElement = wuxing[gan];
-            const zhiElement = wuxing[ganzhi];
-            
-            // 간지에서 지지 부분 추출
-            let ji = '';
-            Object.keys(wuxing).forEach(key => {
-                if (wuxing[key] === zhiElement && diZhiEn.includes(key)) {
-                    ji = key;
-                }
-            });
-            
-            const jangSaeng = jangSaengPos[gan];
-            
-            if (!jangSaeng || !ji) return 0;
-            
-            const jangSaengIndex = jiOrder.indexOf(jangSaeng);
-            const jiIndex = jiOrder.indexOf(ji);
-            
-            if (jangSaengIndex === -1 || jiIndex === -1) return 0;
-            
-            let diff = (jiIndex - jangSaengIndex + 12) % 12;
-            if (reverse) {
-                diff = (12 - diff) % 12;
-            }
-            
-            const unsung = unsungOrder[diff];
-            return unsungScores[unsung] || 0;
-        }
-
-        // 년월간지 생성
-        function generateYearMonthGanzhi(startYear, endYear) {
-            const result = [];
-            
-            for (let year = startYear; year <= endYear; year++) {
-                // 년간지 계산
-                const baseYearGan = 1; // Yin Wood (2025)
-                const baseYearZhi = 5; // Snake (2025)
-                const yearOffset = year - 2025;
-                const yearGan = normalizeIndex(baseYearGan + yearOffset, 10);
-                const yearZhi = normalizeIndex(baseYearZhi + yearOffset, 12);
-                const yearGanzhi = tianGanEn[yearGan] + diZhiEn[yearZhi];
-                
-                for (let month = 1; month <= 12; month++) {
-                    // 월간지 계산
-                    const yearGanMod5 = yearGan % 5;
-                    let monthGanBase;
-                    switch(yearGanMod5) {
-                        case 0: case 5: monthGanBase = 2; break;
-                        case 1: case 6: monthGanBase = 4; break;
-                        case 2: case 7: monthGanBase = 6; break;
-                        case 3: case 8: monthGanBase = 8; break;
-                        case 4: case 9: monthGanBase = 0; break;
-                    }
-                    
-                    const monthGan = normalizeIndex(monthGanBase + (month - 1), 10);
-                    const monthZhi = normalizeIndex(2 + (month - 1), 12);
-                    const monthGanzhi = tianGanEn[monthGan] + diZhiEn[monthZhi];
-                    
-                    result.push({
-                        year: year,
-                        month: month,
-                        yearGanzhi: yearGanzhi,
-                        monthGanzhi: monthGanzhi
-                    });
-                }
-            }
-            
-            return result;
-        }
-
-        // 가중치 업데이트 함수 (탭 함수들 다음에 배치)
-        function updateWeights() {
-            const yearWeight = document.getElementById('yearWeight').value;
-            const monthWeight = 100 - yearWeight;
-            
-            document.getElementById('monthWeight').value = monthWeight;
-            document.getElementById('yearWeightValue').textContent = yearWeight;
-            document.getElementById('monthWeightValue').textContent = monthWeight;
-        }
-        function showInseongFortune() {
-            if (!window.currentPillars) {
-                alert('Please calculate Four Pillars first.');
-                return;
-            }
-            
-            const startYear = parseInt(document.getElementById('graphStartYear').value);
-            const endYear = parseInt(document.getElementById('graphEndYear').value);
-            
-            if (!startYear || !endYear || startYear >= endYear) {
-                alert('Please enter a valid period.');
-                return;
-            }
-            
-            const ilgan = window.currentPillars.day;
-            const yearMonthData = generateYearMonthGanzhi(startYear, endYear);
-            const yearWeight = parseInt(document.getElementById('yearWeight').value) / 100;
-            const monthWeight = parseInt(document.getElementById('monthWeight').value) / 100;
-            
-            const scores = [];
-            const labels = [];
-            
-            yearMonthData.forEach(data => {
-                const yearScore = calculateInseongUnsung(ilgan, data.yearGanzhi);
-                const monthScore = calculateInseongUnsung(ilgan, data.monthGanzhi);
-                
-                const totalScore = yearScore * yearWeight + monthScore * monthWeight;
-                // 기본값 100을 더해서 모든 값을 양수로 만들고 반올림
-                scores.push(Math.round((totalScore + 100) * 10) / 10); // 소수점 1자리까지
-                labels.push(`${data.year}.${data.month.toString().padStart(2, '0')}`);
-            });
-            
-            drawGraph(labels, scores);
-        }
-
-        // 그래프 그리기 (개선된 버전 - 기본값 100 적용)
-        function drawGraph(labels, scores) {
-            const canvas = document.getElementById('fortuneChart');
-            const ctx = canvas.getContext('2d');
-            
-            canvas.style.display = 'block';
-            // 고정 크기로 설정
-            canvas.width = 800;
-            canvas.height = 400;
-            
-            // 캔버스 클리어
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            const padding = 80;
-            const graphWidth = canvas.width - padding * 2;
-            const graphHeight = canvas.height - padding * 2;
-            
-            const minScore = Math.min(...scores);
-            const maxScore = Math.max(...scores);
-            const scoreRange = Math.max(maxScore - minScore, 10); // 최소 범위 보장
-            
-            console.log(`그래프 데이터: 최소=${minScore}, 최대=${maxScore}, 범위=${scoreRange}, 데이터개수=${scores.length}`);
-            
-            // 배경 그리기
-            ctx.fillStyle = '#f8f9fa';
-            ctx.fillRect(padding, padding, graphWidth, graphHeight);
-            
-            // 그리드 선 그리기
-            ctx.strokeStyle = '#e0e0e0';
-            ctx.lineWidth = 1;
-            
-            // 세로 그리드 (시간축)
-            for (let i = 0; i <= 10; i++) {
-                const x = padding + (i / 10) * graphWidth;
-                ctx.beginPath();
-                ctx.moveTo(x, padding);
-                ctx.lineTo(x, padding + graphHeight);
-                ctx.stroke();
-            }
-            
-            // 가로 그리드 (점수축)
-            for (let i = 0; i <= 10; i++) {
-                const y = padding + (i / 10) * graphHeight;
-                ctx.beginPath();
-                ctx.moveTo(padding, y);
-                ctx.lineTo(padding + graphWidth, y);
-                ctx.stroke();
-            }
-            
-            // 축 그리기
-            ctx.strokeStyle = '#333';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(padding, padding);
-            ctx.lineTo(padding, padding + graphHeight);
-            ctx.lineTo(padding + graphWidth, padding + graphHeight);
-            ctx.stroke();
-            
-            // 100선 그리기 (기준선)
-            const baselineY = padding + graphHeight - ((100 - minScore) / scoreRange) * graphHeight;
-            if (baselineY >= padding && baselineY <= padding + graphHeight) {
-                ctx.strokeStyle = '#ff6b6b';
-                ctx.lineWidth = 2;
-                ctx.setLineDash([10, 5]);
-                ctx.beginPath();
-                ctx.moveTo(padding, baselineY);
-                ctx.lineTo(padding + graphWidth, baselineY);
-                ctx.stroke();
-                ctx.setLineDash([]);
-                
-                // 100 라벨 추가
-                ctx.fillStyle = '#ff6b6b';
-                ctx.font = 'bold 12px Arial';
-                ctx.textAlign = 'right';
-                ctx.fillText('100', padding - 5, baselineY + 4);
-            }
-            
-            // 데이터 라인 그리기 (부드러운 베지어 곡선)
-            if (scores.length > 1) {
-                ctx.strokeStyle = '#667eea';
-                ctx.lineWidth = 3;
-                ctx.beginPath();
-                
-                // 첫 번째 점
-                let x = padding + (0 / (scores.length - 1)) * graphWidth;
-                let y = padding + graphHeight - ((scores[0] - minScore) / scoreRange) * graphHeight;
-                ctx.moveTo(x, y);
-                
-                // 베지어 곡선으로 부드럽게 연결
-                for (let i = 1; i < scores.length; i++) {
-                    const currentX = padding + (i / (scores.length - 1)) * graphWidth;
-                    const currentY = padding + graphHeight - ((scores[i] - minScore) / scoreRange) * graphHeight;
-                    
-                    if (i === 1) {
-                        // 첫 번째 곡선
-                        const cp1x = x + (currentX - x) * 0.5;
-                        const cp1y = y;
-                        const cp2x = currentX - (currentX - x) * 0.5;
-                        const cp2y = currentY;
-                        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, currentX, currentY);
-                    } else {
-                        // 이전 점과 현재 점 사이의 제어점 계산
-                        const prevX = padding + ((i-1) / (scores.length - 1)) * graphWidth;
-                        const prevY = padding + graphHeight - ((scores[i-1] - minScore) / scoreRange) * graphHeight;
-                        
-                        const cp1x = prevX + (currentX - prevX) * 0.3;
-                        const cp1y = prevY;
-                        const cp2x = currentX - (currentX - prevX) * 0.3;
-                        const cp2y = currentY;
-                        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, currentX, currentY);
-                    }
-                    
-                    x = currentX;
-                    y = currentY;
-                }
-                ctx.stroke();
-                
-                // 데이터 점 표시
-                ctx.fillStyle = '#667eea';
-                scores.forEach((score, index) => {
-                    const pointX = padding + (index / (scores.length - 1)) * graphWidth;
-                    const pointY = padding + graphHeight - ((score - minScore) / scoreRange) * graphHeight;
-                    
-                    ctx.beginPath();
-                    ctx.arc(pointX, pointY, 4, 0, 2 * Math.PI);
-                    ctx.fill();
-                    
-                    // 높은 점수와 낮은 점수에 값 표시 (100 기준값 적용된 값으로 표시)
-                    if (score === maxScore || score === minScore) {
-                        ctx.fillStyle = '#2c3e50';
-                        ctx.font = 'bold 11px Arial';
-                        ctx.textAlign = 'center';
-                        ctx.fillText(score.toString(), pointX, pointY - 10); // 100 더해진 값 그대로 표시
-                        ctx.fillStyle = '#667eea';
-                    }
-                });
-            }
-            
-            // X축 라벨 (동적 년도 표시)
-            ctx.fillStyle = '#333';
-            ctx.font = '12px Arial';
-            ctx.textAlign = 'center';
-            
-            // 시작년도와 끝년도 계산
-            const startYear = parseInt(document.getElementById('graphStartYear').value);
-            const endYear = parseInt(document.getElementById('graphEndYear').value);
-            const yearRange = endYear - startYear;
-            
-            // 년도 라벨 동적 생성
-            for (let i = 0; i <= yearRange; i++) {
-                const year = startYear + i;
-                const x = padding + (i / yearRange) * graphWidth;
-                ctx.fillText(year.toString(), x, canvas.height - padding + 25);
-            }
-            
-            // Y축 라벨 (100 기준값 적용된 값으로 표시)
-            ctx.textAlign = 'right';
-            ctx.fillStyle = '#333';
-            ctx.font = '12px Arial';
-            
-            for (let i = 0; i <= 5; i++) {
-                const score = minScore + (scoreRange * i / 5);
-                const y = padding + graphHeight - (i / 5) * graphHeight;
-                ctx.fillText(score.toFixed(0), padding - 10, y + 4);
-            }
-            
-            // 제목 추가
-            ctx.fillStyle = '#2c3e50';
-            ctx.font = 'bold 18px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText('Study Exam Fortune Analysis', canvas.width / 2, 30);
-            
-            // 범례 추가 (100 기준값 적용된 값으로 표시)
-            ctx.font = '12px Arial';
-            ctx.textAlign = 'left';
-            const avgScore = scores.reduce((a,b) => a+b, 0) / scores.length;
-            ctx.fillText(`Range: ${minScore.toFixed(0)} ~ ${maxScore.toFixed(0)} (Avg: ${avgScore.toFixed(1)}, Baseline: 100)`, padding, canvas.height - 10);
-        }
-
-        // 가중치 슬라이더 업데이트
-        document.addEventListener('DOMContentLoaded', function() {
-            const yearSlider = document.getElementById('yearWeight');
-            const monthSlider = document.getElementById('monthWeight');
-            const yearValue = document.getElementById('yearValue');
-            const monthValue = document.getElementById('monthValue');
-            
-            if (yearSlider && monthSlider) {
-                yearSlider.addEventListener('input', function() {
-                    yearValue.textContent = this.value + '%';
-                    monthSlider.value = 100 - this.value;
-                    monthValue.textContent = monthSlider.value + '%';
-                });
-                
-                monthSlider.addEventListener('input', function() {
-                    monthValue.textContent = this.value + '%';
-                    yearSlider.value = 100 - this.value;
-                    yearValue.textContent = yearSlider.value + '%';
-                });
+    // 십이운성 점수 계산
+    function getUnsungScore(gan, ganzhi, reverse = false) {
+        const ganElement = wuxing[gan];
+        const zhiElement = wuxing[ganzhi];
+        
+        // 간지에서 지지 부분 추출
+        let ji = '';
+        Object.keys(wuxing).forEach(key => {
+            if (wuxing[key] === zhiElement && diZhiEn.includes(key)) {
+                ji = key;
             }
         });
         
-        // Initialize on page load
-        window.onload = async function() {
-            // Load solar terms data first
-            const loadSuccess = await loadSolarTermsData();
-            if (!loadSuccess) {
-                // JSON 파일 로드 실패시 사용자에게 알림
-                const errorDiv = document.createElement('div');
-                errorDiv.className = 'error';
-                errorDiv.innerHTML = '⚠️ 절입시간 데이터 파일(solar_terms.json)을 찾을 수 없습니다.<br>정확한 사주 계산을 위해서는 이 파일이 필요합니다.';
-                document.querySelector('.container').insertBefore(errorDiv, document.querySelector('.input-section'));
-            }
+        const jangSaeng = jangSaengPos[gan];
+        
+        if (!jangSaeng || !ji) return 0;
+        
+        const jangSaengIndex = jiOrder.indexOf(jangSaeng);
+        const jiIndex = jiOrder.indexOf(ji);
+        
+        if (jangSaengIndex === -1 || jiIndex === -1) return 0;
+        
+        let diff = (jiIndex - jangSaengIndex + 12) % 12;
+        if (reverse) {
+            diff = (12 - diff) % 12;
+        }
+        
+        const unsung = unsungOrder[diff];
+        return unsungScores[unsung] || 0;
+    }
+
+    // 년월간지 생성
+    function generateYearMonthGanzhi(startYear, endYear) {
+        const result = [];
+        
+        for (let year = startYear; year <= endYear; year++) {
+            // 년간지 계산
+            const baseYearGan = 1; // Yin Wood (2025)
+            const baseYearZhi = 5; // Snake (2025)
+            const yearOffset = year - 2025;
+            const yearGan = normalizeIndex(baseYearGan + yearOffset, 10);
+            const yearZhi = normalizeIndex(baseYearZhi + yearOffset, 12);
+            const yearGanzhi = tianGanEn[yearGan] + diZhiEn[yearZhi];
             
-            // Populate day select (1-31)
-            const daySelect = document.getElementById('dayInput');
-            daySelect.innerHTML = '<option value="">Day</option>';
-            for (let i = 1; i <= 31; i++) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = i;
-                if (i === 10) option.selected = true;
-                daySelect.appendChild(option);
+            for (let month = 1; month <= 12; month++) {
+                // 월간지 계산
+                const yearGanMod5 = yearGan % 5;
+                let monthGanBase;
+                switch(yearGanMod5) {
+                    case 0: case 5: monthGanBase = 2; break;
+                    case 1: case 6: monthGanBase = 4; break;
+                    case 2: case 7: monthGanBase = 6; break;
+                    case 3: case 8: monthGanBase = 8; break;
+                    case 4: case 9: monthGanBase = 0; break;
+                }
+                
+                const monthGan = normalizeIndex(monthGanBase + (month - 1), 10);
+                const monthZhi = normalizeIndex(2 + (month - 1), 12);
+                const monthGanzhi = tianGanEn[monthGan] + diZhiEn[monthZhi];
+                
+                result.push({
+                    year: year,
+                    month: month,
+                    yearGanzhi: yearGanzhi,
+                    monthGanzhi: monthGanzhi
+                });
             }
+        }
+        
+        return result;
+    }
+
+    // 인성운 그래프 표시
+    function showInseongFortune() {
+        if (!window.currentPillars) {
+            alert('Please calculate Four Pillars first.');
+            return;
+        }
+        
+        const startYear = parseInt(document.getElementById('graphStartYear').value);
+        const endYear = parseInt(document.getElementById('graphEndYear').value);
+        
+        if (!startYear || !endYear || startYear >= endYear) {
+            alert('Please enter a valid period.');
+            return;
+        }
+        
+        const ilgan = window.currentPillars.day;
+        const yearMonthData = generateYearMonthGanzhi(startYear, endYear);
+        const yearWeight = parseInt(document.getElementById('yearWeight').value) / 100;
+        const monthWeight = parseInt(document.getElementById('monthWeight').value) / 100;
+        
+        const scores = [];
+        const labels = [];
+        
+        yearMonthData.forEach(data => {
+            const yearScore = calculateInseongUnsung(ilgan, data.yearGanzhi);
+            const monthScore = calculateInseongUnsung(ilgan, data.monthGanzhi);
             
-            // Populate month select (1-12)
-            const monthSelect = document.getElementById('monthInput');
-            monthSelect.innerHTML = '<option value="">Month</option>';
-            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            for (let i = 1; i <= 12; i++) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = months[i-1];
-                if (i === 6) option.selected = true;
-                monthSelect.appendChild(option);
-            }
+            const totalScore = yearScore * yearWeight + monthScore * monthWeight;
+            // 기본값 100을 더해서 모든 값을 양수로 만들고 반올림
+            scores.push(Math.round((totalScore + 100) * 10) / 10); // 소수점 1자리까지
+            labels.push(`${data.year}.${data.month.toString().padStart(2, '0')}`);
+        });
+        
+        drawGraph(labels, scores);
+    }
+
+    // 그래프 그리기 (개선된 버전 - 기본값 100 적용)
+    function drawGraph(labels, scores) {
+        const canvas = document.getElementById('fortuneChart');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.style.display = 'block';
+        // 고정 크기로 설정
+        canvas.width = 800;
+        canvas.height = 400;
+        
+        // 캔버스 클리어
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        const padding = 80;
+        const graphWidth = canvas.width - padding * 2;
+        const graphHeight = canvas.height - padding * 2;
+        
+        const minScore = Math.min(...scores);
+        const maxScore = Math.max(...scores);
+        const scoreRange = Math.max(maxScore - minScore, 10); // 최소 범위 보장
+        
+        console.log(`그래프 데이터: 최소=${minScore}, 최대=${maxScore}, 범위=${scoreRange}, 데이터개수=${scores.length}`);
+        
+        // 배경 그리기
+        ctx.fillStyle = '#f8f9fa';
+        ctx.fillRect(padding, padding, graphWidth, graphHeight);
+        
+        // 그리드 선 그리기
+        ctx.strokeStyle = '#e0e0e0';
+        ctx.lineWidth = 1;
+        
+        // 세로 그리드 (시간축)
+        for (let i = 0; i <= 10; i++) {
+            const x = padding + (i / 10) * graphWidth;
+            ctx.beginPath();
+            ctx.moveTo(x, padding);
+            ctx.lineTo(x, padding + graphHeight);
+            ctx.stroke();
+        }
+        
+        // 가로 그리드 (점수축)
+        for (let i = 0; i <= 10; i++) {
+            const y = padding + (i / 10) * graphHeight;
+            ctx.beginPath();
+            ctx.moveTo(padding, y);
+            ctx.lineTo(padding + graphWidth, y);
+            ctx.stroke();
+        }
+        
+        // 축 그리기
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(padding, padding);
+        ctx.lineTo(padding, padding + graphHeight);
+        ctx.lineTo(padding + graphWidth, padding + graphHeight);
+        ctx.stroke();
+        
+        // 100선 그리기 (기준선)
+        const baselineY = padding + graphHeight - ((100 - minScore) / scoreRange) * graphHeight;
+        if (baselineY >= padding && baselineY <= padding + graphHeight) {
+            ctx.strokeStyle = '#ff6b6b';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([10, 5]);
+            ctx.beginPath();
+            ctx.moveTo(padding, baselineY);
+            ctx.lineTo(padding + graphWidth, baselineY);
+            ctx.stroke();
+            ctx.setLineDash([]);
             
-            // Populate year select (1939-2026)
-            const yearSelect = document.getElementById('yearInput');
-            yearSelect.innerHTML = '<option value="">Year</option>';
-            for (let i = 2026; i >= 1939; i--) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = i;
-                if (i === 2025) option.selected = true;
-                yearSelect.appendChild(option);
+            // 100 라벨 추가
+            ctx.fillStyle = '#ff6b6b';
+            ctx.font = 'bold 12px Arial';
+            ctx.textAlign = 'right';
+            ctx.fillText('100', padding - 5, baselineY + 4);
+        }
+        
+        // 데이터 라인 그리기 (부드러운 베지어 곡선)
+        if (scores.length > 1) {
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            // 첫 번째 점
+            let x = padding + (0 / (scores.length - 1)) * graphWidth;
+            let y = padding + graphHeight - ((scores[0] - minScore) / scoreRange) * graphHeight;
+            ctx.moveTo(x, y);
+            
+            // 베지어 곡선으로 부드럽게 연결
+            for (let i = 1; i < scores.length; i++) {
+                const currentX = padding + (i / (scores.length - 1)) * graphWidth;
+                const currentY = padding + graphHeight - ((scores[i] - minScore) / scoreRange) * graphHeight;
+                
+                if (i === 1) {
+                    // 첫 번째 곡선
+                    const cp1x = x + (currentX - x) * 0.5;
+                    const cp1y = y;
+                    const cp2x = currentX - (currentX - x) * 0.5;
+                    const cp2y = currentY;
+                    ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, currentX, currentY);
+                } else {
+                    // 이전 점과 현재 점 사이의 제어점 계산
+                    const prevX = padding + ((i-1) / (scores.length - 1)) * graphWidth;
+                    const prevY = padding + graphHeight - ((scores[i-1] - minScore) / scoreRange) * graphHeight;
+                    
+                    const cp1x = prevX + (currentX - prevX) * 0.3;
+                    const cp1y = prevY;
+                    const cp2x = currentX - (currentX - prevX) * 0.3;
+                    const cp2y = currentY;
+                    ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, currentX, currentY);
+                }
+                
+                x = currentX;
+                y = currentY;
             }
-        };
-    </script>
+            ctx.stroke();
+            
+            // 데이터 점 표시
+            ctx.fillStyle = '#667eea';
+            scores.forEach((score, index) => {
+                const pointX = padding + (index / (scores.length - 1)) * graphWidth;
+                const pointY = padding + graphHeight - ((score - minScore) / scoreRange) * graphHeight;
+                
+                ctx.beginPath();
+                ctx.arc(pointX, pointY, 4, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // 높은 점수와 낮은 점수에 값 표시 (100 기준값 적용된 값으로 표시)
+                if (score === maxScore || score === minScore) {
+                    ctx.fillStyle = '#2c3e50';
+                    ctx.font = 'bold 11px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(score.toString(), pointX, pointY - 10); // 100 더해진 값 그대로 표시
+                    ctx.fillStyle = '#667eea';
+                }
+            });
+        }
+        
+        // X축 라벨 (동적 년도 표시)
+        ctx.fillStyle = '#333';
+        ctx.font = '12px Arial';
+        ctx.textAlign = 'center';
+        
+        // 시작년도와 끝년도 계산
+        const startYear = parseInt(document.getElementById('graphStartYear').value);
+        const endYear = parseInt(document.getElementById('graphEndYear').value);
+        const yearRange = endYear - startYear;
+        
+        // 년도 라벨 동적 생성
+        for (let i = 0; i <= yearRange; i++) {
+            const year = startYear + i;
+            const x = padding + (i / yearRange) * graphWidth;
+            ctx.fillText(year.toString(), x, canvas.height - padding + 25);
+        }
+        
+        // Y축 라벨 (100 기준값 적용된 값으로 표시)
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#333';
+        ctx.font = '12px Arial';
+        
+        for (let i = 0; i <= 5; i++) {
+            const score = minScore + (scoreRange * i / 5);
+            const y = padding + graphHeight - (i / 5) * graphHeight;
+            ctx.fillText(score.toFixed(0), padding - 10, y + 4);
+        }
+        
+        // 제목 추가
+        ctx.fillStyle = '#2c3e50';
+        ctx.font = 'bold 18px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Study Exam Fortune Analysis', canvas.width / 2, 30);
+        
+        // 범례 추가 (100 기준값 적용된 값으로 표시)
+        ctx.font = '12px Arial';
+        ctx.textAlign = 'left';
+        const avgScore = scores.reduce((a,b) => a+b, 0) / scores.length;
+        ctx.fillText(`Range: ${minScore.toFixed(0)} ~ ${maxScore.toFixed(0)} (Avg: ${avgScore.toFixed(1)}, Baseline: 100)`, padding, canvas.height - 10);
+    }
+
+    // 가중치 슬라이더 업데이트
+    document.addEventListener('DOMContentLoaded', function() {
+        const yearSlider = document.getElementById('yearWeight');
+        const monthSlider = document.getElementById('monthWeight');
+        const yearValue = document.getElementById('yearValue');
+        const monthValue = document.getElementById('monthValue');
+        
+        if (yearSlider && monthSlider) {
+            yearSlider.addEventListener('input', function() {
+                yearValue.textContent = this.value + '%';
+                monthSlider.value = 100 - this.value;
+                monthValue.textContent = monthSlider.value + '%';
+            });
+            
+            monthSlider.addEventListener('input', function() {
+                monthValue.textContent = this.value + '%';
+                yearSlider.value = 100 - this.value;
+                yearValue.textContent = yearSlider.value + '%';
+            });
+        }
+    });
+    
+    // Initialize on page load
+    window.onload = async function() {
+        // Load solar terms data first
+        const loadSuccess = await loadSolarTermsData();
+        if (!loadSuccess) {
+            // JSON 파일 로드 실패시 사용자에게 알림
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error';
+            errorDiv.innerHTML = '⚠️ 절입시간 데이터 파일(solar_terms.json)을 찾을 수 없습니다.<br>정확한 사주 계산을 위해서는 이 파일이 필요합니다.';
+            document.querySelector('.container').insertBefore(errorDiv, document.querySelector('.input-section'));
+        }
+        
+        // Populate day select (1-31)
+        const daySelect = document.getElementById('dayInput');
+        daySelect.innerHTML = '<option value="">Day</option>';
+        for (let i = 1; i <= 31; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            if (i === 10) option.selected = true;
+            daySelect.appendChild(option);
+        }
+        
+        // Populate month select (1-12)
+        const monthSelect = document.getElementById('monthInput');
+        monthSelect.innerHTML = '<option value="">Month</option>';
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        for (let i = 1; i <= 12; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = months[i-1];
+            if (i === 6) option.selected = true;
+            monthSelect.appendChild(option);
+        }
+        
+        // Populate year select (1939-2026)
+        const yearSelect = document.getElementById('yearInput');
+        yearSelect.innerHTML = '<option value="">Year</option>';
+        for (let i = 2026; i >= 1939; i--) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            if (i === 2025) option.selected = true;
+            yearSelect.appendChild(option);
+        }
+    };
+</script>
 </body>
 </html>

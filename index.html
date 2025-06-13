@@ -61,20 +61,31 @@
                 <option value="female">Female</option>
             </select>
             <select class="date-input" id="timeInput">
-                <option value="">Birth Time (Optional)</option>
-                <option value="unknown">Unknown Birth Time</option>
-                <option value="23:00">23:00 - 01:00 (子時 - Rat Hour)</option>
-                <option value="01:00">01:00 - 03:00 (丑時 - Ox Hour)</option>
-                <option value="03:00">03:00 - 05:00 (寅時 - Tiger Hour)</option>
-                <option value="05:00">05:00 - 07:00 (卯時 - Rabbit Hour)</option>
-                <option value="07:00">07:00 - 09:00 (辰時 - Dragon Hour)</option>
-                <option value="09:00">09:00 - 11:00 (巳時 - Snake Hour)</option>
-                <option value="11:00">11:00 - 13:00 (午時 - Horse Hour)</option>
-                <option value="13:00">13:00 - 15:00 (未時 - Goat Hour)</option>
-                <option value="15:00">15:00 - 17:00 (申時 - Monkey Hour)</option>
-                <option value="17:00">17:00 - 19:00 (酉時 - Rooster Hour)</option>
-                <option value="19:00">19:00 - 21:00 (戌時 - Dog Hour)</option>
-                <option value="21:00">21:00 - 23:00 (亥時 - Pig Hour)</option>
+                <option value="">Time (Optional)</option>
+                <option value="00:00">12:00 AM</option>
+                <option value="01:00">1:00 AM</option>
+                <option value="02:00">2:00 AM</option>
+                <option value="03:00">3:00 AM</option>
+                <option value="04:00">4:00 AM</option>
+                <option value="05:00">5:00 AM</option>
+                <option value="06:00">6:00 AM</option>
+                <option value="07:00">7:00 AM</option>
+                <option value="08:00">8:00 AM</option>
+                <option value="09:00">9:00 AM</option>
+                <option value="10:00">10:00 AM</option>
+                <option value="11:00">11:00 AM</option>
+                <option value="12:00" selected>12:00 PM</option>
+                <option value="13:00">1:00 PM</option>
+                <option value="14:00">2:00 PM</option>
+                <option value="15:00">3:00 PM</option>
+                <option value="16:00">4:00 PM</option>
+                <option value="17:00">5:00 PM</option>
+                <option value="18:00">6:00 PM</option>
+                <option value="19:00">7:00 PM</option>
+                <option value="20:00">8:00 PM</option>
+                <option value="21:00">9:00 PM</option>
+                <option value="22:00">10:00 PM</option>
+                <option value="23:00">11:00 PM</option>
             </select>
             <button class="search-btn" onclick="calculateSaju()">Calculate</button>
         </div>
@@ -151,7 +162,7 @@
                 return;
             }
             
-            const timeValue = (timeInput && timeInput !== 'unknown') ? timeInput : '12:00';
+            const timeValue = timeInput || '12:00';
             const selectedDate = new Date(`${yearInput}-${monthInput.padStart(2, '0')}-${dayInput.padStart(2, '0')}T${timeValue}`);
             const year = selectedDate.getFullYear();
             const month = selectedDate.getMonth() + 1;
@@ -196,7 +207,7 @@
             const monthZhi = normalizeIndex(2 + (monthNumber - 1), 12);
             
             let hourGan = null, hourZhi = null;
-            if (timeInput && timeInput !== 'unknown') {
+            if (timeInput) {
                 let hourIndex = Math.floor((hour + 1) / 2) % 12;
                 if (hour === 23) hourIndex = 0;
                 const hourGanBase = (dayGan % 5) * 2;
@@ -212,7 +223,7 @@
             const dayBranchText = diZhiEn[dayZhi];
             
             let hourStemText = '', hourBranchText = '';
-            if (timeInput && timeInput !== 'unknown' && hourGan !== null && hourZhi !== null) {
+            if (timeInput && hourGan !== null && hourZhi !== null) {
                 hourStemText = tianGanEn[hourGan];
                 hourBranchText = diZhiEn[hourZhi];
             }
@@ -226,15 +237,7 @@
             updateCell('dayBranch', dayBranchText, 'branch-cell');
             updateCell('hourBranch', hourBranchText, 'branch-cell');
             
-            let timeDisplayText = '';
-            if (!timeInput || timeInput === 'unknown') {
-                timeDisplayText = ' (Birth time unknown)';
-            } else {
-                timeDisplayText = ` ${hour}:${timeValue.split(':')[1] || '00'}`;
-                if (hour === 23) timeDisplayText += ' (Using next day\'s day pillar)';
-            }
-            
-            document.getElementById('selectedDate').textContent = `${year}/${month}/${day}${timeDisplayText}`;
+            document.getElementById('selectedDate').textContent = `${year}/${month}/${day}` + (timeInput ? ` ${hour}:${timeValue.split(':')[1] || '00'}` : ' (No time entered)') + (hour === 23 ? ' (Using next day\'s day pillar)' : '');
             
             if (genderInput) {
                 calculateAndDisplayFortune(selectedDate, genderInput, yearGan, monthGan, monthZhi);

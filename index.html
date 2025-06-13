@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -453,11 +452,59 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 solarTermsData = await response.json();
+                console.log('절입시간 데이터 로드 완료');
                 return true;
             } catch (error) {
+                console.error('절입시간 데이터 로드 실패:', error);
                 solarTermsData = null;
                 return false;
             }
+        }
+
+        function getSolarMonth(date) {
+            const year = date.getFullYear();
+            const transitions = solarTermsData[year] || [];
+            
+            // 해당 년도의 절입시간 데이터가 없으면 null 반환
+            if (transitions.length === 0) {
+                return null;
+            }
+            
+            // Before first transition (February), it's Month 12 of previous year
+            const firstTransition = new Date(year, transitions[0].month - 1, transitions[0].day, transitions[0].hour, transitions[0].minute);
+            if (date < firstTransition) {
+                return 12;
+            }
+            
+            // Check each transition
+            for (let i = transitions.length - 1; i >= 0; i--) {
+                const trans = transitions[i];
+                const transDate = new Date(year, trans.month - 1, trans.day, trans.hour, trans.minute);
+                if (date >= transDate) {
+                    return i + 1;
+                }
+            }
+            
+            return null;
+        }
+        
+        function getMonthStartDate(year, monthNum) {
+            const transitions = solarTermsData[year];
+            if (!transitions || monthNum < 1 || monthNum > 12) return null;
+            
+            if (monthNum === 12) {
+                // Month 12 starts in previous year's December
+                const prevTransitions = solarTermsData[year - 1];
+                if (prevTransitions && prevTransitions.length >= 11) {
+                    const trans = prevTransitions[10];
+                    return new Date(year - 1, trans.month - 1, trans.day, trans.hour, trans.minute);
+                }
+            } else if (monthNum <= transitions.length) {
+                const trans = transitions[monthNum - 1];
+                return new Date(year, trans.month - 1, trans.day, trans.hour, trans.minute);
+            }
+            
+            return null;
         }
 
         function normalizeIndex(index, mod) {
@@ -849,22 +896,25 @@
             
             // 절입시간 데이터 필수 체크
             if (!solarTermsData) {
-                alert('❌ 절입시간 데이터를 불러올 수 없습니다!\n\n정확한 만세력 계산을 위해 solar_terms.json 파일이 필요합니다.\n파일을 서버에 업로드하거나 절입시간 데이터를 확인해주세요.');
+                alert('❌ 절입시간 데이터를 불러올 수 없습니다!\n\n정확한 만세력 계산이 불가능합니다.\n\n해결방법:\n1. solar_terms.json 파일이 index.html과 같은 폴더에 있는지 확인\n2. 웹서버를 통해 접근 (file:// 프로토콜 문제일 수 있음)\n3. 브라우저 개발자도구 콘솔에서 오류 확인');
                 return;
             }
             
-            const timeValue = timeInput || '12:00';
-            const selectedDate = new Date(`${yearInput}-${monthInput.padStart(2, '0')}-${dayInput.padStart(2, '0')}T${timeValue}`);
-            const year = selectedDate.getFullYear();
-            const month = selectedDate.getMonth() + 1;
-            const day = selectedDate.getDate();
-            const hour = selectedDate.getHours();
+            const year = parseInt(yearInput);
             
             // 해당 연도 절입시간 데이터 체크
             if (!solarTermsData[year]) {
-                alert(`❌ ${year}년도 절입시간 데이터가 없습니다!\n\n정확한 계산을 위해 해당 연도의 절입시간 정보가 필요합니다.`);
+                alert(`❌ ${year}년도 절입시간 데이터가 없습니다!\n\n현재 로드된 연도: ${Object.keys(solarTermsData).join(', ')}\n\n해당 연도의 절입시간 정보가 필요합니다.`);
                 return;
             }
+            
+            console.log(`${year}년도 절입시간 데이터 확인됨`);
+            
+            const timeValue = timeInput || '12:00';
+            const selectedDate = new Date(`${yearInput}-${monthInput.padStart(2, '0')}-${dayInput.padStart(2, '0')}T${timeValue}`);
+            const month = selectedDate.getMonth() + 1;
+            const day = selectedDate.getDate();
+            const hour = selectedDate.getHours();
             
             let adjustedDate = new Date(year, month - 1, day);
             if (hour === 23) {
@@ -894,6 +944,80 @@
             const yearZhi = normalizeIndex(baseYearZhi + yearOffset, 12);
             
             const monthNumber = getSolarMonth(selectedDate);
+            if (monthNumber === null) {
+                alert(`❌ ${year}년 ${month}월 ${day}일의 절입시간 계산에 실패했습니다!\n\n정확한 월주 계산이 불가능합니다.`);
+                return;
+            }
+            
+            const yearGanMod5 = yearGan % 5;
+            let monthGanBase;
+            switch(yearGanMod5) {
+                case 0: case 5: monthGanBase = 2; break;
+                case 1: case 6: monthGanBase = 4; break;
+                case 2: case 7: monthGanBase = 6; break;
+                case 3: case 8: monthGanBase = 8; break;
+                case 4: case 9: monthGanBase = 0; break;
+            }
+            
+            const monthGan = normalizeIndex(monthGanBase + (monthNumber - 1), 10);
+            const monthZhi = normalizeIndex(2 + (monthNumber - 1), 12);
+            
+            let hourGan = null, hourZhi = null;
+            if (timeInput) {
+                let hourIndex = Math.floor((hour + 1) / 2) % 12;
+                if (hour === 23) hourIndex = 0;
+                
+                const hourGanBase = (dayGan % 5) * 2;
+                hourGan = normalizeIndex(hourGanBase + hourIndex, 10);
+                hourZhi = hourIndex;
+            }
+            
+            const yearStemText = tianGanEn[yearGan];
+            const yearBranchText = diZhiEn[yearZhi];
+            const monthStemText = tianGanEn[monthGan];
+            const monthBranchText = diZhiEn[monthZhi];
+            const dayStemText = tianGanEn[dayGan];
+            const dayBranchText = diZhiEn[dayZhi];
+            
+            let hourStemText = '', hourBranchText = '';
+            if (timeInput && hourGan !== null && hourZhi !== null) {
+                hourStemText = tianGanEn[hourGan];
+                hourBranchText = diZhiEn[hourZhi];
+            }
+            
+            updateCell('yearStem', yearStemText, 'stem-cell');
+            updateCell('monthStem', monthStemText, 'stem-cell');
+            updateCell('dayStem', dayStemText, 'stem-cell');
+            updateCell('hourStem', hourStemText, 'stem-cell');
+            
+            updateCell('yearBranch', yearBranchText, 'branch-cell');
+            updateCell('monthBranch', monthBranchText, 'branch-cell');
+            updateCell('dayBranch', dayBranchText, 'branch-cell');
+            updateCell('hourBranch', hourBranchText, 'branch-cell');
+            
+            document.getElementById('selectedDate').textContent = 
+                `${year}/${month}/${day}` + (timeInput ? ` ${hour}:${timeValue.split(':')[1] || '00'}` : ' (No time entered)');
+            
+            console.log(`계산 완료: ${dayStemText} ${dayBranchText}일주, ${monthStemText} ${monthBranchText}월주`);
+            
+            if (genderInput) {
+                calculateAndDisplayFortune(selectedDate, genderInput, yearGan, monthGan, monthZhi);
+                document.getElementById('fortuneCard').style.display = 'block';
+            } else {
+                document.getElementById('fortuneCard').style.display = 'none';
+            }
+            
+            calculateAndDisplayYearlyFortune();
+            
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('inseongSection').style.display = 'block';
+            
+            window.currentPillars = {
+                day: dayStemText,
+                year: yearStemText + yearBranchText,
+                month: monthStemText + monthBranchText
+            };
+        } monthNumber = getSolarMonth(selectedDate);
             if (monthNumber === null) {
                 alert(`❌ ${year}년 ${month}월 ${day}일의 절입시간 계산에 실패했습니다!\n\n정확한 월주 계산을 위해 절입시간 데이터를 확인해주세요.`);
                 return;

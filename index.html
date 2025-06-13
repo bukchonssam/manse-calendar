@@ -418,10 +418,24 @@
             'Snake': 'Fire', 'Horse': 'Fire', 'Goat': 'Earth', 'Monkey': 'Metal', 'Rooster': 'Metal', 'Dog': 'Earth', 'Pig': 'Water'
         };
 
+        // 인성운 그래프 관련 데이터
+        const inseongMapping = {
+            'Yang Wood': ['Yang Water', 'Yin Water'], // 갑목 → 임수(편인), 계수(정인)
+            'Yin Wood': ['Yin Water', 'Yang Water'], // 을목 → 계수(편인), 임수(정인)
+            'Yang Fire': ['Yang Wood', 'Yin Wood'], // 병화 → 갑목(편인), 을목(정인)
+            'Yin Fire': ['Yin Wood', 'Yang Wood'], // 정화 → 을목(편인), 갑목(정인)
+            'Yang Earth': ['Yang Fire', 'Yin Fire'], // 무토 → 병화(편인), 정화(정인)
+            'Yin Earth': ['Yin Fire', 'Yang Fire'], // 기토 → 정화(편인), 병화(정인)
+            'Yang Metal': ['Yang Earth', 'Yin Earth'], // 경금 → 무토(편인), 기토(정인)
+            'Yin Metal': ['Yin Earth', 'Yang Earth'], // 신금 → 기토(편인), 무토(정인)
+            'Yang Water': ['Yang Metal', 'Yin Metal'], // 임수 → 경금(편인), 신금(정인)
+            'Yin Water': ['Yin Metal', 'Yang Metal']  // 계수 → 신금(편인), 경금(정인)
+        };
+
         const unsungScores = {
-            '장생': 40, '목욕': 10, '관대': 30, '건록': 60,
-            '제왕': 70, '쇠': 50, '병': 30, '사': 10,
-            '묘': -20, '절': -40, '태': -20, '양': 0
+            '장생': 50, '목욕': -40, '관대': 30, '건록': 60,
+            '제왕': 70, '쇠': -20, '병': -50, '사': -60,
+            '묘': -65, '절': -70, '태': 0, '양': 10
         };
 
         // 지지별 장생위치 (정순)

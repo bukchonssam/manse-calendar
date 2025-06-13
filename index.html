@@ -331,15 +331,22 @@ if (yearTransitions) {
     let prevTransition = null;
     let nextTransition = null;
     
-    for (let i = 0; i < yearTransitions.length; i++) {
-        const transDate = new Date(birthYear, yearTransitions[i].month - 1, yearTransitions[i].day, yearTransitions[i].hour, yearTransitions[i].minute);
-        if (transDate <= birthDate) {
-            prevTransition = transDate;
-        } else {
-            nextTransition = transDate;
-            break;
-        }
+    // 현재 해의 모든 절입시간 확인
+for (let i = 0; i < yearTransitions.length; i++) {
+    const transDate = new Date(birthYear, yearTransitions[i].month - 1, yearTransitions[i].day, yearTransitions[i].hour, yearTransitions[i].minute);
+    if (transDate <= birthDate) {
+        prevTransition = transDate;
+    } else {
+        nextTransition = transDate;
+        break;
     }
+}
+
+// 12월생이고 nextTransition이 없으면 다음해 1월 절입시간 찾기
+if (!nextTransition && solarTermsData[birthYear + 1] && solarTermsData[birthYear + 1].length > 0) {
+    const nextYearFirstTrans = solarTermsData[birthYear + 1][0];
+    nextTransition = new Date(birthYear + 1, nextYearFirstTrans.month - 1, nextYearFirstTrans.day, nextYearFirstTrans.hour, nextYearFirstTrans.minute);
+}
     
     if (isForward && nextTransition) {
         daysToSolarTerm = (nextTransition - birthDate) / (1000 * 60 * 60 * 24);

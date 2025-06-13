@@ -352,25 +352,65 @@
                 </div>
             </div>
 
-            <!-- 인성운 그래프 섹션 수정 -->
-            <div class="inseong-section" id="inseongSection" style="display: none;">
-                <div class="info-title">📈 Study Exam Fortune Analysis</div>
+            <!-- 탭 기반 운세 분석 섹션 -->
+            <div class="fortune-analysis-section" id="fortuneAnalysisSection" style="display: none;">
+                <div class="info-title">🔮 Fortune Analysis</div>
+                
+                <!-- 공통 기간 설정 -->
                 <div class="period-selector">
                     <label>Analysis Period:</label>
                     <input type="number" class="date-input" id="graphStartYear" placeholder="Start Year" value="2024" style="width: 120px;">
                     <input type="number" class="date-input" id="graphEndYear" placeholder="End Year" value="2028" style="width: 120px;">
-                    <button class="search-btn" onclick="showInseongFortune()">Generate Graph</button>
                 </div>
                 
-                <div class="weight-settings">
-                    <label>Year Fortune Weight: <input type="range" id="yearWeight" min="10" max="90" value="60"> <span id="yearValue">60%</span></label>
-                    <label>Month Fortune Weight: <input type="range" id="monthWeight" min="10" max="90" value="40"> <span id="monthValue">40%</span></label>
+                <!-- 탭 버튼들 -->
+                <div class="tab-container">
+                    <button class="tab-btn active" onclick="switchTab('study')">📚 Study Exam</button>
+                    <button class="tab-btn" onclick="switchTab('wealth')">💰 Wealth</button>
+                    <button class="tab-btn" onclick="switchTab('career')">🏢 Career</button>
+                    <button class="tab-btn" onclick="switchTab('love')">💕 Love</button>
                 </div>
                 
-                <canvas id="fortuneChart" style="display:none; height: 400px;"></canvas>
+                <!-- Study Exam 탭 -->
+                <div class="tab-content active" id="studyTab">
+                    <div class="weight-settings">
+                        <label>Year Fortune Weight: <input type="range" id="yearWeight" min="10" max="90" value="60"> <span id="yearValue">60%</span></label>
+                        <label>Month Fortune Weight: <input type="range" id="monthWeight" min="10" max="90" value="40"> <span id="monthValue">40%</span></label>
+                    </div>
+                    <button class="search-btn" onclick="showInseongFortune()">Generate Study Exam Graph</button>
+                    <canvas id="fortuneChart" style="display:none; height: 400px;"></canvas>
+                </div>
+                
+                <!-- Wealth 탭 -->
+                <div class="tab-content" id="wealthTab">
+                    <div class="weight-settings">
+                        <label>Year Fortune Weight: <input type="range" id="wealthYearWeight" min="10" max="90" value="70"> <span id="wealthYearValue">70%</span></label>
+                        <label>Month Fortune Weight: <input type="range" id="wealthMonthWeight" min="10" max="90" value="30"> <span id="wealthMonthValue">30%</span></label>
+                    </div>
+                    <button class="search-btn" onclick="showWealthFortune()">Generate Wealth Graph</button>
+                    <canvas id="wealthChart" style="display:none; height: 400px;"></canvas>
+                </div>
+                
+                <!-- Career 탭 -->
+                <div class="tab-content" id="careerTab">
+                    <div class="weight-settings">
+                        <label>Year Fortune Weight: <input type="range" id="careerYearWeight" min="10" max="90" value="80"> <span id="careerYearValue">80%</span></label>
+                        <label>Month Fortune Weight: <input type="range" id="careerMonthWeight" min="10" max="90" value="20"> <span id="careerMonthValue">20%</span></label>
+                    </div>
+                    <button class="search-btn" onclick="showCareerFortune()">Generate Career Graph</button>
+                    <canvas id="careerChart" style="display:none; height: 400px;"></canvas>
+                </div>
+                
+                <!-- Love 탭 -->
+                <div class="tab-content" id="loveTab">
+                    <div class="weight-settings">
+                        <label>Year Fortune Weight: <input type="range" id="loveYearWeight" min="10" max="90" value="60"> <span id="loveYearValue">60%</span></label>
+                        <label>Month Fortune Weight: <input type="range" id="loveMonthWeight" min="10" max="90" value="40"> <span id="loveMonthValue">40%</span></label>
+                    </div>
+                    <button class="search-btn" onclick="showLoveFortune()">Generate Love Graph</button>
+                    <canvas id="loveChart" style="display:none; height: 400px;"></canvas>
+                </div>
             </div>
-        </div>
-    </div>
 
     <script>
         const tianGanEn = ['Yang Wood', 'Yin Wood', 'Yang Fire', 'Yin Fire', 'Yang Earth', 'Yin Earth', 'Yang Metal', 'Yin Metal', 'Yang Water', 'Yin Water'];

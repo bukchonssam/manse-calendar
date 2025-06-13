@@ -276,6 +276,56 @@
             width: 100%;
         }
         
+        /* 탭 스타일 추가 */
+        .tab-container {
+            display: flex;
+            margin: 20px 0;
+            border-bottom: 2px solid #eee;
+            background: #f8f9fa;
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            background: transparent;
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+        
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            border-bottom-color: #667eea;
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px 0;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         @media (max-width: 768px) {
             .input-section {
                 flex-direction: column;
@@ -352,11 +402,9 @@
                 </div>
             </div>
 
-            <!-- 탭 기반 운세 분석 섹션 -->
-            <div class="fortune-analysis-section" id="fortuneAnalysisSection" style="display: none;">
-                <div class="info-title">🔮 Fortune Analysis</div>
-                
-                <!-- 공통 기간 설정 -->
+            <!-- 인성운 그래프 섹션 수정 -->
+            <div class="inseong-section" id="inseongSection" style="display: none;">
+                <div class="info-title">📈 Fortune Analysis</div>
                 <div class="period-selector">
                     <label>Analysis Period:</label>
                     <input type="number" class="date-input" id="graphStartYear" placeholder="Start Year" value="2024" style="width: 120px;">
@@ -377,7 +425,7 @@
                         <label>Year Fortune Weight: <input type="range" id="yearWeight" min="10" max="90" value="60"> <span id="yearValue">60%</span></label>
                         <label>Month Fortune Weight: <input type="range" id="monthWeight" min="10" max="90" value="40"> <span id="monthValue">40%</span></label>
                     </div>
-                    <button class="search-btn" onclick="showInseongFortune()">Generate Study Exam Graph</button>
+                    <button class="search-btn" onclick="showInseongFortune()">Generate Graph</button>
                     <canvas id="fortuneChart" style="display:none; height: 400px;"></canvas>
                 </div>
                 
@@ -411,6 +459,8 @@
                     <canvas id="loveChart" style="display:none; height: 400px;"></canvas>
                 </div>
             </div>
+        </div>
+    </div>
 
     <script>
         const tianGanEn = ['Yang Wood', 'Yin Wood', 'Yang Fire', 'Yin Fire', 'Yang Earth', 'Yin Earth', 'Yang Metal', 'Yin Metal', 'Yang Water', 'Yin Water'];
@@ -1101,15 +1151,44 @@
             return result;
         }
 
-        // 가중치 업데이트 함수 (탭 함수들 다음에 배치)
-        function updateWeights() {
-            const yearWeight = document.getElementById('yearWeight').value;
-            const monthWeight = 100 - yearWeight;
+        // 탭 전환 함수
+        function switchTab(tabName) {
+            // 모든 탭 버튼에서 active 클래스 제거
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            // 모든 탭 컨텐츠 숨기기
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             
-            document.getElementById('monthWeight').value = monthWeight;
-            document.getElementById('yearWeightValue').textContent = yearWeight;
-            document.getElementById('monthWeightValue').textContent = monthWeight;
+            // 선택된 탭 버튼에 active 클래스 추가
+            event.target.classList.add('active');
+            // 선택된 탭 컨텐츠 표시
+            document.getElementById(tabName + 'Tab').classList.add('active');
         }
+        
+        // 새로운 운세 분석 함수들
+        function showWealthFortune() {
+            if (!window.currentPillars) {
+                alert('Please calculate Four Pillars first.');
+                return;
+            }
+            alert('Wealth Fortune analysis will be implemented soon!');
+        }
+        
+        function showCareerFortune() {
+            if (!window.currentPillars) {
+                alert('Please calculate Four Pillars first.');
+                return;
+            }
+            alert('Career Fortune analysis will be implemented soon!');
+        }
+        
+        function showLoveFortune() {
+            if (!window.currentPillars) {
+                alert('Please calculate Four Pillars first.');
+                return;
+            }
+            alert('Love Fortune analysis will be implemented soon!');
+        }
+
         function showInseongFortune() {
             if (!window.currentPillars) {
                 alert('Please calculate Four Pillars first.');
@@ -1324,6 +1403,51 @@
             ctx.fillText(`Range: ${minScore.toFixed(0)} ~ ${maxScore.toFixed(0)} (Avg: ${avgScore.toFixed(1)}, Baseline: 100)`, padding, canvas.height - 10);
         }
 
+        // 다른 탭 가중치 슬라이더 설정
+        function setupOtherTabSliders() {
+            // Wealth 탭
+            const wealthYearSlider = document.getElementById('wealthYearWeight');
+            const wealthMonthSlider = document.getElementById('wealthMonthWeight');
+            const wealthYearValue = document.getElementById('wealthYearValue');
+            const wealthMonthValue = document.getElementById('wealthMonthValue');
+            
+            if (wealthYearSlider && wealthMonthSlider) {
+                wealthYearSlider.addEventListener('input', function() {
+                    wealthYearValue.textContent = this.value + '%';
+                    wealthMonthSlider.value = 100 - this.value;
+                    wealthMonthValue.textContent = wealthMonthSlider.value + '%';
+                });
+            }
+            
+            // Career 탭
+            const careerYearSlider = document.getElementById('careerYearWeight');
+            const careerMonthSlider = document.getElementById('careerMonthWeight');
+            const careerYearValue = document.getElementById('careerYearValue');
+            const careerMonthValue = document.getElementById('careerMonthValue');
+            
+            if (careerYearSlider && careerMonthSlider) {
+                careerYearSlider.addEventListener('input', function() {
+                    careerYearValue.textContent = this.value + '%';
+                    careerMonthSlider.value = 100 - this.value;
+                    careerMonthValue.textContent = careerMonthSlider.value + '%';
+                });
+            }
+            
+            // Love 탭
+            const loveYearSlider = document.getElementById('loveYearWeight');
+            const loveMonthSlider = document.getElementById('loveMonthWeight');
+            const loveYearValue = document.getElementById('loveYearValue');
+            const loveMonthValue = document.getElementById('loveMonthValue');
+            
+            if (loveYearSlider && loveMonthSlider) {
+                loveYearSlider.addEventListener('input', function() {
+                    loveYearValue.textContent = this.value + '%';
+                    loveMonthSlider.value = 100 - this.value;
+                    loveMonthValue.textContent = loveMonthSlider.value + '%';
+                });
+            }
+        }
+
         // 가중치 슬라이더 업데이트
         document.addEventListener('DOMContentLoaded', function() {
             const yearSlider = document.getElementById('yearWeight');
@@ -1344,6 +1468,9 @@
                     yearValue.textContent = yearSlider.value + '%';
                 });
             }
+            
+            // 다른 탭 슬라이더들도 설정
+            setupOtherTabSliders();
         });
         
         // Initialize on page load

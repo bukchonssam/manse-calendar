@@ -1,3 +1,5 @@
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -461,52 +463,6 @@
             }
         }
 
-        function getSolarMonth(date) {
-            const year = date.getFullYear();
-            const transitions = solarTermsData[year] || [];
-            
-            // 해당 년도의 절입시간 데이터가 없으면 null 반환
-            if (transitions.length === 0) {
-                return null;
-            }
-            
-            // Before first transition (February), it's Month 12 of previous year
-            const firstTransition = new Date(year, transitions[0].month - 1, transitions[0].day, transitions[0].hour, transitions[0].minute);
-            if (date < firstTransition) {
-                return 12;
-            }
-            
-            // Check each transition
-            for (let i = transitions.length - 1; i >= 0; i--) {
-                const trans = transitions[i];
-                const transDate = new Date(year, trans.month - 1, trans.day, trans.hour, trans.minute);
-                if (date >= transDate) {
-                    return i + 1;
-                }
-            }
-            
-            return null;
-        }
-        
-        function getMonthStartDate(year, monthNum) {
-            const transitions = solarTermsData[year];
-            if (!transitions || monthNum < 1 || monthNum > 12) return null;
-            
-            if (monthNum === 12) {
-                // Month 12 starts in previous year's December
-                const prevTransitions = solarTermsData[year - 1];
-                if (prevTransitions && prevTransitions.length >= 11) {
-                    const trans = prevTransitions[10];
-                    return new Date(year - 1, trans.month - 1, trans.day, trans.hour, trans.minute);
-                }
-            } else if (monthNum <= transitions.length) {
-                const trans = transitions[monthNum - 1];
-                return new Date(year, trans.month - 1, trans.day, trans.hour, trans.minute);
-            }
-            
-            return null;
-        }
-
         function normalizeIndex(index, mod) {
             return ((index % mod) + mod) % mod;
         }
@@ -552,6 +508,48 @@
             return calculateSipsinUnsung(ilgan, ganzhi, 'jeongin');
         }
 
+        function getSolarMonth(date) {
+            const year = date.getFullYear();
+            const transitions = solarTermsData[year] || [];
+            
+            if (transitions.length === 0) {
+                return null;
+            }
+            
+            const firstTransition = new Date(year, transitions[0].month - 1, transitions[0].day, transitions[0].hour, transitions[0].minute);
+            if (date < firstTransition) {
+                return 12;
+            }
+            
+            for (let i = transitions.length - 1; i >= 0; i--) {
+                const trans = transitions[i];
+                const transDate = new Date(year, trans.month - 1, trans.day, trans.hour, trans.minute);
+                if (date >= transDate) {
+                    return i + 1;
+                }
+            }
+            
+            return null;
+        }
+        
+        function getMonthStartDate(year, monthNum) {
+            const transitions = solarTermsData[year];
+            if (!transitions || monthNum < 1 || monthNum > 12) return null;
+            
+            if (monthNum === 12) {
+                const prevTransitions = solarTermsData[year - 1];
+                if (prevTransitions && prevTransitions.length >= 11) {
+                    const trans = prevTransitions[10];
+                    return new Date(year - 1, trans.month - 1, trans.day, trans.hour, trans.minute);
+                }
+            } else if (monthNum <= transitions.length) {
+                const trans = transitions[monthNum - 1];
+                return new Date(year, trans.month - 1, trans.day, trans.hour, trans.minute);
+            }
+            
+            return null;
+        }
+
         function switchTab(tabName) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
@@ -563,125 +561,6 @@
         function showInseongFortune() {
             if (!window.currentPillars) {
                 alert('Please calculate Four Pillars first.');
-                return;
-            }
-            
-            const startYear = parseInt(document.getElementById('graphStartYear').value);
-            const endYear = parseInt(document.getElementById('graphEndYear').value);
-            
-            if (!startYear || !endYear || startYear >= endYear) {
-                alert('Please enter a valid period.');
-                return;
-            }
-            
-            const ilgan = window.currentPillars.day;
-            const yearMonthData = generateYearMonthGanzhi(startYear, endYear);
-            const yearWeight = 0.7;
-            const monthWeight = 0.3;
-            
-            const scores = [];
-            const labels = [];
-            
-            yearMonthData.forEach(data => {
-                const yearScore = calculateInseongUnsung(ilgan, data.yearGanzhi);
-                const monthScore = calculateInseongUnsung(ilgan, data.monthGanzhi);
-                
-                const totalScore = yearScore * yearWeight + monthScore * monthWeight;
-                scores.push(Math.round((totalScore + 100) * 10) / 10);
-                labels.push(`${data.year}.${data.month.toString().padStart(2, '0')}`);
-            });
-            
-            drawGraph(labels, scores, 'fortuneChart', 'Study Fortune Analysis');
-        }
-
-        function showWealthFortune() {
-            if (!window.currentPillars) {
-                alert('Please calculate Four Pillars first.');
-                return;
-            }
-            
-            const startYear = parseInt(document.getElementById('graphStartYear').value);
-            const endYear = parseInt(document.getElementById('graphEndYear').value);
-            
-            if (!startYear || !endYear || startYear >= endYear) {
-                alert('Please enter a valid period.');
-                return;
-            }
-            
-            const ilgan = window.currentPillars.day;
-            const yearMonthData = generateYearMonthGanzhi(startYear, endYear);
-            const yearWeight = 0.7;
-            const monthWeight = 0.3;
-            
-            const scores = [];
-            const labels = [];
-            
-            yearMonthData.forEach(data => {
-                const jeongjaeYearScore = calculateSipsinUnsung(ilgan, data.yearGanzhi, 'jeongjae');
-                const pyeonjaeYearScore = calculateSipsinUnsung(ilgan, data.yearGanzhi, 'pyeonjae');
-                const jeongjaeMonthScore = calculateSipsinUnsung(ilgan, data.monthGanzhi, 'jeongjae');
-                const pyeonjaeMonthScore = calculateSipsinUnsung(ilgan, data.monthGanzhi, 'pyeonjae');
-                
-                const yearScore = jeongjaeYearScore + pyeonjaeYearScore;
-                const monthScore = jeongjaeMonthScore + pyeonjaeMonthScore;
-                
-                const totalScore = yearScore * yearWeight + monthScore * monthWeight;
-                scores.push(Math.round((totalScore + 100) * 10) / 10);
-                labels.push(`${data.year}.${data.month.toString().padStart(2, '0')}`);
-            });
-            
-            drawGraph(labels, scores, 'wealthChart', 'Wealth Fortune Analysis');
-        }
-
-        function showCareerFortune() {
-            if (!window.currentPillars) {
-                alert('Please calculate Four Pillars first.');
-                return;
-            }
-            
-            const startYear = parseInt(document.getElementById('graphStartYear').value);
-            const endYear = parseInt(document.getElementById('graphEndYear').value);
-            
-            if (!startYear || !endYear || startYear >= endYear) {
-                alert('Please enter a valid period.');
-                return;
-            }
-            
-            const ilgan = window.currentPillars.day;
-            const yearMonthData = generateYearMonthGanzhi(startYear, endYear);
-            const yearWeight = 0.7;
-            const monthWeight = 0.3;
-            
-            const scores = [];
-            const labels = [];
-            
-            yearMonthData.forEach(data => {
-                // 정관 + 편관 합산
-                const jeonggwanYearScore = calculateSipsinUnsung(ilgan, data.yearGanzhi, 'jeonggwan');
-                const pyeonggwanYearScore = calculateSipsinUnsung(ilgan, data.yearGanzhi, 'pyeonggwan');
-                const jeonggwanMonthScore = calculateSipsinUnsung(ilgan, data.monthGanzhi, 'jeonggwan');
-                const pyeonggwanMonthScore = calculateSipsinUnsung(ilgan, data.monthGanzhi, 'pyeonggwan');
-                
-                const yearScore = jeonggwanYearScore + pyeonggwanYearScore;
-                const monthScore = jeonggwanMonthScore + pyeonggwanMonthScore;
-                
-                const totalScore = yearScore * yearWeight + monthScore * monthWeight;
-                scores.push(Math.round((totalScore + 100) * 10) / 10);
-                labels.push(`${data.year}.${data.month.toString().padStart(2, '0')}`);
-            });
-            
-            drawGraph(labels, scores, 'careerChart', 'Career Fortune Analysis');
-        }
-
-        function showLoveFortune() {
-            if (!window.currentPillars) {
-                alert('Please calculate Four Pillars first.');
-                return;
-            }
-            
-            const genderInput = document.getElementById('genderInput').value;
-            if (!genderInput) {
-                alert('Please select gender for love fortune analysis.');
                 return;
             }
             
@@ -716,14 +595,15 @@
         }
 
         function drawGraph(labels, scores, canvasId, title) {
+
+        function drawGraph(labels, scores, canvasId, title) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
             
             canvas.style.display = 'block';
             
-            // 반응형 크기 설정
             const container = canvas.parentElement;
-            const containerWidth = container.offsetWidth - 40; // 여백 고려
+            const containerWidth = container.offsetWidth - 40;
             const isMobile = window.innerWidth <= 768;
             
             canvas.width = isMobile ? Math.min(containerWidth, 350) : 800;
@@ -894,24 +774,14 @@
                 return;
             }
             
-            // 절입시간 데이터 필수 체크
             if (!solarTermsData) {
-                alert('❌ 절입시간 데이터를 불러올 수 없습니다!\n\n정확한 만세력 계산이 불가능합니다.\n\n해결방법:\n1. solar_terms.json 파일이 index.html과 같은 폴더에 있는지 확인\n2. 웹서버를 통해 접근 (file:// 프로토콜 문제일 수 있음)\n3. 브라우저 개발자도구 콘솔에서 오류 확인');
+                alert('절입시간 데이터(solar_terms.json)를 불러올 수 없습니다. 정확한 사주 계산을 위해서는 절입시간 데이터 파일이 필요합니다.');
                 return;
             }
-            
-            const year = parseInt(yearInput);
-            
-            // 해당 연도 절입시간 데이터 체크
-            if (!solarTermsData[year]) {
-                alert(`❌ ${year}년도 절입시간 데이터가 없습니다!\n\n현재 로드된 연도: ${Object.keys(solarTermsData).join(', ')}\n\n해당 연도의 절입시간 정보가 필요합니다.`);
-                return;
-            }
-            
-            console.log(`${year}년도 절입시간 데이터 확인됨`);
             
             const timeValue = timeInput || '12:00';
             const selectedDate = new Date(`${yearInput}-${monthInput.padStart(2, '0')}-${dayInput.padStart(2, '0')}T${timeValue}`);
+            const year = selectedDate.getFullYear();
             const month = selectedDate.getMonth() + 1;
             const day = selectedDate.getDate();
             const hour = selectedDate.getHours();
@@ -945,7 +815,7 @@
             
             const monthNumber = getSolarMonth(selectedDate);
             if (monthNumber === null) {
-                alert(`❌ ${year}년 ${month}월 ${day}일의 절입시간 계산에 실패했습니다!\n\n정확한 월주 계산이 불가능합니다.`);
+                alert(`${year}년도의 절입시간 데이터가 없습니다. solar_terms.json 파일에 해당 연도 데이터를 추가해주세요.`);
                 return;
             }
             
@@ -996,81 +866,8 @@
             updateCell('hourBranch', hourBranchText, 'branch-cell');
             
             document.getElementById('selectedDate').textContent = 
-                `${year}/${month}/${day}` + (timeInput ? ` ${hour}:${timeValue.split(':')[1] || '00'}` : ' (No time entered)');
-            
-            console.log(`계산 완료: ${dayStemText} ${dayBranchText}일주, ${monthStemText} ${monthBranchText}월주`);
-            
-            if (genderInput) {
-                calculateAndDisplayFortune(selectedDate, genderInput, yearGan, monthGan, monthZhi);
-                document.getElementById('fortuneCard').style.display = 'block';
-            } else {
-                document.getElementById('fortuneCard').style.display = 'none';
-            }
-            
-            calculateAndDisplayYearlyFortune();
-            
-            document.getElementById('resultSection').style.display = 'block';
-            document.getElementById('inseongSection').style.display = 'block';
-            
-            window.currentPillars = {
-                day: dayStemText,
-                year: yearStemText + yearBranchText,
-                month: monthStemText + monthBranchText
-            };
-        } monthNumber = getSolarMonth(selectedDate);
-            if (monthNumber === null) {
-                alert(`❌ ${year}년 ${month}월 ${day}일의 절입시간 계산에 실패했습니다!\n\n정확한 월주 계산을 위해 절입시간 데이터를 확인해주세요.`);
-                return;
-            }
-            
-            const yearGanMod5 = yearGan % 5;
-            let monthGanBase;
-            switch(yearGanMod5) {
-                case 0: case 5: monthGanBase = 2; break;
-                case 1: case 6: monthGanBase = 4; break;
-                case 2: case 7: monthGanBase = 6; break;
-                case 3: case 8: monthGanBase = 8; break;
-                case 4: case 9: monthGanBase = 0; break;
-            }
-            
-            const monthGan = normalizeIndex(monthGanBase + (monthNumber - 1), 10);
-            const monthZhi = normalizeIndex(2 + (monthNumber - 1), 12);
-            
-            let hourGan = null, hourZhi = null;
-            if (timeInput) {
-                let hourIndex = Math.floor((hour + 1) / 2) % 12;
-                if (hour === 23) hourIndex = 0;
-                
-                const hourGanBase = (dayGan % 5) * 2;
-                hourGan = normalizeIndex(hourGanBase + hourIndex, 10);
-                hourZhi = hourIndex;
-            }
-            
-            const yearStemText = tianGanEn[yearGan];
-            const yearBranchText = diZhiEn[yearZhi];
-            const monthStemText = tianGanEn[monthGan];
-            const monthBranchText = diZhiEn[monthZhi];
-            const dayStemText = tianGanEn[dayGan];
-            const dayBranchText = diZhiEn[dayZhi];
-            
-            let hourStemText = '', hourBranchText = '';
-            if (timeInput && hourGan !== null && hourZhi !== null) {
-                hourStemText = tianGanEn[hourGan];
-                hourBranchText = diZhiEn[hourZhi];
-            }
-            
-            updateCell('yearStem', yearStemText, 'stem-cell');
-            updateCell('monthStem', monthStemText, 'stem-cell');
-            updateCell('dayStem', dayStemText, 'stem-cell');
-            updateCell('hourStem', hourStemText, 'stem-cell');
-            
-            updateCell('yearBranch', yearBranchText, 'branch-cell');
-            updateCell('monthBranch', monthBranchText, 'branch-cell');
-            updateCell('dayBranch', dayBranchText, 'branch-cell');
-            updateCell('hourBranch', hourBranchText, 'branch-cell');
-            
-            document.getElementById('selectedDate').textContent = 
-                `${year}/${month}/${day}` + (timeInput ? ` ${hour}:${timeValue.split(':')[1] || '00'}` : ' (No time entered)');
+                `${year}/${month}/${day}` + (timeInput ? ` ${hour}:${timeValue.split(':')[1] || '00'}` : ' (No time entered)') + 
+                (hour === 23 ? ' (Using next day\'s day pillar)' : '');
             
             if (genderInput) {
                 calculateAndDisplayFortune(selectedDate, genderInput, yearGan, monthGan, monthZhi);
@@ -1104,10 +901,6 @@
                     element.style.background = 'transparent';
                 }
             }
-        }
-
-        function displayAdditionalInfo() {
-            // 삭제된 함수
         }
 
         function calculateAndDisplayFortune(birthDate, gender, yearGan, monthGan, monthZhi) {
@@ -1218,24 +1011,11 @@
 
         window.onload = async function() {
             const loadSuccess = await loadSolarTermsData();
-            
             if (!loadSuccess) {
-                // JSON 파일 로드 실패시 경고 표시
                 const errorDiv = document.createElement('div');
                 errorDiv.className = 'error';
-                errorDiv.style.cssText = 'background: #ffe6e6; color: #d8000c; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #d8000c; font-weight: bold;';
-                errorDiv.innerHTML = '⚠️ <strong>절입시간 데이터 파일을 찾을 수 없습니다!</strong><br><br>' +
-                                   '정확한 만세력 계산을 위해서는 <code>solar_terms.json</code> 파일이 필요합니다.<br>' +
-                                   '이 파일 없이는 사주 계산이 불가능합니다.<br><br>' +
-                                   '<small>* 절입시간: 입춘, 경칩, 청명 등 24절기의 정확한 시각 정보</small>';
+                errorDiv.innerHTML = '⚠️ 절입시간 데이터 파일(solar_terms.json)을 찾을 수 없습니다.<br>정확한 사주 계산을 위해서는 이 파일이 필요합니다.';
                 document.querySelector('.container').insertBefore(errorDiv, document.querySelector('.input-section'));
-                
-                // Calculate 버튼 비활성화
-                const calculateBtn = document.querySelector('.search-btn');
-                calculateBtn.disabled = true;
-                calculateBtn.style.opacity = '0.5';
-                calculateBtn.style.cursor = 'not-allowed';
-                calculateBtn.textContent = 'Data Required';
             }
             
             const daySelect = document.getElementById('dayInput');
